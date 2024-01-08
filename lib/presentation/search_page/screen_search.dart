@@ -49,14 +49,9 @@ class _MyHomePageState extends State<ScreenSrearch> {
       name: 'Future Event 1',
       date: '2024-02-01',
       location: 'TBD',
-      imageUrl: 'https://www.example.com/images/future_event_1_image.jpg',
+      imageUrl: 'assets/images/image.jpg',
     ),
-    Event(
-      name: 'Future Event 2',
-      date: '2024-02-15',
-      location: 'TBD',
-      imageUrl: 'https://www.example.com/images/future_event_2_image.jpg',
-    ),
+   
   ];
 
   @override
@@ -144,7 +139,7 @@ class _MyHomePageState extends State<ScreenSrearch> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Center(
-                          child: Image.network(
+                          child: Image.asset(
                             comingSoonEvents[index].imageUrl,
                             width: 40,
                             height: 40,
