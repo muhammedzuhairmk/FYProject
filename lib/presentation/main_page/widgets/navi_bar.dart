@@ -19,9 +19,9 @@ class BottomNavigationBarWidget extends StatelessWidget {
       selectedIconTheme:const  IconThemeData(color: Color.fromARGB(255, 78, 131, 175)),
       unselectedIconTheme: const IconThemeData(color: BackGroundColor),
       items: const [
-      BottomNavigationBarItem(icon: Icon(Icons.home),label: 'home'),
-            BottomNavigationBarItem(icon: Icon(Icons.search),label: 'search'),
-                  BottomNavigationBarItem(icon: Icon(Icons.calendar_month_rounded),label: 'event calender'),
+      BottomNavigationBarItem(icon: Icon(Icons.home),label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.search),label: 'Search'),
+                  BottomNavigationBarItem(icon: Icon(Icons.calendar_month_rounded),label: 'Event List'),
     ]
     );
     },
