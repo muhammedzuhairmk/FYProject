@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 
 class EventDayContainer extends StatelessWidget {
+  const EventDayContainer({super.key});
   @override
   Widget build(BuildContext context) {
     return Container(

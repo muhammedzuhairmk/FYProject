@@ -6,7 +6,7 @@ import 'package:front_end/presentation/main_page/widgets/navi_bar.dart';
 import 'package:front_end/presentation/search_page/screen_search.dart';
 
 class HomeScreen extends StatefulWidget {
-   HomeScreen({super.key});
+   const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -15,8 +15,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _pages = [
     
-      ScreenMain(),
-      ScreenSrearch(title: 'title'),
+      const ScreenMain(),
+      MyApp(),
       ScreenCaleneder(),
   ];
 
@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return _pages[index];
         },),
       ),
-      bottomNavigationBar: BottomNavigationBarWidget(),
+      bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 }

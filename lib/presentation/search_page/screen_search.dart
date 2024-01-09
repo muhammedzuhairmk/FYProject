@@ -1,93 +1,86 @@
 import 'package:flutter/material.dart';
 
-
-class ScreenSrearch extends StatefulWidget {
-  const ScreenSrearch({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<ScreenSrearch> createState() => _MyHomePageState();
+void main() {
+  runApp(MyApp());
 }
 
-class _MyHomePageState extends State<ScreenSrearch> {
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: SearchPage(),
+    );
   }
+}
+
+class SearchPage extends StatefulWidget {
+  @override
+  _SearchPageState createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  TextEditingController searchController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
-      body: Center(
-        child: _widgetOptions[_selectedIndex],
+      appBar: AppBar(
+        title: Text('All events'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              // Perform search based on searchController.text
+              // Add your search logic here
+              print('Search: ${searchController.text}');
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.calendar_today),
+            onPressed: () async {
+              DateTime? pickedDate = await showDatePicker(
+                context: context,
+                initialDate: selectedDate,
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2101),
+              );
+
+              if (pickedDate != null && pickedDate != selectedDate) {
+                setState(() {
+                  selectedDate = pickedDate;
+                  // Perform date-based filtering
+                  // Add your filtering logic here
+                  print('Selected Date: $selectedDate');
+                });
+              }
+            },
+          ),
+        ],
       ),
-      drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                labelText: 'Search events',
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.clear),
+                  onPressed: () {
+                    searchController.clear();
+                    // Clear search results or update UI accordingly
+                  },
+                ),
               ),
-              child: Text('Drawer Header'),
             ),
-            ListTile(
-              title: const Text('Home'),
-              selected: _selectedIndex == 0,
-              onTap: () {
-                // Update the state of the app
-                _onItemTapped(0);
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Business'),
-              selected: _selectedIndex == 1,
-              onTap: () {
-                // Update the state of the app
-                _onItemTapped(1);
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('School'),
-              selected: _selectedIndex == 2,
-              onTap: () {
-                // Update the state of the app
-                _onItemTapped(2);
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
+          ),
+          SizedBox(height: 20),
+          Text('Events on ${selectedDate.toLocal()}'),
+          // Display events based on the selected date
+          // Add your event display logic here
+        ],
       ),
     );
   }
