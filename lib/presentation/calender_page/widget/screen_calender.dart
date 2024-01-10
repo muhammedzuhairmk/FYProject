@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 
-
 class Event {
   final String name;
   final String date;
   final String location;
   final String imageUrl;
 
+<<<<<<< HEAD
+class Event {
+  final String name;
+  final String date;
+  final String location;
+  final String imageUrl;
+
+=======
+>>>>>>> 2a32e55c94734a4e6a646cf68ff499370e74050e
   Event({
     required this.name,
     required this.date,
@@ -15,8 +23,11 @@ class Event {
   });
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 2a32e55c94734a4e6a646cf68ff499370e74050e
 class ScreenCaleneder extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -40,7 +51,11 @@ class _MyHomePageState extends State<ScreenCaleneder> {
       name: 'Mobile App Summit',
       date: '2024-01-25',
       location: 'Exhibition Hall',
+<<<<<<< HEAD
       imageUrl:'assets/images/image.jpg',
+=======
+      imageUrl: 'assets/images/image.jpg',
+>>>>>>> 2a32e55c94734a4e6a646cf68ff499370e74050e
     ),
   ];
 
@@ -51,7 +66,10 @@ class _MyHomePageState extends State<ScreenCaleneder> {
       location: 'TBD',
       imageUrl: 'assets/images/image.jpg',
     ),
+<<<<<<< HEAD
    
+=======
+>>>>>>> 2a32e55c94734a4e6a646cf68ff499370e74050e
   ];
 
   @override
@@ -120,7 +138,11 @@ class _MyHomePageState extends State<ScreenCaleneder> {
             ),
             Container(
               padding: const EdgeInsets.all(16),
+<<<<<<< HEAD
               child:const  Text(
+=======
+              child: const Text(
+>>>>>>> 2a32e55c94734a4e6a646cf68ff499370e74050e
                 'Coming Soon:',
                 style: TextStyle(color: Colors.black, fontSize: 18),
               ),
@@ -213,6 +235,7 @@ class EventDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
+<<<<<<< HEAD
            const  SizedBox(height: 16),
            const Text (
               'Description:',
@@ -220,6 +243,18 @@ class EventDetailsScreen extends StatelessWidget {
             ),
           const SizedBox(height: 8),
           const Text(
+=======
+            const SizedBox(height: 16),
+            const Text(
+              'Description:',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+>>>>>>> 2a32e55c94734a4e6a646cf68ff499370e74050e
               'Add your event description here...', // Replace with the actual description
               style: TextStyle(fontSize: 16, color: Colors.black),
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 
+<<<<<<< HEAD
 class AutoSlideContainer extends StatefulWidget {
   @override
   _AutoSlideContainerState createState() => _AutoSlideContainerState();
@@ -30,6 +31,10 @@ class _AutoSlideContainerState extends State<AutoSlideContainer> {
     });
   }
 
+=======
+class EventDayContainer extends StatelessWidget {
+  const EventDayContainer({super.key});
+>>>>>>> 2a32e55c94734a4e6a646cf68ff499370e74050e
   @override
   Widget build(BuildContext context) {
     return Container(
