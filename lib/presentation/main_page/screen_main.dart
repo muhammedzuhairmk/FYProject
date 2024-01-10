@@ -6,7 +6,7 @@ import 'package:front_end/presentation/main_page/widgets/navi_bar.dart';
 import 'package:front_end/presentation/search_page/screen_search.dart';
 
 class HomeScreen extends StatefulWidget {
-   const HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -14,22 +14,22 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _pages = [
-    
-     
-      ScreenMain(),
-      ScreenSearch(),
-      ScreenEventList(),
-      
+    ScreenMain(),
+    SearchPage(),
+    ScreenEventList(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: BackGroundColor,
       body: SafeArea(
-        child: ValueListenableBuilder(valueListenable: indexChangeNotifier , builder: (context, int index, _) {
-          return _pages[index];
-        },),
+        child: ValueListenableBuilder(
+          valueListenable: indexChangeNotifier,
+          builder: (context, int index, _) {
+            return _pages[index];
+          },
+        ),
       ),
       bottomNavigationBar: const BottomNavigationBarWidget(),
     );
