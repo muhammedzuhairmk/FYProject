@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
-import 'package:front_end/presentation/main_page/screen_home.dart';
+import 'presentation/main_page/screen_main.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -23,5 +23,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
   // This widget is the root of your application.
   
