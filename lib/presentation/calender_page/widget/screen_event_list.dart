@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/core/constant/colors.dart';
 
 class Event {
   final String name;
@@ -6,15 +7,6 @@ class Event {
   final String location;
   final String imageUrl;
 
-<<<<<<< HEAD
-class Event {
-  final String name;
-  final String date;
-  final String location;
-  final String imageUrl;
-
-=======
->>>>>>> 2a32e55c94734a4e6a646cf68ff499370e74050e
   Event({
     required this.name,
     required this.date,
@@ -23,17 +15,13 @@ class Event {
   });
 }
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 2a32e55c94734a4e6a646cf68ff499370e74050e
-class ScreenCaleneder extends StatefulWidget {
+class ScreenEventList extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<ScreenCaleneder> {
+class _MyHomePageState extends State<ScreenEventList> {
   final List<Event> events = [
     Event(
       name: 'Flutter Workshop',
@@ -51,11 +39,7 @@ class _MyHomePageState extends State<ScreenCaleneder> {
       name: 'Mobile App Summit',
       date: '2024-01-25',
       location: 'Exhibition Hall',
-<<<<<<< HEAD
-      imageUrl:'assets/images/image.jpg',
-=======
       imageUrl: 'assets/images/image.jpg',
->>>>>>> 2a32e55c94734a4e6a646cf68ff499370e74050e
     ),
   ];
 
@@ -64,24 +48,26 @@ class _MyHomePageState extends State<ScreenCaleneder> {
       name: 'Future Event 1',
       date: '2024-02-01',
       location: 'TBD',
+      imageUrl:'assets/images/image.jpg',
+    ),
+    Event(
+      name: 'Future Event 2',
+      date: '2024-02-15',
+      location: 'TBD',
       imageUrl: 'assets/images/image.jpg',
     ),
-<<<<<<< HEAD
-   
-=======
->>>>>>> 2a32e55c94734a4e6a646cf68ff499370e74050e
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Event List'),
+        title: Text('Event List'),
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue.shade50, Colors.blue.shade100],
+            colors: [Colors.blue.shade200,BackGroundColor],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -90,10 +76,10 @@ class _MyHomePageState extends State<ScreenCaleneder> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              padding: const EdgeInsets.all(16),
-              child: const Text(
+              padding: EdgeInsets.all(16),
+              child: Text(
                 'Present Events:',
-                style: TextStyle(color: Colors.black, fontSize: 18),
+                style: TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),
             Expanded(
@@ -137,14 +123,10 @@ class _MyHomePageState extends State<ScreenCaleneder> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(16),
-<<<<<<< HEAD
-              child:const  Text(
-=======
-              child: const Text(
->>>>>>> 2a32e55c94734a4e6a646cf68ff499370e74050e
+              padding: EdgeInsets.all(16),
+              child: Text(
                 'Coming Soon:',
-                style: TextStyle(color: Colors.black, fontSize: 18),
+                style: TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),
             Expanded(
@@ -161,7 +143,7 @@ class _MyHomePageState extends State<ScreenCaleneder> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Center(
-                          child: Image.asset(
+                          child: Image.network(
                             comingSoonEvents[index].imageUrl,
                             width: 40,
                             height: 40,
@@ -235,26 +217,13 @@ class EventDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
-<<<<<<< HEAD
-           const  SizedBox(height: 16),
-           const Text (
+            SizedBox(height: 16),
+            Text(
               'Description:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
             ),
-          const SizedBox(height: 8),
-          const Text(
-=======
-            const SizedBox(height: 16),
-            const Text(
-              'Description:',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-            const SizedBox(height: 8),
-            const Text(
->>>>>>> 2a32e55c94734a4e6a646cf68ff499370e74050e
+            SizedBox(height: 8),
+            Text(
               'Add your event description here...', // Replace with the actual description
               style: TextStyle(fontSize: 16, color: Colors.black),
             ),

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
-import 'package:front_end/presentation/calender_page/widget/screen_calender.dart';
-//import 'widgets/event_container.dart';
-import 'widgets/main_container.dart';
+import 'package:front_end/presentation/home_page/widgets/main_container.dart';
+import '../calender_page/widget/screen_event_list.dart';
 
 class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
   @override
@@ -124,7 +123,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (contex) =>  ScreenCaleneder(),
+                      builder: (contex) =>  ScreenEventList(),
                     ),
                   );
                 },
@@ -176,7 +175,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  margin: const EdgeInsets.all(80),
+                  margin: const EdgeInsets.all(75),
                   decoration: BoxDecoration(
                     border: Border.all(
                         width: 2.0, color: Color.fromARGB(255, 114, 163, 181)),

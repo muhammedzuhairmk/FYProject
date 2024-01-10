@@ -1,19 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: SplashScreen(),
-    );
-  }
-}
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -83,17 +71,17 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 67),
+              const SizedBox(height: 27),
               Text(
                 "Welcome!",
                 style: theme.textTheme.headline2,
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 8),
               const Text("Sign in or create a new account",
                   style: TextStyle(
                       fontSize: 22, color: Color.fromRGBO(10, 1, 1, 1))),
-              const SizedBox(height: 86),
-              Image.asset('assets/image_1.png', height: 223, width: 358),
+              const SizedBox(height: 16),
+              Image.asset('assets/images/image.jpg', height: 223, width: 358),
               const Spacer(),
               ElevatedButton(
                 onPressed: () {

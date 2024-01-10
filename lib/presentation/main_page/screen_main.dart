@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
-import 'package:front_end/presentation/calender_page/widget/screen_calender.dart';
+import 'package:front_end/presentation/calender_page/widget/screen_event_list.dart';
 import 'package:front_end/presentation/home_page/screen_home.dart';
 import 'package:front_end/presentation/main_page/widgets/navi_bar.dart';
 import 'package:front_end/presentation/search_page/screen_search.dart';
@@ -15,9 +15,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _pages = [
     
-      const ScreenMain(),
-      MyApp(),
-      ScreenCaleneder(),
+     
+      ScreenMain(),
+      ScreenSearch(),
+      ScreenEventList(),
       
   ];
 

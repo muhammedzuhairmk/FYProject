@@ -21,7 +21,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
       items: const [
       BottomNavigationBarItem(icon: Icon(Icons.home),label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.search),label: 'Search'),
-                  BottomNavigationBarItem(icon: Icon(Icons.calendar_month_rounded),label: 'Event List'),
+                  BottomNavigationBarItem(icon: Icon(Icons.line_style_rounded),label: 'Event List'),
     ]
     );
     },
