@@ -15,9 +15,9 @@ class BottomNavigationBarWidget extends StatelessWidget {
         indexChangeNotifier.value = index;
       },
       selectedItemColor:const  Color.fromARGB(255, 78, 131, 175),
-      unselectedItemColor: BackGroundColor,
+      unselectedItemColor: backGroundColor,
       selectedIconTheme:const  IconThemeData(color: Color.fromARGB(255, 78, 131, 175)),
-      unselectedIconTheme: const IconThemeData(color: BackGroundColor),
+      unselectedIconTheme: const IconThemeData(color: backGroundColor),
       items: const [
       BottomNavigationBarItem(icon: Icon(Icons.home),label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.search),label: 'Search'),

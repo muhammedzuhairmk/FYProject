@@ -14,12 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'demo',
+      title: 'Event Snap',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: BackGroundColor,
+        scaffoldBackgroundColor: backGroundColor,
       ),
-      home: HomeScreen(),
+      home: const HomeScreen(),
        
     );
   }

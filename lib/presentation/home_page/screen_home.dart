@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/presentation/home_page/widgets/main_container.dart';
-import '../calender_page/widget/screen_event_list.dart';
+import '../event_list_page/widget/screen_event_list.dart';
 
 class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
   @override
@@ -44,7 +44,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
               IconButton(
                 icon: Icon(
                   Icons.notifications,
-                  color: _isScrolled ? Colors.black : BackGroundColor,
+                  color: _isScrolled ? Colors.black : backGroundColor,
                 ),
                 onPressed: () {
                   // Add your search functionality here
@@ -79,7 +79,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                     ),
                   ),
                   decoration: BoxDecoration(
-                    color: BackGroundColor,
+                    color: backGroundColor,
                     border: Border.all(
                         width: 2.0, color: Color.fromARGB(255, 114, 163, 181)),
                     borderRadius: BorderRadius.circular(12),
@@ -97,7 +97,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
               ListTile(
                 leading: const Icon(
                   Icons.account_box,
-                  color: BackGroundColor,
+                  color: backGroundColor,
                 ),
                 title: const Text(
                   'Account',
@@ -106,7 +106,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 onTap: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (contex) =>  ScreenMain(),
+                      builder: (contex) => ScreenMain(),
                     ),
                   );
                 },
@@ -114,7 +114,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
               ListTile(
                 leading: const Icon(
                   Icons.list_alt_sharp,
-                  color: BackGroundColor,
+                  color: backGroundColor,
                 ),
                 title: const Text(
                   'Event List',
@@ -123,7 +123,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (contex) =>  ScreenEventList(),
+                      builder: (contex) => ScreenEventList(),
                     ),
                   );
                 },
@@ -131,7 +131,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
               ListTile(
                 leading: const Icon(
                   Icons.admin_panel_settings,
-                  color: BackGroundColor,
+                  color: backGroundColor,
                 ),
                 title: const Text(
                   'Admin panel',
@@ -142,7 +142,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
               ListTile(
                 leading: const Icon(
                   Icons.calendar_month_rounded,
-                  color: BackGroundColor,
+                  color: backGroundColor,
                 ),
                 title: const Text(
                   'Calender',
@@ -153,7 +153,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
               ListTile(
                 leading: const Icon(
                   Icons.upload_rounded,
-                  color: BackGroundColor,
+                  color: backGroundColor,
                 ),
                 title: const Text(
                   'Upload image',
@@ -164,7 +164,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
               ListTile(
                 leading: const Icon(
                   Icons.collections_rounded,
-                  color: BackGroundColor,
+                  color: backGroundColor,
                 ),
                 title: const Text(
                   'Event Album',
@@ -184,7 +184,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                   child: ListTile(
                     leading: const Icon(
                       Icons.logout,
-                      color: BackGroundColor,
+                      color: backGroundColor,
                     ),
                     title: const Text(
                       'Logout',
