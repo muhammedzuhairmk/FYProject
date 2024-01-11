@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
 import 'presentation/main_page/screen_main.dart';
+
 //import 'presentation/splash_screen.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
@@ -19,8 +20,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: backGroundColor,
       ),
+
       home: const HomeScreen(),
-       
+
     );
   }
 }
