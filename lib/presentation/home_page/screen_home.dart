@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/presentation/home_page/widgets/main_container.dart';
@@ -197,9 +198,25 @@ class _AnimatedAppBarState extends State<ScreenMain> {
             ],
           ),
         ),
+        
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            
+          },
+          
+          backgroundColor:Colors.white,
+          foregroundColor: backGroundColor,
+          elevation: 0,
+          shape:const CircleBorder(
+            side: BorderSide(color: Color.fromARGB(255, 114, 163, 181),width: 2.0,)
+           ),
+          
+          child:const  Icon(Icons.add),
+        ),
         //appBar: AppBarWidget(),
-        body: Center(
+        body:  Center(
           child: MainContainer(),
-        ));
+        ),
+        );
   }
 }
