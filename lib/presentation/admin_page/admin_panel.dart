@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
-import 'package:front_end/presentation/home_page/screen_home.dart';
 
 class AdminPanel extends StatelessWidget {
   const AdminPanel({super.key});
@@ -9,21 +8,7 @@ class AdminPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-           leading: Container(
-            margin:const  EdgeInsets.symmetric(horizontal: 30),
-             child: IconButton(
-              icon: const Icon(Icons.arrow_back,),
-              color: backGroundColor,
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (contex) => ScreenMain(),
-                    )
-                );
-                    
-              },
-                       ),
-           ),
+           
           title: Container(
             margin:const EdgeInsets.symmetric(horizontal: 50),
             child:const Text(
@@ -39,7 +24,7 @@ class AdminPanel extends StatelessWidget {
                 bottom: Radius.circular(350),
               ),
             ),
-
+          
         ),
         body: Column(
           children: [

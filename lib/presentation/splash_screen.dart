@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:front_end/core/constant/colors.dart';
 
 
 
@@ -14,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-      const Duration(seconds: 3),
+      const Duration(seconds: 54),
       () {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => WelcomeScreen()),
@@ -28,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     ThemeData( primaryColor: const Color.fromARGB(255, 119, 192, 251),);
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 103, 224, 238),
+      backgroundColor: backGroundColor,
       body: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 88),

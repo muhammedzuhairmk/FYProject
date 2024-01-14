@@ -5,7 +5,6 @@ import 'package:front_end/presentation/home_page/screen_home.dart';
 import 'package:front_end/presentation/main_page/widgets/navi_bar.dart';
 import 'package:front_end/presentation/search_page/screen_search.dart';
 
-import '../calender_page/ScreenCalender.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ScreenMain(),
     SearchPage(),
     ScreenEventList(),
-    ScreenCalender(),
+    
   ];
 
   @override

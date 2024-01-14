@@ -1,19 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
+import 'package:front_end/presentation/account_page/screen_Account.dart';
 import 'package:front_end/presentation/admin_page/admin_panel.dart';
 import 'package:front_end/presentation/home_page/widgets/main_container.dart';
 import '../event_list_page/widget/screen_event_list.dart';
+
 
 class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
   @override
   _AnimatedAppBarState createState() => _AnimatedAppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize =>const  Size.fromHeight(kToolbarHeight);
 }
 
 class _AnimatedAppBarState extends State<ScreenMain> {
+  
   ScrollController _scrollController = ScrollController();
   bool _isScrolled = false;
 
@@ -53,8 +56,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
               },
             ),
           ],
-          iconTheme: IconThemeData(color: backGroundColor)
-          ),
+          iconTheme:const  IconThemeData(color: backGroundColor)),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -85,7 +87,8 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 decoration: BoxDecoration(
                   color: backGroundColor,
                   border: Border.all(
-                      width: 2.0, color: Color.fromARGB(255, 114, 163, 181)),
+                      width: 2.0,
+                       color:const  Color.fromARGB(255, 114, 163, 181)),
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -107,10 +110,11 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 'Account',
                 style: TextStyle(color: drawertext),
               ),
-              onTap: () {
-                Navigator.of(context).pushReplacement(
+             onTap: () {
+                Navigator.push(
+                  context,
                   MaterialPageRoute(
-                    builder: (contex) => ScreenMain(),
+                    builder: (context) => const AccountDetails(),
                   ),
                 );
               },
@@ -142,9 +146,10 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 style: TextStyle(color: drawertext),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacement(
+                Navigator.push(
+                  context,
                   MaterialPageRoute(
-                    builder: (contex) => AdminPanel(),
+                    builder: (context) => const AdminPanel(),
                   ),
                 );
               },
@@ -188,7 +193,8 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 margin: const EdgeInsets.all(75),
                 decoration: BoxDecoration(
                   border: Border.all(
-                      width: 2.0, color: Color.fromARGB(255, 114, 163, 181)),
+                    width: 2.0, 
+                    color:const  Color.fromARGB(255, 114, 163, 181)),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: ListTile(
@@ -223,11 +229,12 @@ class _AnimatedAppBarState extends State<ScreenMain> {
         child: const Icon(Icons.add),
       ),
       //appBar: AppBarWidget(),
-      body: Center(
+      body:const  Center(
         child: MainContainer(),
       ),
     );
   }
+ 
 
   void _showAlertDialog(BuildContext context) {
     showDialog(
@@ -245,14 +252,14 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                       children: [
                         IconButton(
                           color: backGroundColor,
-                          hoverColor: Color.fromARGB(255, 78, 131, 175),
-                          icon: Icon(Icons.camera),
+                          hoverColor:const  Color.fromARGB(255, 78, 131, 175),
+                          icon: const Icon(Icons.camera),
                           onPressed: () {
                             // Handle camera icon press
                             print('Camera icon pressed');
                           },
                         ),
-                        Text(
+                        const Text(
                           'Camera',
                           style: TextStyle(
                             color: backGroundColor,
@@ -264,16 +271,16 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                       children: [
                         IconButton(
                           color: backGroundColor,
-                          hoverColor: Color.fromARGB(255, 78, 131, 175),
-                          icon: Icon(Icons.upload),
+                          hoverColor:const  Color.fromARGB(255, 78, 131, 175),
+                          icon:const  Icon(Icons.upload),
                           onPressed: () {
                             // Handle upload icon press
                             print('Upload icon pressed');
                           },
                         ),
-                        Text(
+                       const  Text(
                           'Upload',
-                           style: TextStyle(
+                          style: TextStyle(
                             color: backGroundColor,
                           ),
                         ),

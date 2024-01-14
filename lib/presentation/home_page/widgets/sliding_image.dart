@@ -42,7 +42,7 @@ class _SlidingImageState extends State<SlidingImage> {
               autoPlay: true,
               autoPlayInterval: Duration(seconds: 3),
               enlargeCenterPage: true,
-              aspectRatio: 16 / 12,
+              aspectRatio: 2/1,
               onPageChanged: (index, reason) {
                 setState(() {
                   _currentIndex = index;

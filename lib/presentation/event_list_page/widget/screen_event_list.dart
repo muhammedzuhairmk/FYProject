@@ -62,7 +62,7 @@ class _MyHomePageState extends State<ScreenEventList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Event List'),
+        title:const  Text('Event List'),
       ),
       body: Container(
         decoration: BoxDecoration(
