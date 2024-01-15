@@ -43,6 +43,8 @@ class _MyHomePageState extends State<ScreenEventList> {
     ),
   ];
 
+
+
   final List<Event> comingSoonEvents = [
     Event(
       name: 'Future Event 1',
@@ -58,12 +60,18 @@ class _MyHomePageState extends State<ScreenEventList> {
     ),
   ];
 
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title:const  Text('Event List'),
       ),
+
+
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -72,16 +80,19 @@ class _MyHomePageState extends State<ScreenEventList> {
             end: Alignment.bottomCenter,
           ),
         ),
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              padding: EdgeInsets.all(16),
-              child: Text(
+              padding:const EdgeInsets.all(16),
+              child: const Text(
                 'Present Events:',
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),
+
+
             Expanded(
               child: ListView.builder(
                 itemCount: events.length,
@@ -95,6 +106,7 @@ class _MyHomePageState extends State<ScreenEventList> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8),
                         ),
+
                         child: Center(
                           child: Image.network(
                             events[index].imageUrl,
@@ -104,10 +116,13 @@ class _MyHomePageState extends State<ScreenEventList> {
                           ),
                         ),
                       ),
+
+
                       title: Text(events[index].name),
                       subtitle: Text(
                         'Date: ${events[index].date}\nLocation: ${events[index].location}',
                       ),
+
                       onTap: () {
                         Navigator.push(
                           context,
@@ -115,6 +130,7 @@ class _MyHomePageState extends State<ScreenEventList> {
                             builder: (context) =>
                                 EventDetailsScreen(event: events[index]),
                           ),
+
                         );
                       },
                     ),
@@ -122,17 +138,22 @@ class _MyHomePageState extends State<ScreenEventList> {
                 },
               ),
             ),
+
+
             Container(
-              padding: EdgeInsets.all(16),
-              child: Text(
+              padding:const EdgeInsets.all(16),
+              child:const Text(
                 'Coming Soon:',
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),
+
+
             Expanded(
               child: ListView.builder(
                 itemCount: comingSoonEvents.length,
                 itemBuilder: (context, index) {
+                 
                   return Card(
                     child: ListTile(
                       leading: Container(
@@ -142,6 +163,7 @@ class _MyHomePageState extends State<ScreenEventList> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8),
                         ),
+
                         child: Center(
                           child: Image.network(
                             comingSoonEvents[index].imageUrl,
@@ -151,10 +173,12 @@ class _MyHomePageState extends State<ScreenEventList> {
                           ),
                         ),
                       ),
+
                       title: Text(comingSoonEvents[index].name),
                       subtitle: Text(
                         'Date: ${comingSoonEvents[index].date}\nLocation: ${comingSoonEvents[index].location}',
                       ),
+
                       onTap: () {
                         Navigator.push(
                           context,
@@ -164,6 +188,8 @@ class _MyHomePageState extends State<ScreenEventList> {
                           ),
                         );
                       },
+
+
                     ),
                   );
                 },
@@ -179,14 +205,16 @@ class _MyHomePageState extends State<ScreenEventList> {
 class EventDetailsScreen extends StatelessWidget {
   final Event event;
 
-  EventDetailsScreen({required this.event});
+  const EventDetailsScreen({required this.event});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title: Text(event.name),
       ),
+      
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -202,6 +230,8 @@ class EventDetailsScreen extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(12),
               ),
+
+
               child: Center(
                 child: Container(
                   width: 150,
@@ -210,23 +240,32 @@ class EventDetailsScreen extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
                   ),
+
+
                   child: Image.network(
                     event.imageUrl,
                     fit: BoxFit.cover,
                   ),
+
                 ),
               ),
             ),
-            SizedBox(height: 16),
-            Text(
+
+
+            const SizedBox(height: 16),
+            const Text(
               'Description:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
             ),
-            SizedBox(height: 8),
-            Text(
+
+
+            const SizedBox(height: 8),
+            const Text(
               'Add your event description here...', // Replace with the actual description
               style: TextStyle(fontSize: 16, color: Colors.black),
             ),
+
+            
           ],
         ),
       ),

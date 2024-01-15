@@ -1,5 +1,4 @@
 
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +9,7 @@ class SlidingImage extends StatefulWidget {
 
 class _SlidingImageState extends State<SlidingImage> {
   final List<String> imageList = [
-    'https://as1.ftcdn.net/v2/jpg/05/64/63/22/1000_F_564632207_YGJSy3IC0XinhqMKgR3lAQ6homLfmfm0.jpg',
+     'https://as1.ftcdn.net/v2/jpg/05/64/63/22/1000_F_564632207_YGJSy3IC0XinhqMKgR3lAQ6homLfmfm0.jpg',
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRVvLaT8HkU_CjUfpMBvuGzTzR3ZNbfhAooseXildMB6XzSF2xxdTCPAjz1sJXP_RE_gs&usqp=CAU',
     'https://www.thestudyfalcon.com/blog/wp-content/uploads/2021/01/WhatsApp-Image-2021-01-08-at-9.55.52-AM.jpeg',
     'https://c8.alamy.com/comp/2NBB001/world-typing-day-banner-design-illustration-2NBB001.jpg',
@@ -21,6 +20,7 @@ class _SlidingImageState extends State<SlidingImage> {
     'https://img.freepik.com/free-vector/software-testing-cartoon-banner-functional-test-methodology-programming-search-errors-bugs-website-platform-development-dashboard-usability-optimization-computer-pc-illustration_107791-3131.jpg?size=626&ext=jpg&ga=GA1.1.1315563093.1704684554&semt=ais',
     'https://img.freepik.com/premium-photo/advance-cyberspace-concept_862994-20265.jpg?size=626&ext=jpg&ga=GA1.1.1315563093.1704684554&semt=ais'
     // Add more image URLs as needed
+    // ... (your list of image URLs)
   ];
 
   int _currentIndex = 0;
@@ -28,21 +28,33 @@ class _SlidingImageState extends State<SlidingImage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(),
+      
       child: Column(
         children: [
           CarouselSlider(
             items: imageList.map((url) {
-              return Image.network(
-                url,
-                fit: BoxFit.cover,
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0), // Set image border radius
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0), // Set image border radius
+                  child: Image.network(
+                    url,
+                    fit: BoxFit.cover,
+                    height: 180,
+                    width: 400,
+                  ),
+                ),
               );
             }).toList(),
+
+
             options: CarouselOptions(
               autoPlay: true,
-              autoPlayInterval: Duration(seconds: 3),
+              autoPlayInterval: const Duration(seconds: 3),
               enlargeCenterPage: true,
-              aspectRatio: 2/1,
+              aspectRatio: 2 / 1,
               onPageChanged: (index, reason) {
                 setState(() {
                   _currentIndex = index;
@@ -50,13 +62,14 @@ class _SlidingImageState extends State<SlidingImage> {
               },
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             ' $_currentIndex',
-            style: TextStyle(fontSize: 1),
+            style:const  TextStyle(fontSize: 1),
           ),
         ],
       ),
     );
   }
 }
+

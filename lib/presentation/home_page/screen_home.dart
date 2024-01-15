@@ -57,6 +57,8 @@ class _AnimatedAppBarState extends State<ScreenMain> {
             ),
           ],
           iconTheme:const  IconThemeData(color: backGroundColor)),
+      
+      
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -81,7 +83,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 ),
                 currentAccountPicture: CircleAvatar(
                   child: ClipOval(
-                    child: Image.asset("assets/images/image.jpg"),
+                    child: Image.asset("assets/images/image.jpg",fit:BoxFit.cover,),
                   ),
                 ),
                 decoration: BoxDecoration(
@@ -101,6 +103,8 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 ),
               ),
             ),
+
+
             ListTile(
               leading: const Icon(
                 Icons.account_box,
@@ -119,6 +123,8 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 );
               },
             ),
+
+
             ListTile(
               leading: const Icon(
                 Icons.list_alt_sharp,

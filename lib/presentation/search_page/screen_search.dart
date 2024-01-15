@@ -13,7 +13,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('All events'),
+        title: const Text('All events'),
       ),
       body: Column(
         children: [
@@ -23,25 +23,25 @@ class _SearchPageState extends State<SearchPage> {
               children: [
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    padding:const  EdgeInsets.symmetric(horizontal: 8.0),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.search),
-                        SizedBox(width: 8.0),
+                        const Icon(Icons.search),
+                        const SizedBox(width: 8.0),
                         Expanded(
                           child: TextField(
                             controller: searchController,
-                            decoration: InputDecoration.collapsed(
+                            decoration: const InputDecoration.collapsed(
                               hintText: 'Search an event',
                             ),
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.clear),
+                          icon:const  Icon(Icons.clear),
                           onPressed: () {
                             searchController.clear();
                           },
@@ -50,9 +50,9 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ),
                 ),
-                SizedBox(width: 8.0),
+                const SizedBox(width: 8.0),
                 IconButton(
-                  icon: Icon(Icons.calendar_today),
+                  icon:const  Icon(Icons.calendar_today),
                   onPressed: () async {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
@@ -72,7 +72,7 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text('Events on ${selectedDate.toLocal()}'),
         ],
       ),

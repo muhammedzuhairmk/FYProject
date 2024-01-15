@@ -8,98 +8,116 @@ class AccountDetails extends StatefulWidget {
 }
 
 class _AccountDetailsState extends State<AccountDetails> {
+  var  usernameController = TextEditingController();
+   var  emailController = TextEditingController();
+    var  addressController = TextEditingController();
+     var  phoneController = TextEditingController();
+     var  admission_year_Controller = TextEditingController();
+     var  roll_no_Controller = TextEditingController();
+     var  password_Controller = TextEditingController();
+     var  confirm_password_Controller = TextEditingController();
+
   int _currentStep = 0;
 
-  List<Step> stepList() => [
+  List<Step> stepList() {
+    return [
         Step(
           title: const Text('Account'),
           isActive: _currentStep >= 0,
           state: _currentStep <= 0 ? StepState.editing : StepState.complete,
-          content: const Column(
+          content:  Column(
             children: [
               TextField(
-                decoration: InputDecoration(
+                controller:usernameController,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: ' Username',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
-              TextField(
-                decoration: InputDecoration(
+               TextField(
+                controller:emailController,
+                decoration:const  InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Email',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
             ],
           ),
         ),
         Step(
-          title: Text('personal details'),
+          title: const Text('personal details'),
           isActive: _currentStep >= 1,
           state: _currentStep <= 1 ? StepState.editing : StepState.complete,
-          content: const Column(
+          content:  Column(
             children: [
               TextField(
-                decoration: InputDecoration(
+                controller: addressController,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: ' Address',
                 ),
               ),
-              SizedBox(
+             const  SizedBox(
                 height: 8,
               ),
-              TextField(
-                decoration: InputDecoration(
+               TextField(
+                controller: phoneController,
+                decoration:const  InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Phone Number',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               TextField(
-                decoration: InputDecoration(
+                controller: admission_year_Controller,
+                decoration:const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Admission Year',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               TextField(
-                decoration: InputDecoration(
+                controller: roll_no_Controller,
+                decoration:const  InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'RollNo',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
             ],
           ),
         ),
         Step(
-          title: Text(' Password'),
+          title: const Text(' Password'),
           isActive: _currentStep >= 2,
           state: StepState.complete,
-          content: const Column(
+          content:  Column(
             children: [
               TextField(
-                decoration: InputDecoration(
+                controller: password_Controller,
+                decoration:const  InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: ' Password',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               TextField(
-                decoration: InputDecoration(
+                controller: confirm_password_Controller,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: ' Confirm Password',
                 ),
@@ -108,6 +126,7 @@ class _AccountDetailsState extends State<AccountDetails> {
           ),
         ),
       ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +134,7 @@ class _AccountDetailsState extends State<AccountDetails> {
       appBar: AppBar(
         title: const Text('EventSnap'),
       ),
-      body: Column(
+      body: ListView(
         children: [
           const SizedBox(
             height: 20,
@@ -174,7 +193,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                 onPressed: () {
                   // Add your button click logic here
                 },
-                child: Text('Save'),
+                child: const Text("save"),
           
           ),
         ],

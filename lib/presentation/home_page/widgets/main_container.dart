@@ -8,12 +8,14 @@ class MainContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
-        Container(
-          child: SlidingImage(),
-        ),
+
+
+        SlidingImage(),
+
+
         Container(
           height: 40,
           margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 1),
@@ -31,6 +33,8 @@ class MainContainer extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
+
+
         Container(
           height: 250,
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -43,6 +47,8 @@ class MainContainer extends StatelessWidget {
               ),
             ],
           ),
+
+
           child: ListView(
             children: [
               Container(
@@ -65,6 +71,8 @@ class MainContainer extends StatelessWidget {
             ],
           ),
         ),
+
+
         Container(
           height: 40,
           margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 1),
@@ -82,6 +90,8 @@ class MainContainer extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
+
+
         Container(
           height: 500,
           margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -94,6 +104,8 @@ class MainContainer extends StatelessWidget {
               ),
             ],
           ),
+
+
           child: ListView(
             children: [
               Container(
@@ -114,10 +126,11 @@ class MainContainer extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
+
+
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 height: 150,
-              
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: 32,
@@ -132,6 +145,8 @@ class MainContainer extends StatelessWidget {
                   },
                 ),
               ),
+
+
               Container(
                 height: 40,
                 margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
@@ -149,6 +164,8 @@ class MainContainer extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
+
+
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 height: 150,
@@ -163,6 +180,8 @@ class MainContainer extends StatelessWidget {
                       width: 100,
                       child: Text('${index}'),
                     );
+
+
                   },
                 ),
               ),

@@ -18,14 +18,17 @@ class AdminPanel extends StatelessWidget {
             fontSize: 27,
                         ),
                       ),
-          ),
+                     ),
+
+
            shape:const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(350),
               ),
             ),
-          
         ),
+
+
         body: Column(
           children: [
           const  SizedBox(
@@ -38,6 +41,8 @@ class AdminPanel extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+
+
             Container(
                 height: 200,
                 padding:const EdgeInsets.all(15),
@@ -50,9 +55,12 @@ class AdminPanel extends StatelessWidget {
                     ),
                   ],
                 ),
+
+
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -71,6 +79,8 @@ class AdminPanel extends StatelessWidget {
                               print('Camera icon pressed');
                             },
                           ),
+
+
                         const  Text(
                             'Camera',
                             style:  TextStyle(
@@ -80,6 +90,8 @@ class AdminPanel extends StatelessWidget {
                         ],
                       ),
                     ),
+
+
 
                      Container(
                       height: 70,
@@ -96,6 +108,8 @@ class AdminPanel extends StatelessWidget {
                               print('Student List icon pressed');
                             },
                           ),
+
+
                          const Text(
                             'Students',
                             style: TextStyle(
@@ -105,6 +119,8 @@ class AdminPanel extends StatelessWidget {
                         ],
                       ),
                     ),
+
+
 
                     Container(
                       height: 70,
@@ -121,6 +137,8 @@ class AdminPanel extends StatelessWidget {
                               print('notification icon pressed');
                             },
                           ),
+
+
                          const Text(
                             'Notifica',
                             style: TextStyle(
@@ -130,6 +148,8 @@ class AdminPanel extends StatelessWidget {
                         ],
                       ),
                     ),
+
+
 
                      Container(
                       height: 70,
@@ -146,6 +166,8 @@ class AdminPanel extends StatelessWidget {
                               print('upload icon pressed');
                             },
                           ),
+
+
                          const  Text(
                             'Upload',
                             style: TextStyle(
@@ -155,12 +177,12 @@ class AdminPanel extends StatelessWidget {
                         ],
                       ),
                     ),
-                    
                   ]
                 ),
 
-               const SizedBox(height: 20,),
 
+
+               const SizedBox(height: 20,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -179,6 +201,8 @@ class AdminPanel extends StatelessWidget {
                               print('verification icon pressed');
                             },
                           ),
+
+
                         const  Text(
                             'Approval',
                             style:  TextStyle(
@@ -188,6 +212,7 @@ class AdminPanel extends StatelessWidget {
                         ],
                       ),
                     ),
+
 
                      Container(
                       height: 70,
@@ -204,6 +229,8 @@ class AdminPanel extends StatelessWidget {
                               print('Camera icon pressed');
                             },
                           ),
+
+
                          const Text(
                             'Camera',
                             style: TextStyle(
@@ -213,6 +240,8 @@ class AdminPanel extends StatelessWidget {
                         ],
                       ),
                     ),
+
+
 
                     Container(
                       height: 70,
@@ -229,6 +258,8 @@ class AdminPanel extends StatelessWidget {
                               print('Camera icon pressed');
                             },
                           ),
+
+
                          const Text(
                             'Camera',
                             style: TextStyle(
@@ -238,6 +269,7 @@ class AdminPanel extends StatelessWidget {
                         ],
                       ),
                     ),
+
 
                      Container(
                       height: 70,
@@ -254,6 +286,8 @@ class AdminPanel extends StatelessWidget {
                               print('upload icon pressed');
                             },
                           ),
+
+
                          const  Text(
                             'Upload',
                             style: TextStyle(
@@ -262,13 +296,14 @@ class AdminPanel extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ),
-                    
+                    ), 
                   ]
                 ),
               ],
             ),
             ),
+
+
             const SizedBox(height: 35,),
              Column(
                children: [
@@ -277,24 +312,28 @@ class AdminPanel extends StatelessWidget {
                   padding:const  EdgeInsets.all(10),
                     height: 60,
                     width: 60,
-                    child:  Image(image: AssetImage("assets/images/amalcollege.png"),width: 10.2,height: 10.0,),
+                   child:  Image(image: AssetImage("assets/images/amalcollege.png"),width: 10.2,height: 10.0,),
                     decoration:const  BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       color: Colors.white),
-                 ),
+                       ),
+
+
                  Container(
                   height: 170,
                   width: 600,
-                   decoration:const  BoxDecoration(
+                  decoration:const  BoxDecoration(
                   borderRadius: BorderRadius.vertical(
-                                 top: Radius.circular(120),
-                               ),
+                    top: Radius.circular(120),
+                     ),
+
+
                   boxShadow:  [
                     BoxShadow(
-                      color: Colors.white,
+                    color: Colors.white,
                     ),
-                  ],
-                                 ),
+                    ],
+                    ),
                                  child:const Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                    children: [
@@ -303,10 +342,10 @@ class AdminPanel extends StatelessWidget {
                                    ],
                                  )
                            ),
-               ],
-             ),
-          ]
-        ) 
-     );
-  }
-}
+                      ],
+                    ),
+                  ]
+                ) 
+             );
+         }
+      }
