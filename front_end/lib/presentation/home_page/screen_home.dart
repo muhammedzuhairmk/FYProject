@@ -4,19 +4,18 @@ import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/presentation/account_page/screen_Account.dart';
 import 'package:front_end/presentation/admin_page/admin_panel.dart';
 import 'package:front_end/presentation/home_page/widgets/main_container.dart';
+import 'package:front_end/presentation/home_page/widgets/notification.dart';
 import '../event_list_page/widget/screen_event_list.dart';
-
 
 class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
   @override
   _AnimatedAppBarState createState() => _AnimatedAppBarState();
 
   @override
-  Size get preferredSize =>const  Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class _AnimatedAppBarState extends State<ScreenMain> {
-  
   ScrollController _scrollController = ScrollController();
   bool _isScrolled = false;
 
@@ -52,13 +51,12 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 color: _isScrolled ? Colors.black : backGroundColor,
               ),
               onPressed: () {
-                // Add your search functionality here
+                _showNotificationDialog(context);
               },
             ),
           ],
-          iconTheme:const  IconThemeData(color: backGroundColor)),
-      
-      
+          iconTheme: const IconThemeData(color: backGroundColor)),
+
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -83,14 +81,17 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 ),
                 currentAccountPicture: CircleAvatar(
                   child: ClipOval(
-                    child: Image.asset("assets/images/image.jpg",fit:BoxFit.cover,),
+                    child: Image.asset(
+                      "assets/images/image.jpg",
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 decoration: BoxDecoration(
                   color: backGroundColor,
                   border: Border.all(
                       width: 2.0,
-                       color:const  Color.fromARGB(255, 114, 163, 181)),
+                      color: const Color.fromARGB(255, 114, 163, 181)),
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -103,8 +104,6 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 ),
               ),
             ),
-
-
             ListTile(
               leading: const Icon(
                 Icons.account_box,
@@ -114,7 +113,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 'Account',
                 style: TextStyle(color: drawertext),
               ),
-             onTap: () {
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -123,8 +122,6 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 );
               },
             ),
-
-
             ListTile(
               leading: const Icon(
                 Icons.list_alt_sharp,
@@ -199,8 +196,8 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 margin: const EdgeInsets.all(75),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    width: 2.0, 
-                    color:const  Color.fromARGB(255, 114, 163, 181)),
+                      width: 2.0,
+                      color: const Color.fromARGB(255, 114, 163, 181)),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: ListTile(
@@ -235,13 +232,13 @@ class _AnimatedAppBarState extends State<ScreenMain> {
         child: const Icon(Icons.add),
       ),
       //appBar: AppBarWidget(),
-      body:const  Center(
+      body: const Center(
         child: MainContainer(),
       ),
     );
   }
- 
 
+  //navigation_camara and upload part
   void _showAlertDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -258,7 +255,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                       children: [
                         IconButton(
                           color: backGroundColor,
-                          hoverColor:const  Color.fromARGB(255, 78, 131, 175),
+                          hoverColor: const Color.fromARGB(255, 78, 131, 175),
                           icon: const Icon(Icons.camera),
                           onPressed: () {
                             // Handle camera icon press
@@ -277,14 +274,14 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                       children: [
                         IconButton(
                           color: backGroundColor,
-                          hoverColor:const  Color.fromARGB(255, 78, 131, 175),
-                          icon:const  Icon(Icons.upload),
+                          hoverColor: const Color.fromARGB(255, 78, 131, 175),
+                          icon: const Icon(Icons.upload),
                           onPressed: () {
                             // Handle upload icon press
                             print('Upload icon pressed');
                           },
                         ),
-                       const  Text(
+                        const Text(
                           'Upload',
                           style: TextStyle(
                             color: backGroundColor,
@@ -302,3 +299,41 @@ class _AnimatedAppBarState extends State<ScreenMain> {
     );
   }
 }
+
+//notification  part
+void _showNotificationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Notification'),
+        content: Text('This is a notification message.'),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (contex) => ScreenNotification(),
+                  ),
+                );
+                },
+                child: Text('OK'),
+              ),
+                IconButton(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                onPressed: () {
+                    builder: (context) => AnotherNotificationPage();
+                },
+                icon: Icon(Icons.navigate_next),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+

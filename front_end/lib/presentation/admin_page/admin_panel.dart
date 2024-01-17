@@ -29,18 +29,20 @@ class AdminPanel extends StatelessWidget {
         ),
 
 
-        body: Column(
+        body: ListView(
           children: [
           const  SizedBox(
               height: 100,
             ),
-           const Text(
-              'Admin Panel',
-              style: TextStyle(
-                fontSize: 52,
-                fontWeight: FontWeight.bold,
+           const Center(
+             child:  Text(
+                'Admin Panel',
+                style: TextStyle(
+                  fontSize: 52,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
+           ),
 
 
             Container(
