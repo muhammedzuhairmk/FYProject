@@ -315,17 +315,18 @@ void _showNotificationDialog(BuildContext context) {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (contex) => ScreenNotification(),
-                  ),
-                );
+                    MaterialPageRoute(
+                      builder: (contex) => ScreenNotification(),
+                    ),
+                  );
                 },
                 child: Text('OK'),
               ),
-                IconButton(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+              IconButton(
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 onPressed: () {
-                    builder: (context) => AnotherNotificationPage();
+                  builder:
+                  (context) => AnotherNotificationPage();
                 },
                 icon: Icon(Icons.navigate_next),
               ),
@@ -336,4 +337,3 @@ void _showNotificationDialog(BuildContext context) {
     },
   );
 }
-
