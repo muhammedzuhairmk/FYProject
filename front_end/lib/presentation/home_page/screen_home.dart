@@ -4,7 +4,7 @@ import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/presentation/account_page/screen_Account.dart';
 import 'package:front_end/presentation/admin_page/admin_panel.dart';
 import 'package:front_end/presentation/home_page/widgets/main_container.dart';
-import 'package:front_end/presentation/home_page/widgets/notification.dart';
+//import 'package:front_end/presentation/home_page/widgets/notification.dart';
 import '../event_list_page/widget/screen_event_list.dart';
 
 class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
@@ -309,29 +309,29 @@ void _showNotificationDialog(BuildContext context) {
         title: Text('Notification'),
         content: Text('This is a notification message.'),
         actions: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (contex) => ScreenNotification(),
-                    ),
-                  );
-                },
-                child: Text('OK'),
-              ),
-              IconButton(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                onPressed: () {
-                  builder:
-                  (context) => AnotherNotificationPage();
-                },
-                icon: Icon(Icons.navigate_next),
-              ),
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: [
+          //     TextButton(
+          //       onPressed: () {
+          //         Navigator.of(context).push(
+          //           MaterialPageRoute(
+          //             builder: (contex) => ScreenNotification(),
+          //           ),
+          //         );
+          //       },
+          //       child: Text('OK'),
+          //     ),
+          //     IconButton(
+          //       padding: EdgeInsets.symmetric(horizontal: 20),
+          //       onPressed: () {
+          //         builder:
+          //         (context) => AnotherNotificationPage();
+          //       },
+          //       icon: Icon(Icons.navigate_next),
+          //     ),
+          //   ],
+          // ),
         ],
       );
     },

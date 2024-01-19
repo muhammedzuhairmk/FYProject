@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
-
-
+import 'package:front_end/presentation/registration/login_page.dart';
+import 'package:front_end/presentation/registration/registration_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-      const Duration(seconds: 54),
+      const Duration(seconds: 4),
       () {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => WelcomeScreen()),
@@ -26,7 +26,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData( primaryColor: const Color.fromARGB(255, 119, 192, 251),);
+    ThemeData(
+      primaryColor: Color.fromARGB(255, 6, 34, 56),
+    );
 
     return Scaffold(
       backgroundColor: backGroundColor,
@@ -86,14 +88,18 @@ class WelcomeScreen extends StatelessWidget {
               const Spacer(),
               ElevatedButton(
                 onPressed: () {
-                  onTapSignIn(context);
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => login_page()),
+                  );
                 },
                 child: Text("Sign In"),
               ),
               const SizedBox(height: 17),
               OutlinedButton(
                 onPressed: () {
-                  onTapSignUp(context);
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => Reg_page()),
+                  );
                 },
                 child: const Text("Sign Up"),
               ),
@@ -106,7 +112,7 @@ class WelcomeScreen extends StatelessWidget {
 }
 
 void onTapSignIn(BuildContext context) {
-  Navigator.pushNamed(context, AppRoutes.signInScreen);
+  Navigator.pushNamed(context, AppRoutes.login_page);
 }
 
 void onTapSignUp(BuildContext context) {
@@ -114,13 +120,6 @@ void onTapSignUp(BuildContext context) {
 }
 
 class AppRoutes {
-  static const String signInScreen = '/signin';
+  static const String login_page = '/signin';
   static const String signUpScreen = '/signup';
 }
-
-
-
-
-
-
-

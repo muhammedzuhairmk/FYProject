@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
-import 'package:front_end/presentation/registration/login_page.dart';
+//import 'package:front_end/presentation/registration/login_page.dart';
 //import 'presentation/main_page/screen_main.dart';
 
-//import 'presentation/splash_screen.dart';
+import 'presentation/splash_screen.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: backGroundColor,
       ),
-      home: login_page(),
+      home: SplashScreen(),
     );
   }
 }
