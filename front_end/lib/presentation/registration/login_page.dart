@@ -120,7 +120,7 @@ class _login_pageState extends State<login_page> {
                 height: 5,
               ),
               Padding(
-                padding: EdgeInsets.only(left: 35),
+                padding: const EdgeInsets.only(left: 35),
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                   TextButton(
@@ -157,7 +157,7 @@ class _login_pageState extends State<login_page> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomeScreen()));
+                                builder: (context) => const HomeScreen()));
                       }
                     },
                     style: ElevatedButton.styleFrom(

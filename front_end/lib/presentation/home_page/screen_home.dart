@@ -4,7 +4,7 @@ import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/presentation/account_page/screen_Account.dart';
 import 'package:front_end/presentation/admin_page/admin_panel.dart';
 import 'package:front_end/presentation/home_page/widgets/main_container.dart';
-//import 'package:front_end/presentation/home_page/widgets/notification.dart';
+import 'package:front_end/presentation/home_page/widgets/notification.dart';
 import '../event_list_page/widget/screen_event_list.dart';
 
 class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
@@ -16,7 +16,7 @@ class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _AnimatedAppBarState extends State<ScreenMain> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   bool _isScrolled = false;
 
   @override
@@ -305,33 +305,35 @@ void _showNotificationDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Notification'),
-        content: Text('This is a notification message.'),
+      return  AlertDialog(
+        title: const Text('Notification'),
+        content: const Text('This is a notification message.'),
         actions: <Widget>[
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   children: [
-          //     TextButton(
-          //       onPressed: () {
-          //         Navigator.of(context).push(
-          //           MaterialPageRoute(
-          //             builder: (contex) => ScreenNotification(),
-          //           ),
-          //         );
-          //       },
-          //       child: Text('OK'),
-          //     ),
-          //     IconButton(
-          //       padding: EdgeInsets.symmetric(horizontal: 20),
-          //       onPressed: () {
-          //         builder:
-          //         (context) => AnotherNotificationPage();
-          //       },
-          //       icon: Icon(Icons.navigate_next),
-          //     ),
-          //   ],
-          // ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                       maintainState: true, 
+                       builder: (BuildContext context) => ScreenNotification()
+                    ),
+                  );
+                },
+                child:const  Text('OK'),
+              ),
+              IconButton(
+                padding:const  EdgeInsets.symmetric(horizontal: 20),
+                onPressed: () {
+                  MaterialPageRoute(
+                      builder: (contex) => const ScreenNotification(),
+                    );
+                },
+                icon:const  Icon(Icons.navigate_next),
+              ),
+            ],
+          ),
         ],
       );
     },
