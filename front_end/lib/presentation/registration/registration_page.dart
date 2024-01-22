@@ -1,5 +1,8 @@
+// ignore_for_file: non_constant_identifier_names, prefer_const_constructors_in_immutables, camel_case_types
+
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:email_validator/email_validator.dart';
 import 'package:front_end/presentation/registration/login_page.dart';
@@ -22,11 +25,11 @@ class _Reg_pageState extends State<Reg_page> {
 
 //textediting  controllers
 
-  final NameController = TextEditingController();
-  final GmailController = TextEditingController();
-  final PhonoNoController = TextEditingController();
+  final nameController = TextEditingController();
+  final gmailController = TextEditingController();
+  final phonoNoController = TextEditingController();
   final passController = TextEditingController();
-  final ConPassController = TextEditingController();
+  final conPassController = TextEditingController();
 
   bool _securePass = true;
   bool _secureConPass = true;
@@ -70,7 +73,7 @@ class _Reg_pageState extends State<Reg_page> {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 35, left: 35),
                     child: TextFormField(
-                        controller: NameController,
+                        controller: nameController,
                         decoration: const InputDecoration(
                           enabledBorder: InputBorder.none,
                           fillColor: Color.fromARGB(212, 237, 235, 235),
@@ -97,7 +100,7 @@ class _Reg_pageState extends State<Reg_page> {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 35, left: 35),
                     child: TextFormField(
-                        controller: GmailController,
+                        controller: gmailController,
                         decoration: const InputDecoration(
                           enabledBorder: InputBorder.none,
                           fillColor: const Color.fromARGB(212, 237, 235, 235),
@@ -106,7 +109,7 @@ class _Reg_pageState extends State<Reg_page> {
                           hintText: "Gmail",
                         ),
                         validator: (value) {
-                          if (!EmailValidator.validate(GmailController.text)) {
+                          if (!EmailValidator.validate(gmailController.text)) {
                             return "Please enter a valid gmail";
                           } else {
                             return null;
@@ -124,7 +127,7 @@ class _Reg_pageState extends State<Reg_page> {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 35, left: 35),
                     child: TextFormField(
-                        controller: PhonoNoController,
+                        controller: phonoNoController,
                         decoration: const InputDecoration(
                           enabledBorder: InputBorder.none,
                           fillColor: Color.fromARGB(212, 237, 235, 235),
@@ -193,7 +196,7 @@ class _Reg_pageState extends State<Reg_page> {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 35, left: 35),
                     child: TextFormField(
-                        controller: ConPassController,
+                        controller: conPassController,
                         decoration: InputDecoration(
                           enabledBorder: InputBorder.none,
                           fillColor: const Color.fromARGB(212, 237, 235, 235),

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, camel_case_types
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
@@ -8,7 +10,7 @@ import 'package:front_end/presentation/registration/registration_page.dart';
 //import 'package:front_end/core/constant/colors.dart';
 
 class login_page extends StatefulWidget {
-  login_page({super.key});
+  const login_page({super.key});
 
   @override
   State<login_page> createState() => _login_pageState();
@@ -17,10 +19,12 @@ class login_page extends StatefulWidget {
 class _login_pageState extends State<login_page> {
   final _GmailKey = GlobalKey<FormState>();
   final _PassKey = GlobalKey<FormState>();
-  final _GmailController = TextEditingController();
+  final _gmailController = TextEditingController();
   final _passController = TextEditingController();
 
   bool _securePass = true;
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,7 @@ class _login_pageState extends State<login_page> {
           shadowColor: Colors.black,
           elevation: 10,
           toolbarHeight: 100,
-          backgroundColor: Color.fromARGB(255, 246, 246, 246),
+          backgroundColor:const Color.fromARGB(255, 246, 246, 246),
           title: const Padding(
             padding: EdgeInsets.only(top: 25),
             child: Text(
@@ -61,7 +65,7 @@ class _login_pageState extends State<login_page> {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 35, left: 35),
                   child: TextFormField(
-                      controller: _GmailController,
+                      controller: _gmailController,
                       decoration: const InputDecoration(
                         enabledBorder: InputBorder.none,
                         fillColor: Color.fromARGB(212, 237, 235, 235),
@@ -70,7 +74,7 @@ class _login_pageState extends State<login_page> {
                         hintText: "Gmail",
                       ),
                       validator: (value) {
-                        if (!EmailValidator.validate(_GmailController.text)) {
+                        if (!EmailValidator.validate(_gmailController.text)) {
                           return "Please enter a valid gmail";
                         } else {
                           return null;
