@@ -1,9 +1,10 @@
-const mongoose = require ("mongoose");
+const mongoose = require('mongoose');
 
-const connection = mongoose.createConnection('mongodb://localhost:27017/EventSnap').on('open', () => {
-    console.log("Mongoodb connected");
-}).on('error', () => {
-    console.log("Mongoodb Connection Error");
-});
+const connection = mongoose.createConnection('mongodb://127.0.0.1:27017/EventSnap');
 
-module .exports = connection;
+connection.on('connected',()=>{
+    console.log("DB Connected");
+})
+
+
+module.exports = connection;

@@ -89,7 +89,7 @@ class WelcomeScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => login_page()),
+                    MaterialPageRoute(builder: (context) => Login()),
                   );
                 },
                 child: Text("Sign In"),
@@ -98,7 +98,7 @@ class WelcomeScreen extends StatelessWidget {
               OutlinedButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => Reg_page()),
+                    MaterialPageRoute(builder: (context) => Registration()),
                   );
                 },
                 child: const Text("Sign Up"),
