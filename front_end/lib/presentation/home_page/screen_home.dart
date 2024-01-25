@@ -28,6 +28,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
       });
     });
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -300,7 +301,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
   }
 }
 
-//notification  part
+
 void _showNotificationDialog(BuildContext context) {
   showDialog(
     context: context,
@@ -314,20 +315,14 @@ void _showNotificationDialog(BuildContext context) {
             children: [
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                       maintainState: true, 
-                       builder: (BuildContext context) => ScreenNotification()
-                    ),
-                  );
+                Navigator.of(context).pop(); 
                 },
                 child:const  Text('OK'),
               ),
               IconButton(
                 padding:const  EdgeInsets.symmetric(horizontal: 20),
                 onPressed: () {
-                  MaterialPageRoute(
-                      builder: (contex) => const ScreenNotification(),
+                 Navigator.push(context, MaterialPageRoute(builder: (builder)=>ScreenNotification())
                     );
                 },
                 icon:const  Icon(Icons.navigate_next),

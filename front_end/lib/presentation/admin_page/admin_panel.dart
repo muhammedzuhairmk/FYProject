@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
 
@@ -314,7 +316,7 @@ class AdminPanel extends StatelessWidget {
                   padding:const  EdgeInsets.all(10),
                     height: 60,
                     width: 60,
-                   child:  Image(image: AssetImage("assets/images/amalcollege.png"),width: 10.2,height: 10.0,),
+                   child:  const Image(image: AssetImage("assets/images/amalcollege.png"),width: 10.2,height: 10.0,),
                     decoration:const  BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       color: Colors.white),

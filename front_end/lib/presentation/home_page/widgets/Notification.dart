@@ -79,8 +79,8 @@ class _DashboardState extends State<ScreenNotification> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: TextFormField(
-                                decoration: InputDecoration(
+                            child:  TextFormField(
+                                decoration:const  InputDecoration(
                                   filled: true,
                                   fillColor: Colors.white,
                                   hintText: "Long URL",

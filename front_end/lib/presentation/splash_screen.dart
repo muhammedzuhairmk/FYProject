@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
@@ -18,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
       const Duration(seconds: 2),
       () {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => WelcomeScreen()),
+          MaterialPageRoute(builder: (context) => const WelcomeScreen()),
         );
       },
     );
@@ -27,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeData(
-      primaryColor: Color.fromARGB(255, 6, 34, 56),
+      primaryColor: const Color.fromARGB(255, 6, 34, 56),
     );
 
     return Scaffold(
@@ -77,7 +79,7 @@ class WelcomeScreen extends StatelessWidget {
               const SizedBox(height: 27),
               Text(
                 "Welcome!",
-                style: theme.textTheme.headline2,
+                style: theme.textTheme.displayMedium,
               ),
               const SizedBox(height: 8),
               const Text("Sign in or create a new account",
@@ -89,16 +91,16 @@ class WelcomeScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => Login()),
+                    MaterialPageRoute(builder: (context) => const Login()),
                   );
                 },
-                child: Text("Sign In"),
+                child:const Text("Sign In"),
               ),
               const SizedBox(height: 17),
               OutlinedButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => Registration()),
+                    MaterialPageRoute(builder: (context) =>const  Registration()),
                   );
                 },
                 child: const Text("Sign Up"),
@@ -120,6 +122,7 @@ void onTapSignUp(BuildContext context) {
 }
 
 class AppRoutes {
+  // ignore: constant_identifier_names
   static const String login_page = '/signin';
   static const String signUpScreen = '/signup';
 }
