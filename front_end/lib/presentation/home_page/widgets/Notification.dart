@@ -1,136 +1,203 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
 
-class ScreenNotification extends StatefulWidget {
-  const ScreenNotification({super.key});
+class ToDo {
+  final String id;
+  final String title;
+  final String description;
 
-  @override
-  State<ScreenNotification> createState() => _DashboardState();
+  ToDo({
+    required this.id,
+    required this.title,
+    required this.description,
+  });
+
+  factory ToDo.fromJson(Map<String, dynamic> json) {
+    return ToDo(
+      id: json['_id'],
+      title: json['title'],
+      description: json['description'],
+    );
+  }
 }
 
-class _DashboardState extends State<ScreenNotification> {
-  final getStoage = GetStorage();
-  final textLongUrl = TextEditingController();
-  final getConnect = GetConnect();
+class ScreenNotification extends StatefulWidget {
+  const ScreenNotification({Key? key}) : super(key: key);
 
-  List<Map<String,dynamic>> dataList = [];
+  @override
+  _ToDoListPageState createState() => _ToDoListPageState();
+}
 
-  void _urlSubmit(longurl) async{
-
-    Map<String,dynamic> userData = getStoage.read('user');
-    String userId = userData['_id'];
-
-    final res = await getConnect.post('http://192.168.29.239:3000/urlSubmit',
-        {
-          'userId': userId,
-          'longUrl': longurl
-    });
-
-    print(res.body['shortUrl']);
-
-    Get.snackbar("Short URL Created", res.body['shortUrl']);
-    textLongUrl.text="";
-  }
-
-  Future<void> _fetchUserUrl(userId) async {
-  
-    final response = await getConnect.post('http://192.168.14.131:3000/getUserURL', {
-        'userId' : userId
-    });
-
-    final List<dynamic> data = response.body['success'];
-
-    setState(() {
-      dataList = List<Map<String,dynamic>>.from(data);
-    });
-    
-  }
+class _ToDoListPageState extends State<ScreenNotification> {
+  List<ToDo> todos = [];
+  bool isLoading = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Map<String,dynamic> userData = getStoage.read('user');
-    String userId = userData['_id'];
+    fetchToDos();
+  }
 
-    _fetchUserUrl(userId);
+  Future<void> fetchToDos() async {
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.get(Uri.parse('http://192.168.159.240:3000/userRegistration'));
+    if (response.statusCode == 200) {
+      final List<dynamic> todoList = jsonDecode(response.body);
+      setState(() {
+        todos = todoList.map((json) => ToDo.fromJson(json)).toList();
+        isLoading = false;
+      });
+    } else {
+      // Handle error
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
+  Future<void> addToDo() async {
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.post(
+      Uri.parse('http://192.168.159.240:3000/userRegistration'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"title": "New ToDo", "description": "Description"}),
+    );
+    if (response.statusCode == 200) {
+      fetchToDos();
+    } else {
+      // Handle error
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> deleteToDo(String id) async {
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.delete(Uri.parse('http://192.168.159.240:3000/userRegistration/$id'));
+    if (response.statusCode == 200) {
+      fetchToDos();
+    } else {
+      // Handle error
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> updateToDoTitle(String id, String newTitle) async {
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.put(
+      Uri.parse('http://your-backend-url/updateToDo/$id'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"title": newTitle}),
+    );
+    if (response.statusCode == 200) {
+      fetchToDos();
+    } else {
+      // Handle error
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: 10,),
-                  const Text("* URL SHORTENER *",style: TextStyle(fontSize: 30),),
-                  const Text("Long URL to Short URL"),
-                  SizedBox(height: 10,),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Form(
-                      child: Row(
+    return Scaffold(
+      appBar: AppBar(title: const Text('To-Do List')),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : todos.isEmpty
+              ? Center(child: Text('No To-Dos found'))
+              : ListView.builder(
+                  itemCount: todos.length,
+                  itemBuilder: (context, index) {
+                    final todo = todos[index];
+                    return ListTile(
+                      title: Text(todo.title),
+                      subtitle: Text(todo.description),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Expanded(
-                            child:  TextFormField(
-                                decoration:const  InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: "Long URL",
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10.0))
-                                  ),
-                                ),
-                                controller: textLongUrl,
-                                validator: (value){
-                                  if(value == null || value.isEmpty){
-                                    return " Please Enter long Url";
-                                  }
-                                  return null;
-                                }
-                            ),
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () => _showEditDialog(context, todo),
                           ),
-                          SizedBox(width: 10), // Add some spacing between TextField and Button
-                          ElevatedButton(
-                            onPressed: () {
-                              _urlSubmit(textLongUrl.text);
-                            },
-                            child: Text('Submit'),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () => _showDeleteDialog(context, todo.id),
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  dataList.isEmpty ? CircularProgressIndicator(): Expanded(
-                    child: Container(
-                      child: ListView.builder(
-                        itemCount: dataList.length,
-                          itemBuilder: (context,index){
-                          return Card(
-                            elevation: 2,
-                            margin: EdgeInsets.symmetric(vertical: 6,horizontal: 16),
-                            child: ListTile(
-                              title: Text("http://192.168.29.239/${dataList[index]['shorturl']}"),
-                              subtitle: Text('${dataList[index]['longUrl']}'),
-                            ),
-                          );
-                          }
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
+                    );
+                  },
+                ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: addToDo,
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Future<void> _showEditDialog(BuildContext context, ToDo todo) async {
+    TextEditingController titleController = TextEditingController(text: todo.title);
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Edit ToDo'),
+        content: TextField(controller: titleController),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel'),
           ),
-        ),
+          TextButton(
+            onPressed: () async {
+              await updateToDoTitle(todo.id, titleController.text);
+              Navigator.of(context).pop();
+            },
+            child: Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showDeleteDialog(BuildContext context, String id) async {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Delete ToDo'),
+        content: Text('Are you sure you want to delete this ToDo?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await deleteToDo(id);
+              Navigator.of(context).pop();
+            },
+            child: Text('Delete'),
+          ),
+        ],
       ),
     );
   }
 }
+

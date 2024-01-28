@@ -1,4 +1,4 @@
-// ignore_for_file: sort_child_properties_last
+// ignore_for_file: sort_child_properties_last, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
@@ -80,7 +80,7 @@ class AdminPanel extends StatelessWidget {
                             icon:const  Icon(Icons.camera),
                             onPressed: () {
                               // Handle camera icon press
-                              print('Camera icon pressed');
+                              
                             },
                           ),
 
@@ -137,9 +137,7 @@ class AdminPanel extends StatelessWidget {
                             hoverColor: const Color.fromARGB(255, 78, 131, 175),
                             icon:const Icon(Icons.notification_add_rounded),
                             onPressed: () {
-                              // Handle camera icon press
-                              print('notification icon pressed');
-                            },
+                            }
                           ),
 
 

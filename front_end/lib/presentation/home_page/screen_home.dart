@@ -1,9 +1,11 @@
-//ignore_for_file: use_build_context_synchronously
+//ignore_for_file: use_build_context_synchronously, prefer_const_constructors
+
 
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 //import 'package:flutter/foundation.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -11,8 +13,8 @@ import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/presentation/account_page/screen_Account.dart';
 import 'package:front_end/presentation/admin_page/admin_panel.dart';
 import 'package:front_end/presentation/home_page/widgets/main_container.dart';
-import 'package:front_end/presentation/home_page/widgets/notification.dart';
 import '../event_list_page/widget/screen_event_list.dart';
+import 'widgets/Notification.dart';
 
 class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
   @override
@@ -65,7 +67,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 color: _isScrolled ? Colors.black : backGroundColor,
               ),
               onPressed: () {
-                _showNotificationDialog(context);
+                _showNotificationDialog(context, " ");
               },
             ),
           ],
@@ -315,77 +317,72 @@ class _AnimatedAppBarState extends State<ScreenMain> {
 
 
   
-  Future _pickImageGallery() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage == null) return;
-    setState(() {
-      selectedIMage = File(returnImage.path);
-      //_image = File(returnImage.path).readAsBytesSync();
-    });
+ Future<void> _pickImageGallery() async {
+  final returnImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+  if (returnImage == null) return;
+  setState(() {
+    selectedIMage = File(returnImage.path);
+  });
 
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse('http://localhost:3000/upload'),
-      );
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'image',
-          compressedFile.path,
-        ),
-      );
+  var request = http.MultipartRequest(
+    'POST',
+    Uri.parse('http://192.168.160.240:3000/upload'),
+  );
+  request.files.add(
+    await http.MultipartFile.fromPath(
+      'image',
+      selectedIMage!.path, // Use selectedIMage instead of compressedFile
+    ),
+  );
 
-      try {
-        final response = await request.send();
-        if (response.statusCode == 200) {
-          print('Image uploaded successfully');
-        } else {
-          print('Failed to upload image');
-        }
-      } catch (e) {
-        print('Error uploading image: $e');
-      }  }
+  try {
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      print('Image uploaded successfully');
+    } else {
+      print('Failed to upload image');
+    }
+  } catch (e) {
+    print('Error uploading image: $e');
+  }
+}
 
-//Camera
-  Future _pickImageCamera() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (returnImage == null) return;
-    setState(() {
-      selectedIMage = File(returnImage.path);
-      //_image = File(returnImage.path).readAsBytesSync();
-    });
-    
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse('http://localhost:3000/upload'),
-      );
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'image',
-          compressedFile.path,
-        ),
-      );
+Future<void> _pickImageCamera() async {
+  final returnImage = await ImagePicker().pickImage(source: ImageSource.camera);
+  if (returnImage == null) return;
+  setState(() {
+    selectedIMage = File(returnImage.path);
+  });
+  
+  var request = http.MultipartRequest(
+    'POST',
+    Uri.parse('http://192.168.160.240:3000/upload'),
+  );
+  request.files.add(
+    await http.MultipartFile.fromPath(
+      'image',
+      selectedIMage!.path, // Use selectedIMage instead of compressedFile
+    ),
+  );
 
-      try {
-        final response = await request.send();
-        if (response.statusCode == 200) {
-          print('Image uploaded successfully');
-        } else {
-          print('Failed to upload image');
-        }
-      } catch (e) {
-        print('Error uploading image: $e');
-      }
+  try {
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      print('Image uploaded successfully');
+    } else {
+      print('Failed to upload image');
+    }
+  } catch (e) {
+    print('Error uploading image: $e');
   }
 }
 
 
-void _showNotificationDialog(BuildContext context) {
+void _showNotificationDialog(BuildContext context, String response) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return  AlertDialog(
+      return AlertDialog(
         title: const Text('Notification'),
         content: const Text('This is a notification message.'),
         actions: <Widget>[
@@ -394,17 +391,17 @@ void _showNotificationDialog(BuildContext context) {
             children: [
               TextButton(
                 onPressed: () {
-                Navigator.of(context).pop(); 
+                  Navigator.of(context).pop();
                 },
-                child:const  Text('OK'),
+                child: const Text('OK'),
               ),
               IconButton(
-                padding:const  EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 onPressed: () {
-                 Navigator.push(context, MaterialPageRoute(builder: (builder)=>const ScreenNotification())
-                    );
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenNotification() )); 
+                 
                 },
-                icon:const  Icon(Icons.navigate_next),
+                icon: const Icon(Icons.navigate_next),
               ),
             ],
           ),
@@ -412,4 +409,5 @@ void _showNotificationDialog(BuildContext context) {
       );
     },
   );
+}
 }

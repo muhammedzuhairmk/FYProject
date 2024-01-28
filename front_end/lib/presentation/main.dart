@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
-import 'package:front_end/presentation/home_page/widgets/notification.dart';
 import 'package:front_end/presentation/main_page/screen_main.dart';
-import 'package:front_end/presentation/splash_screen.dart';
 import 'package:get_storage/get_storage.dart';
+import 'home_page/widgets/Notification.dart';
 import 'registration/login_page.dart';
 import 'package:get/get.dart';
 

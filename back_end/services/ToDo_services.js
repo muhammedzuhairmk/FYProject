@@ -1,4 +1,3 @@
-const { deleteToDo } = require("../controller/ToDo_controller");
 const ToDoModel = require("../models/ToDo_model");
 
 class ToDoService{
