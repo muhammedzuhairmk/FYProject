@@ -26,13 +26,13 @@ class _RegistrationState extends State<Registration> {
   void _register(name,email,pass) async{
     print("${name},${email},${pass}");
 
-    if(name.isEmpty || email.isEmpty || pass.isEmpty){
+    if(name.isEmpty || email.isEmpty  || pass.isEmpty ){
       Get.snackbar("Please Enter Details", '');
     }else{
-      final res = await getConnect.post('http://192.168.14.131:3000/userRegistration', {
+      final res = await getConnect.post('http://192.168.159.240:3000/userRegistration', {
         "name":name,
         "email":email,
-        "password":pass
+        "password":pass,
       });
 
       if(res.body['status']){
@@ -82,6 +82,7 @@ class _RegistrationState extends State<Registration> {
                             borderRadius: BorderRadius.all(Radius.circular(10.0)))),
                   ),
                 ),
+               
                 Padding(
                   padding: const EdgeInsets.fromLTRB(25, 20, 25, 2),
                   child: TextField(
@@ -95,6 +96,7 @@ class _RegistrationState extends State<Registration> {
                             borderRadius: BorderRadius.all(Radius.circular(10.0)))),
                   ),
                 ),
+                
                 Padding(padding: const EdgeInsets.all(20),child:
                 ElevatedButton(
                   onPressed: () {

@@ -1,5 +1,12 @@
+//ignore_for_file: use_build_context_synchronously
+
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+//import 'package:flutter/foundation.dart';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/presentation/account_page/screen_Account.dart';
 import 'package:front_end/presentation/admin_page/admin_panel.dart';
@@ -16,6 +23,10 @@ class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _AnimatedAppBarState extends State<ScreenMain> {
+
+ 
+  File? selectedIMage;
+
   final ScrollController _scrollController = ScrollController();
   bool _isScrolled = false;
 
@@ -28,6 +39,8 @@ class _AnimatedAppBarState extends State<ScreenMain> {
       });
     });
   }
+
+  
   
 
   @override
@@ -260,7 +273,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                           icon: const Icon(Icons.camera),
                           onPressed: () {
                             // Handle camera icon press
-                            print('Camera icon pressed');
+                            _pickImageCamera();
                           },
                         ),
                         const Text(
@@ -279,7 +292,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                           icon: const Icon(Icons.upload),
                           onPressed: () {
                             // Handle upload icon press
-                            print('Upload icon pressed');
+                           _pickImageGallery();
                           },
                         ),
                         const Text(
@@ -298,6 +311,72 @@ class _AnimatedAppBarState extends State<ScreenMain> {
         );
       },
     );
+  }
+
+
+  
+  Future _pickImageGallery() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returnImage == null) return;
+    setState(() {
+      selectedIMage = File(returnImage.path);
+      //_image = File(returnImage.path).readAsBytesSync();
+    });
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('http://localhost:3000/upload'),
+      );
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image',
+          compressedFile.path,
+        ),
+      );
+
+      try {
+        final response = await request.send();
+        if (response.statusCode == 200) {
+          print('Image uploaded successfully');
+        } else {
+          print('Failed to upload image');
+        }
+      } catch (e) {
+        print('Error uploading image: $e');
+      }  }
+
+//Camera
+  Future _pickImageCamera() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (returnImage == null) return;
+    setState(() {
+      selectedIMage = File(returnImage.path);
+      //_image = File(returnImage.path).readAsBytesSync();
+    });
+    
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('http://localhost:3000/upload'),
+      );
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image',
+          compressedFile.path,
+        ),
+      );
+
+      try {
+        final response = await request.send();
+        if (response.statusCode == 200) {
+          print('Image uploaded successfully');
+        } else {
+          print('Failed to upload image');
+        }
+      } catch (e) {
+        print('Error uploading image: $e');
+      }
   }
 }
 
@@ -322,7 +401,7 @@ void _showNotificationDialog(BuildContext context) {
               IconButton(
                 padding:const  EdgeInsets.symmetric(horizontal: 20),
                 onPressed: () {
-                 Navigator.push(context, MaterialPageRoute(builder: (builder)=>ScreenNotification())
+                 Navigator.push(context, MaterialPageRoute(builder: (builder)=>const ScreenNotification())
                     );
                 },
                 icon:const  Icon(Icons.navigate_next),

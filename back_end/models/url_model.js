@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const db = require('../config/db_config');
-const userModel = require('./user_model')
+const userModel = require('./user_model');
 
 const { Schema } = mongoose;
 

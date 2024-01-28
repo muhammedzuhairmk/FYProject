@@ -1,4 +1,10 @@
+
+
 import 'package:flutter/material.dart';
+import 'package:front_end/presentation/account_page/pickProfile.dart';
+
+
+
 
 class AccountDetails extends StatefulWidget {
   const AccountDetails({Key? key}) : super(key: key);
@@ -20,7 +26,7 @@ class _AccountDetailsState extends State<AccountDetails> {
      var  confirm_password_Controller = TextEditingController();
 
   int _currentStep = 0;
-
+ 
   List<Step> stepList() {
     return [
         Step(
@@ -136,8 +142,10 @@ class _AccountDetailsState extends State<AccountDetails> {
       appBar: AppBar(
         title: const Text('EventSnap'),
       ),
-      body: ListView(
+      body: 
+        ListView(
         children: [
+          const pickProfile(),
           const SizedBox(
             height: 20,
           ),
@@ -191,18 +199,20 @@ class _AccountDetailsState extends State<AccountDetails> {
               ),
             ),
           ),
-          ElevatedButton(
-                onPressed: () {
-                  // Add your button click logic here
-                },
-                child: const Text("save"),
-          
+          Center(
+            child: ElevatedButton(
+                  onPressed: () {
+                    // Add your button click logic here
+                  },
+                  child: const Text("save"),
+            
+            ),
           ),
+          SizedBox(
+            height: 20,
+          )
         ],
       ),
     );
   }
 }
-
-
-

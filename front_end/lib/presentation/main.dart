@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/presentation/home_page/widgets/notification.dart';
 import 'package:front_end/presentation/main_page/screen_main.dart';
+import 'package:front_end/presentation/splash_screen.dart';
 import 'package:get_storage/get_storage.dart';
-import 'presentation/registration/login_page.dart';
-//import 'presentation/splash_screen.dart';
+import 'registration/login_page.dart';
 import 'package:get/get.dart';
 
 void main() async {
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final get_storage = GetStorage();
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
 
     get_storage.writeIfNull('user', false);

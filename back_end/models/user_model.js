@@ -10,10 +10,13 @@ const userSchema = new Schema({
     email:{
         type:String
     },
+       
     password:{
         type:String
     },
-})
+},{timestamps:true});
+
+
 
 const userModel = db.model('users',userSchema);
 module.exports = userModel;

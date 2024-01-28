@@ -1,4 +1,5 @@
-const app = require("./app")
+const app = require("./app");
+const db = require('./config/db_config');
 
 
 app.get('/',(req,res)=>{
