@@ -1,6 +1,5 @@
 //ignore_for_file: use_build_context_synchronously, prefer_const_constructors
 
-
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -25,8 +24,6 @@ class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _AnimatedAppBarState extends State<ScreenMain> {
-
- 
   File? selectedIMage;
 
   final ScrollController _scrollController = ScrollController();
@@ -41,9 +38,6 @@ class _AnimatedAppBarState extends State<ScreenMain> {
       });
     });
   }
-
-  
-  
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +127,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const AccountDetails(),
+                    builder: (context) => AccountPage(),
                   ),
                 );
               },
@@ -294,7 +288,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                           icon: const Icon(Icons.upload),
                           onPressed: () {
                             // Handle upload icon press
-                           _pickImageGallery();
+                            _pickImageGallery();
                           },
                         ),
                         const Text(
@@ -315,99 +309,100 @@ class _AnimatedAppBarState extends State<ScreenMain> {
     );
   }
 
+  Future<void> _pickImageGallery() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returnImage == null) return;
+    setState(() {
+      selectedIMage = File(returnImage.path);
+    });
 
-  
- Future<void> _pickImageGallery() async {
-  final returnImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-  if (returnImage == null) return;
-  setState(() {
-    selectedIMage = File(returnImage.path);
-  });
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://192.168.160.240:3000/upload'),
+    );
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'image',
+        selectedIMage!.path, // Use selectedIMage instead of compressedFile
+      ),
+    );
 
-  var request = http.MultipartRequest(
-    'POST',
-    Uri.parse('http://192.168.160.240:3000/upload'),
-  );
-  request.files.add(
-    await http.MultipartFile.fromPath(
-      'image',
-      selectedIMage!.path, // Use selectedIMage instead of compressedFile
-    ),
-  );
-
-  try {
-    final response = await request.send();
-    if (response.statusCode == 200) {
-      print('Image uploaded successfully');
-    } else {
-      print('Failed to upload image');
+    try {
+      final response = await request.send();
+      if (response.statusCode == 200) {
+        print('Image uploaded successfully');
+      } else {
+        print('Failed to upload image');
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
     }
-  } catch (e) {
-    print('Error uploading image: $e');
   }
-}
 
-Future<void> _pickImageCamera() async {
-  final returnImage = await ImagePicker().pickImage(source: ImageSource.camera);
-  if (returnImage == null) return;
-  setState(() {
-    selectedIMage = File(returnImage.path);
-  });
-  
-  var request = http.MultipartRequest(
-    'POST',
-    Uri.parse('http://192.168.160.240:3000/upload'),
-  );
-  request.files.add(
-    await http.MultipartFile.fromPath(
-      'image',
-      selectedIMage!.path, // Use selectedIMage instead of compressedFile
-    ),
-  );
+  Future<void> _pickImageCamera() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (returnImage == null) return;
+    setState(() {
+      selectedIMage = File(returnImage.path);
+    });
 
-  try {
-    final response = await request.send();
-    if (response.statusCode == 200) {
-      print('Image uploaded successfully');
-    } else {
-      print('Failed to upload image');
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://192.168.160.240:3000/upload'),
+    );
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'image',
+        selectedIMage!.path, // Use selectedIMage instead of compressedFile
+      ),
+    );
+
+    try {
+      final response = await request.send();
+      if (response.statusCode == 200) {
+        print('Image uploaded successfully');
+      } else {
+        print('Failed to upload image');
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
     }
-  } catch (e) {
-    print('Error uploading image: $e');
   }
-}
 
-
-void _showNotificationDialog(BuildContext context, String response) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Notification'),
-        content: const Text('This is a notification message.'),
-        actions: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-              IconButton(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                onPressed: () {
-                 Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenNotification() )); 
-                 
-                },
-                icon: const Icon(Icons.navigate_next),
-              ),
-            ],
-          ),
-        ],
-      );
-    },
-  );
-}
+  void _showNotificationDialog(BuildContext context, String response) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Notification'),
+          content: const Text('This is a notification message.'),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+                IconButton(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ScreenNotification()));
+                  },
+                  icon: const Icon(Icons.navigate_next),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

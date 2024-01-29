@@ -1,218 +1,135 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:front_end/presentation/account_page/pickProfile.dart';
 
-
-
-
-class AccountDetails extends StatefulWidget {
-  const AccountDetails({Key? key}) : super(key: key);
-
+class AccountPage extends StatefulWidget {
   @override
-  State<AccountDetails> createState() => _AccountDetailsState();
-
-  
+  _AccountPageState createState() => _AccountPageState();
 }
 
-class _AccountDetailsState extends State<AccountDetails> {
-  var  usernameController = TextEditingController();
-   var  emailController = TextEditingController();
-    var  addressController = TextEditingController();
-     var  phoneController = TextEditingController();
-     var  admission_year_Controller = TextEditingController();
-     var  roll_no_Controller = TextEditingController();
-     var  password_Controller = TextEditingController();
-     var  confirm_password_Controller = TextEditingController();
+class _AccountPageState extends State<AccountPage> {
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController admissionNumberController = TextEditingController();
+  TextEditingController currentPasswordController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
-  int _currentStep = 0;
- 
-  List<Step> stepList() {
-    return [
-        Step(
-          title: const Text('Account'),
-          isActive: _currentStep >= 0,
-          state: _currentStep <= 0 ? StepState.editing : StepState.complete,
-          content:  Column(
-            children: [
-              TextField(
-                controller:usernameController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: ' Username',
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-               TextField(
-                controller:emailController,
-                decoration:const  InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Email',
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-            ],
-          ),
-        ),
-        Step(
-          title: const Text('personal details'),
-          isActive: _currentStep >= 1,
-          state: _currentStep <= 1 ? StepState.editing : StepState.complete,
-          content:  Column(
-            children: [
-              TextField(
-                controller: addressController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: ' Address',
-                ),
-              ),
-             const  SizedBox(
-                height: 8,
-              ),
-               TextField(
-                controller: phoneController,
-                decoration:const  InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Phone Number',
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              TextField(
-                controller: admission_year_Controller,
-                decoration:const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Admission Year',
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              TextField(
-                controller: roll_no_Controller,
-                decoration:const  InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'RollNo',
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-            ],
-          ),
-        ),
-        Step(
-          title: const Text(' Password'),
-          isActive: _currentStep >= 2,
-          state: StepState.complete,
-          content:  Column(
-            children: [
-              TextField(
-                controller: password_Controller,
-                decoration:const  InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: ' Password',
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              TextField(
-                controller: confirm_password_Controller,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: ' Confirm Password',
-                ),
-              ),
-            ],
-          ),
-        ),
-      ];
-  }
+  bool _isEditingPersonalDetails = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('EventSnap'),
+        title: Text('Account Settings'),
       ),
-      body: 
-        ListView(
-        children: [
-          const pickProfile(),
-          const SizedBox(
-            height: 20,
-          ),
-          Container(
-            height: 50,
-            margin:const EdgeInsets.symmetric(horizontal: 25),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Account Details',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            child:const  Center(
-              child: Text(
-                "Account Details",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+            SizedBox(height: 10),
+            Text('Full Name: John Doe'), // Replace with actual user data
+            Text(
+                'Email: john.doe@example.com'), // Replace with actual user data
+            Text('Phone Number: 1234567890'), // Replace with actual user data
+            Text('Admission Number: A12345'), // Replace with actual user data
+            SizedBox(height: 20),
+            !_isEditingPersonalDetails
+                ? ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _isEditingPersonalDetails = true;
+                        fullNameController.text =
+                            'John Doe'; // Initialize with actual user data
+                        emailController.text =
+                            'john.doe@example.com'; // Initialize with actual user data
+                        phoneNumberController.text =
+                            '1234567890'; // Initialize with actual user data
+                        admissionNumberController.text =
+                            'A12345'; // Initialize with actual user data
+                      });
+                    },
+                    child: Text('Edit Personal Details'),
+                  )
+                : Column(
+                    children: [
+                      TextField(
+                        controller: fullNameController,
+                        decoration: InputDecoration(labelText: 'Full Name'),
+                      ),
+                      TextField(
+                        controller: emailController,
+                        decoration: InputDecoration(labelText: 'Email'),
+                      ),
+                      TextField(
+                        controller: phoneNumberController,
+                        decoration: InputDecoration(labelText: 'Phone Number'),
+                      ),
+                      TextField(
+                        controller: admissionNumberController,
+                        decoration:
+                            InputDecoration(labelText: 'Admission Number'),
+                      ),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            // Save updated personal details
+                            _isEditingPersonalDetails = false;
+                          });
+                        },
+                        child: Text('Save Personal Details'),
+                      ),
+                    ],
+                  ),
+            SizedBox(height: 20),
+            Text(
+              'Change Password',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: currentPasswordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Current Password',
               ),
             ),
-          ),
-          Center(
-            child: Container(
-              margin: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Stepper(
-                steps: stepList(),
-                elevation: 0,
-                onStepTapped: (int newIndex) {
-                  setState(() {
-                    _currentStep = newIndex;
-                  });
-                },
-                currentStep: _currentStep,
-                onStepContinue: () {
-                  if (_currentStep < (stepList().length - 1)) {
-                    setState(() {
-                      _currentStep += 1;
-                    });
-                  }
-                },
-                onStepCancel: () {
-                  if (_currentStep > 0) {
-                    setState(() {
-                      _currentStep -= 1;
-                    });
-                  }
-                },
+            TextField(
+              controller: newPasswordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'New Password',
               ),
             ),
-          ),
-          Center(
-            child: ElevatedButton(
-                  onPressed: () {
-                    // Add your button click logic here
-                  },
-                  child: const Text("save"),
-            
+            TextField(
+              controller: confirmPasswordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Confirm Password',
+              ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          )
-        ],
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Handle password change logic
+              },
+              child: Text('Change Password'),
+            ),
+          ],
+        ),
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: AccountPage(),
+  ));
 }
