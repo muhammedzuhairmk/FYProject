@@ -10,12 +10,14 @@ class _AccountPageState extends State<AccountPage> {
   TextEditingController fullNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController admissionYearController = TextEditingController();
   TextEditingController admissionNumberController = TextEditingController();
-  TextEditingController currentPasswordController = TextEditingController();
-  TextEditingController newPasswordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
+
+  TextEditingController passwordController = TextEditingController();
 
   bool _isEditingPersonalDetails = false;
+
+  int _currentStep = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,111 +27,120 @@ class _AccountPageState extends State<AccountPage> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
-            Text(
-              'Account Details',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text('Full Name: John Doe'), // Replace with actual user data
-            Text(
-                'Email: john.doe@example.com'), // Replace with actual user data
-            Text('Phone Number: 1234567890'), // Replace with actual user data
-            Text('Admission Number: A12345'), // Replace with actual user data
+            pickProfile(),
             SizedBox(height: 20),
-            !_isEditingPersonalDetails
-                ? ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _isEditingPersonalDetails = true;
-                        fullNameController.text =
-                            'John Doe'; // Initialize with actual user data
-                        emailController.text =
-                            'john.doe@example.com'; // Initialize with actual user data
-                        phoneNumberController.text =
-                            '1234567890'; // Initialize with actual user data
-                        admissionNumberController.text =
-                            'A12345'; // Initialize with actual user data
-                      });
-                    },
-                    child: Text('Edit Personal Details'),
-                  )
-                : Column(
-                    children: [
-                      TextField(
-                        controller: fullNameController,
-                        decoration: InputDecoration(labelText: 'Full Name'),
-                      ),
-                      TextField(
-                        controller: emailController,
-                        decoration: InputDecoration(labelText: 'Email'),
-                      ),
-                      TextField(
-                        controller: phoneNumberController,
-                        decoration: InputDecoration(labelText: 'Phone Number'),
-                      ),
-                      TextField(
-                        controller: admissionNumberController,
-                        decoration:
-                            InputDecoration(labelText: 'Admission Number'),
-                      ),
-                      SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            // Save updated personal details
-                            _isEditingPersonalDetails = false;
-                          });
-                        },
-                        child: Text('Save Personal Details'),
-                      ),
-                    ],
+            Container(
+              height: 50,
+              margin: EdgeInsets.symmetric(horizontal: 25),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Center(
+                child: Text(
+                  "Account Details",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
-            SizedBox(height: 20),
-            Text(
-              'Change Password',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: currentPasswordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Current Password',
+                ),
               ),
             ),
-            TextField(
-              controller: newPasswordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'New Password',
+            Center(
+              child: Container(
+                margin: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
             ),
-            TextField(
-              controller: confirmPasswordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Confirm Password',
+            TextFormField(
+              controller: fullNameController,
+              decoration: const InputDecoration(
+                labelText: 'Full Name',
+                prefixIcon: Icon(Icons.person),
               ),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Handle password change logic
-              },
-              child: Text('Change Password'),
+            TextFormField(
+              controller: emailController,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                prefixIcon: Icon(Icons.email),
+              ),
+            ),
+            SizedBox(height: 20),
+            TextFormField(
+              controller: phoneNumberController,
+              decoration: const InputDecoration(
+                labelText: 'Phone Number',
+                prefixIcon: Icon(Icons.phone),
+              ),
+            ),
+            SizedBox(height: 20),
+            TextFormField(
+              controller: admissionYearController,
+              decoration: const InputDecoration(
+                labelText: 'Admission Year',
+                prefixIcon: Icon(Icons.calendar_today),
+              ),
+            ),
+            SizedBox(height: 20),
+            TextFormField(
+              controller: admissionNumberController,
+              decoration: const InputDecoration(
+                labelText: 'Admission Number',
+                prefixIcon: Icon(Icons.confirmation_number),
+              ),
+            ),
+            SizedBox(height: 20),
+            TextFormField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                prefixIcon: Icon(Icons.lock),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.visibility_off),
+                  onPressed: () {
+                    // Handle password visibility toggle
+                  },
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Add your button click logic here
+                  // Navigate to UpdateProfileScreen or perform form submission
+                },
+                child: Text('Update Profile'),
+              ),
             ),
           ],
         ),
       ),
     );
   }
-}
 
-void main() {
-  runApp(MaterialApp(
-    home: AccountPage(),
-  ));
+  List<Step> stepList() {
+    return [
+      Step(
+        title: Text('Step 1'),
+        content: Text('Content for Step 1'),
+        isActive: _currentStep == 0,
+      ),
+      Step(
+        title: Text('Step 2'),
+        content: Text('Content for Step 2'),
+        isActive: _currentStep == 1,
+      ),
+      // Add more steps as needed
+    ];
+  }
 }
