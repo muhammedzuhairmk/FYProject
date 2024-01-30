@@ -1,7 +1,6 @@
 const db = require('../config/db_config');
-const UserModel = require('./user_model');
+const UserModel = require("./user_model");
 const mongoose = require('mongoose');
-
 const { Schema } = mongoose;
 
 const toDoSchema = new Schema({
@@ -19,5 +18,5 @@ const toDoSchema = new Schema({
     },
 },{timestamps:true});
 
-const ToDoModel = db.model('todo', toDoSchema);
+const ToDoModel = db.model('todo',toDoSchema);
 module.exports = ToDoModel;

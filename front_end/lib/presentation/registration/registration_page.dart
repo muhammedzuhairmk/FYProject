@@ -29,7 +29,7 @@ class _RegistrationState extends State<Registration> {
     if(name.isEmpty || email.isEmpty  || pass.isEmpty ){
       Get.snackbar("Please Enter Details", '');
     }else{
-      final res = await getConnect.post('http://192.168.159.240:3000/userRegistration', {
+      final res = await getConnect.post('http://192.168.14.131:3000/userRegistration', {
         "name":name,
         "email":email,
         "password":pass,

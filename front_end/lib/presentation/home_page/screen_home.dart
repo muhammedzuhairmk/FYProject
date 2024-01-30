@@ -319,7 +319,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
 
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.160.240:3000/upload'),
+      Uri.parse('http://192.168.14.131:3000/upload'),
     );
     request.files.add(
       await http.MultipartFile.fromPath(
@@ -350,7 +350,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
 
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.160.240:3000/upload'),
+      Uri.parse('http://192.168.14.131:3000/upload'),
     );
     request.files.add(
       await http.MultipartFile.fromPath(
