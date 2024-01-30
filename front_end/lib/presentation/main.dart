@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/presentation/main_page/screen_main.dart';
+import 'package:front_end/presentation/splash_screen.dart';
 import 'package:get_storage/get_storage.dart';
 import 'home_page/widgets/Notification.dart';
 import 'registration/login_page.dart';
@@ -24,12 +25,11 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: backGroundColor,
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }
 // This widget is the root of your application.
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -39,31 +39,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   final get_storage = GetStorage();
   @override
   void initState() {
-    
     super.initState();
 
     get_storage.writeIfNull('user', false);
 
-    Future.delayed(const Duration(seconds: 2),() async{
-
+    Future.delayed(const Duration(seconds: 2), () async {
       print(get_storage.read('user'));
-       checkUserData();
+      checkUserData();
     });
-
-
   }
 
-  checkUserData(){
-    if(get_storage.read('user').toString().isNotEmpty || get_storage.read('user') ){
-      Navigator.push(context, MaterialPageRoute(builder: (builder)=>const ScreenNotification()));
-    }else{
-      Navigator.push(context, MaterialPageRoute(builder: (builder)=>const Login()));
+  checkUserData() {
+    if (get_storage.read('user').toString().isNotEmpty ||
+        get_storage.read('user')) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (builder) => const ScreenNotification()));
+    } else {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (builder) => const Login()));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
