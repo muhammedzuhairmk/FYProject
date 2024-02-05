@@ -1,5 +1,10 @@
+// ignore_for_file: prefer_final_fields, use_key_in_widget_constructors, library_private_types_in_public_api, file_names
+
 import 'package:flutter/material.dart';
+import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/presentation/account_page/pickProfile.dart';
+
+
 
 class AccountPage extends StatefulWidget {
   @override
@@ -12,33 +17,32 @@ class _AccountPageState extends State<AccountPage> {
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController admissionYearController = TextEditingController();
   TextEditingController admissionNumberController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
 
-  bool _isEditingPersonalDetails = false;
 
-  int _currentStep = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Account Settings'),
+        title: const Text('Account Settings'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: ListView(
+        padding: const EdgeInsets.all(16.0),
+        child:  ListView(
           children: [
-            pickProfile(),
-            SizedBox(height: 20),
+            const pickProfile(),
+            const SizedBox(height: 20),
+
             Container(
               height: 50,
-              margin: EdgeInsets.symmetric(horizontal: 25),
+              margin: const EdgeInsets.symmetric(horizontal: 25),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Center(
+
+              child: const Center(
                 child: Text(
                   "Account Details",
                   style: TextStyle(
@@ -48,78 +52,90 @@ class _AccountPageState extends State<AccountPage> {
                 ),
               ),
             ),
+
             Center(
               child: Container(
-                margin: EdgeInsets.all(20),
+                height:420,
+                margin: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
-              ),
-            ),
-            TextFormField(
-              controller: fullNameController,
-              decoration: const InputDecoration(
-                labelText: 'Full Name',
-                prefixIcon: Icon(Icons.person),
-              ),
-            ),
-            SizedBox(height: 20),
-            TextFormField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                prefixIcon: Icon(Icons.email),
-              ),
-            ),
-            SizedBox(height: 20),
-            TextFormField(
-              controller: phoneNumberController,
-              decoration: const InputDecoration(
-                labelText: 'Phone Number',
-                prefixIcon: Icon(Icons.phone),
-              ),
-            ),
-            SizedBox(height: 20),
-            TextFormField(
-              controller: admissionYearController,
-              decoration: const InputDecoration(
-                labelText: 'Admission Year',
-                prefixIcon: Icon(Icons.calendar_today),
-              ),
-            ),
-            SizedBox(height: 20),
-            TextFormField(
-              controller: admissionNumberController,
-              decoration: const InputDecoration(
-                labelText: 'Admission Number',
-                prefixIcon: Icon(Icons.confirmation_number),
-              ),
-            ),
-            SizedBox(height: 20),
-            TextFormField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                prefixIcon: Icon(Icons.lock),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.visibility_off),
-                  onPressed: () {
-                    // Handle password visibility toggle
-                  },
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    Container(
+                        height: 50,
+                        margin: const EdgeInsets.symmetric(horizontal:20),
+                      decoration: BoxDecoration(
+                        color: mainColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child : const Text( "suhair"),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                     Container(
+                        height: 50,
+                        margin: const EdgeInsets.symmetric(horizontal:20),
+                      decoration: BoxDecoration(
+                        color: mainColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child : const Text( "email@gmail.com"),
+                      ),
+
+                      const SizedBox(height: 10),
+                      
+                     Container(
+                        height: 50,
+                        margin: const EdgeInsets.symmetric(horizontal:20),
+                       decoration: BoxDecoration(
+                        color: mainColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child : const Text( "7541248544"),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                     Container(
+                        height: 50,
+                        margin: const EdgeInsets.symmetric(horizontal:20),
+                      decoration: BoxDecoration(
+                        color: mainColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child : const Text( "2021"),
+                      ),
+                      
+                      const SizedBox(height: 10),
+
+                     Container(
+                        height: 50,
+                        margin: const EdgeInsets.symmetric(horizontal:20),
+                      decoration: BoxDecoration(
+                        color: mainColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child : const Text( "7487"),
+                      ),
+                      
+                      const SizedBox(height: 10),
+
+                     Container(
+                        height: 50,
+                        margin: const EdgeInsets.symmetric(horizontal:20),
+                      decoration: BoxDecoration(
+                        color: mainColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child : const Text( "9876543210"),
+                      ),
+                  
+                  ],
                 ),
-              ),
-            ),
-            SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Add your button click logic here
-                  // Navigate to UpdateProfileScreen or perform form submission
-                },
-                child: Text('Update Profile'),
               ),
             ),
           ],
@@ -127,20 +143,7 @@ class _AccountPageState extends State<AccountPage> {
       ),
     );
   }
-
-  List<Step> stepList() {
-    return [
-      Step(
-        title: Text('Step 1'),
-        content: Text('Content for Step 1'),
-        isActive: _currentStep == 0,
-      ),
-      Step(
-        title: Text('Step 2'),
-        content: Text('Content for Step 2'),
-        isActive: _currentStep == 1,
-      ),
-      // Add more steps as needed
-    ];
-  }
 }
+
+
+

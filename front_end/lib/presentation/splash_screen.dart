@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
     );
 
     return Scaffold(
-      backgroundColor: backGroundColor,
+      backgroundColor: mainColor,
       body: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 88),

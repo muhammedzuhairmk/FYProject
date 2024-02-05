@@ -77,7 +77,7 @@ class _MyHomePageState extends State<ScreenEventList> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue.shade200,backGroundColor],
+            colors: [Colors.blue.shade200,mainColor],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),

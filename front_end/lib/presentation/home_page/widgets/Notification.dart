@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, file_names
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -116,9 +118,9 @@ class _ToDoListPageState extends State<ScreenNotification> {
     return Scaffold(
       appBar: AppBar(title: const Text('To-Do List')),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : todos.isEmpty
-              ? Center(child: Text('No To-Dos found'))
+              ? const Center(child: Text('No To-Dos found'))
               : ListView.builder(
                   itemCount: todos.length,
                   itemBuilder: (context, index) {
@@ -154,21 +156,21 @@ class _ToDoListPageState extends State<ScreenNotification> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Edit ToDo'),
+        title: const Text('Edit ToDo'),
         content: TextField(controller: titleController),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () async {
               await updateToDoTitle(todo.id, titleController.text);
               Navigator.of(context).pop();
             },
-            child: Text('Save'),
+            child: const Text('Save'),
           ),
         ],
       ),
@@ -179,21 +181,21 @@ class _ToDoListPageState extends State<ScreenNotification> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete ToDo'),
-        content: Text('Are you sure you want to delete this ToDo?'),
+        title: const Text('Delete ToDo'),
+        content: const Text('Are you sure you want to delete this ToDo?'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () async {
               await deleteToDo(id);
               Navigator.of(context).pop();
             },
-            child: Text('Delete'),
+            child: const Text('Delete'),
           ),
         ],
       ),

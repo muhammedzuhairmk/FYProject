@@ -1,4 +1,6 @@
 
+// ignore_for_file: avoid_unnecessary_containers, library_private_types_in_public_api, use_key_in_widget_constructors
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 

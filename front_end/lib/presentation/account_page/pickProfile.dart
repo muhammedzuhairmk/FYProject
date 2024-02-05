@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, camel_case_types, use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';

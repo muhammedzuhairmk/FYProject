@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously, library_private_types_in_public_api, use_key_in_widget_constructors, file_names
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -60,7 +62,7 @@ class _FacultyListPageState extends State<FacultyListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Faculty Management'),
+        title: const Text('Faculty Management'),
       ),
       body: ListView.builder(
         itemCount: faculties.length,
@@ -74,7 +76,7 @@ class _FacultyListPageState extends State<FacultyListPage> {
             title: Text(faculties[index].name),
             subtitle: Text(faculties[index].designation),
             trailing: IconButton(
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
               onPressed: () => deleteFaculty(faculties[index].id),
             ),
           );
@@ -87,7 +89,7 @@ class _FacultyListPageState extends State<FacultyListPage> {
             MaterialPageRoute(builder: (context) => AddFacultyPage()),
           ).then((value) => fetchFaculties());
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -163,10 +165,10 @@ class _AddFacultyPageState extends State<AddFacultyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Faculty'),
+        title: const Text('Add Faculty'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -187,50 +189,50 @@ class _AddFacultyPageState extends State<AddFacultyPage> {
                           fit: BoxFit.cover,
                         ),
                       )
-                    : Icon(
+                    : const Icon(
                         Icons.camera_alt,
                         size: 50,
                       ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: nameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Name',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
               controller: educationController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Education',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
               controller: numberController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Number',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
               controller: designationController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Designation',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed:() {
               addFaculty();
               },
-              child: Text('Add Faculty'),
+              child: const Text('Add Faculty'),
             ),
           ],
         ),

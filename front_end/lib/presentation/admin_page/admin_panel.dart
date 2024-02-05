@@ -1,4 +1,4 @@
-// ignore_for_file: sort_child_properties_last, prefer_const_constructors
+// ignore_for_file: sort_child_properties_last, prefer_const_constructors, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
@@ -71,7 +71,7 @@ class AdminPanel extends StatelessWidget {
                     Container(
                       height: 70,
                       width: 70,
-                      decoration: BoxDecoration(color: backGroundColor,borderRadius: BorderRadius.circular(20)),
+                      decoration: BoxDecoration(color: mainColor,borderRadius: BorderRadius.circular(20)),
                       child: Column(
                         children: [
                           IconButton(
@@ -100,7 +100,7 @@ class AdminPanel extends StatelessWidget {
                      Container(
                       height: 70,
                       width: 70,
-                      decoration: BoxDecoration(color: backGroundColor,borderRadius: BorderRadius.circular(20)),
+                      decoration: BoxDecoration(color: mainColor,borderRadius: BorderRadius.circular(20)),
                       child: Column(
                         children: [
                           IconButton(
@@ -129,7 +129,7 @@ class AdminPanel extends StatelessWidget {
                     Container(
                       height: 70,
                       width: 70,
-                      decoration: BoxDecoration(color: backGroundColor,borderRadius: BorderRadius.circular(20)),
+                      decoration: BoxDecoration(color: mainColor,borderRadius: BorderRadius.circular(20)),
                       child: Column(
                         children: [
                           IconButton(
@@ -156,7 +156,7 @@ class AdminPanel extends StatelessWidget {
                      Container(
                       height: 70,
                       width: 70,
-                      decoration: BoxDecoration(color: backGroundColor,borderRadius: BorderRadius.circular(20)),
+                      decoration: BoxDecoration(color: mainColor,borderRadius: BorderRadius.circular(20)),
                       child: Column(
                         children: [
                           IconButton(
@@ -191,7 +191,7 @@ class AdminPanel extends StatelessWidget {
                     Container(
                       height: 70,
                       width: 70,
-                      decoration: BoxDecoration(color: backGroundColor,borderRadius: BorderRadius.circular(20)),
+                      decoration: BoxDecoration(color: mainColor,borderRadius: BorderRadius.circular(20)),
                       child: Column(
                         children: [
                           IconButton(
@@ -219,7 +219,7 @@ class AdminPanel extends StatelessWidget {
                      Container(
                       height: 70,
                       width: 70,
-                      decoration: BoxDecoration(color: backGroundColor,borderRadius: BorderRadius.circular(20)),
+                      decoration: BoxDecoration(color: mainColor,borderRadius: BorderRadius.circular(20)),
                       child: Column(
                         children: [
                           IconButton(
@@ -248,7 +248,7 @@ class AdminPanel extends StatelessWidget {
                     Container(
                       height: 70,
                       width: 70,
-                      decoration: BoxDecoration(color: backGroundColor,borderRadius: BorderRadius.circular(20)),
+                      decoration: BoxDecoration(color: mainColor,borderRadius: BorderRadius.circular(20)),
                       child: Column(
                         children: [
                           IconButton(
@@ -276,7 +276,7 @@ class AdminPanel extends StatelessWidget {
                      Container(
                       height: 70,
                       width: 70,
-                      decoration: BoxDecoration(color: backGroundColor,borderRadius: BorderRadius.circular(20)),
+                      decoration: BoxDecoration(color: mainColor,borderRadius: BorderRadius.circular(20)),
                       child: Column(
                         children: [
                           IconButton(

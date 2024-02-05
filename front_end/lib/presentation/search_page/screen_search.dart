@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_key_in_widget_constructors, avoid_print
+
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {

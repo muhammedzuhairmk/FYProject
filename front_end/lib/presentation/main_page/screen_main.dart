@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: backGroundColor,
+      backgroundColor: mainColor,
 
       body: SafeArea(
         child: ValueListenableBuilder(

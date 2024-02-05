@@ -20,19 +20,21 @@ class _RegistrationState extends State<Registration> {
   TextEditingController nameText = TextEditingController();
   TextEditingController emailText = TextEditingController();
   TextEditingController passText = TextEditingController();
+  TextEditingController confirmpassText = TextEditingController();
   final getConnect = GetConnect();
 
 
-  void _register(name,email,pass) async{
-    print("${name},${email},${pass}");
+  void _register(name,email,pass,confirmpass) async{
+    print("${name},${email},${pass},${confirmpass}");
 
-    if(name.isEmpty || email.isEmpty  || pass.isEmpty ){
+    if(name.isEmpty || email.isEmpty  || pass.isEmpty || confirmpass.isEmpty ){
       Get.snackbar("Please Enter Details", '');
     }else{
       final res = await getConnect.post('http://192.168.14.131:3000/userRegistration', {
         "name":name,
         "email":email,
         "password":pass,
+        "confirmpassword" :confirmpass
       });
 
       if(res.body['status']){
@@ -96,11 +98,25 @@ class _RegistrationState extends State<Registration> {
                             borderRadius: BorderRadius.all(Radius.circular(10.0)))),
                   ),
                 ),
+
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(25, 20, 25, 2),
+                  child: TextField(
+                    controller: confirmpassText,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: "Confirm Password",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)))),
+                  ),
+                ),
                 
                 Padding(padding: const EdgeInsets.all(20),child:
                 ElevatedButton(
                   onPressed: () {
-                      _register(nameText.text,emailText.text,passText.text);
+                      _register(nameText.text,emailText.text,passText.text,confirmpassText.text);
                   },
                   child: const Text("REGISTER"),
                 ),),

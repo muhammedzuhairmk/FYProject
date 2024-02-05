@@ -1,6 +1,7 @@
+// ignore_for_file: avoid_print, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
-import 'package:front_end/presentation/splash_screen.dart';
 import 'package:get_storage/get_storage.dart';
 import 'presentation/home_page/widgets/Notification.dart';
 import 'presentation/main_page/screen_main.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Event Snap',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: backGroundColor,
+        scaffoldBackgroundColor: mainColor,
         useMaterial3: true,
       ),
       home: const HomeScreen(),

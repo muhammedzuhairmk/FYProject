@@ -1,17 +1,16 @@
-//ignore_for_file: use_build_context_synchronously, prefer_const_constructors
+//ignore_for_file: use_build_context_synchronously, prefer_const_constructors, avoid_print, library_private_types_in_public_api, use_key_in_widget_constructors
 
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-//import 'package:flutter/foundation.dart';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/presentation/account_page/screen_Account.dart';
 import 'package:front_end/presentation/admin_page/admin_panel.dart';
 import 'package:front_end/presentation/home_page/widgets/main_container.dart';
+import '../../core/constant/colors.dart';
 import '../event_list_page/widget/screen_event_list.dart';
 import 'widgets/Notification.dart';
 
@@ -58,14 +57,14 @@ class _AnimatedAppBarState extends State<ScreenMain> {
             IconButton(
               icon: Icon(
                 Icons.notifications,
-                color: _isScrolled ? Colors.black : backGroundColor,
+                color: _isScrolled ? Colors.black : mainColor,
               ),
               onPressed: () {
                 _showNotificationDialog(context, " ");
               },
             ),
           ],
-          iconTheme: const IconThemeData(color: backGroundColor)),
+          iconTheme: const IconThemeData(color: mainColor)),
 
       drawer: Drawer(
         child: ListView(
@@ -98,7 +97,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                   ),
                 ),
                 decoration: BoxDecoration(
-                  color: backGroundColor,
+                  color: mainColor,
                   border: Border.all(
                       width: 2.0,
                       color: const Color.fromARGB(255, 114, 163, 181)),
@@ -117,7 +116,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
             ListTile(
               leading: const Icon(
                 Icons.account_box,
-                color: backGroundColor,
+                color: mainColor,
               ),
               title: const Text(
                 'Account',
@@ -135,7 +134,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
             ListTile(
               leading: const Icon(
                 Icons.list_alt_sharp,
-                color: backGroundColor,
+                color: mainColor,
               ),
               title: const Text(
                 'Event List',
@@ -152,7 +151,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
             ListTile(
               leading: const Icon(
                 Icons.admin_panel_settings,
-                color: backGroundColor,
+                color: mainColor,
               ),
               title: const Text(
                 'Admin panel',
@@ -170,7 +169,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
             ListTile(
               leading: const Icon(
                 Icons.calendar_month_rounded,
-                color: backGroundColor,
+                color: mainColor,
               ),
               title: const Text(
                 'Calender',
@@ -181,7 +180,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
             ListTile(
               leading: const Icon(
                 Icons.upload_rounded,
-                color: backGroundColor,
+                color: mainColor,
               ),
               title: const Text(
                 'Upload image',
@@ -192,7 +191,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
             ListTile(
               leading: const Icon(
                 Icons.collections_rounded,
-                color: backGroundColor,
+                color: mainColor,
               ),
               title: const Text(
                 'Event Album',
@@ -213,7 +212,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 child: ListTile(
                   leading: const Icon(
                     Icons.logout,
-                    color: backGroundColor,
+                    color: mainColor,
                   ),
                   title: const Text(
                     'Logout',
@@ -232,7 +231,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
           _showAlertDialog(context);
         },
         backgroundColor: Colors.white,
-        foregroundColor: backGroundColor,
+        foregroundColor: mainColor,
         elevation: 0,
         shape: const CircleBorder(
             side: BorderSide(
@@ -264,7 +263,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                     Column(
                       children: [
                         IconButton(
-                          color: backGroundColor,
+                          color: mainColor,
                           hoverColor: const Color.fromARGB(255, 78, 131, 175),
                           icon: const Icon(Icons.camera),
                           onPressed: () {
@@ -275,7 +274,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                         const Text(
                           'Camera',
                           style: TextStyle(
-                            color: backGroundColor,
+                            color: mainColor,
                           ),
                         ),
                       ],
@@ -283,7 +282,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                     Column(
                       children: [
                         IconButton(
-                          color: backGroundColor,
+                          color: mainColor,
                           hoverColor: const Color.fromARGB(255, 78, 131, 175),
                           icon: const Icon(Icons.upload),
                           onPressed: () {
@@ -294,7 +293,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                         const Text(
                           'Upload',
                           style: TextStyle(
-                            color: backGroundColor,
+                            color: mainColor,
                           ),
                         ),
                       ],
