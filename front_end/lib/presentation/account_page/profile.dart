@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 
-class AccountPage extends StatefulWidget {
+class AccountProfilePage extends StatefulWidget {
   @override
   _AccountPageState createState() => _AccountPageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _AccountPageState extends State<AccountProfilePage> {
   TextEditingController fullNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();

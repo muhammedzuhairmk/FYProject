@@ -26,7 +26,7 @@ class _PickImageState extends State<pickProfile> {
                 ? CircleAvatar(
                     radius: 60, backgroundImage: MemoryImage(_image!))
                 : const CircleAvatar(
-                    radius: 100,
+                    radius: 90,
                     backgroundImage: NetworkImage(
                         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
                   ),
@@ -66,7 +66,7 @@ class _PickImageState extends State<pickProfile> {
                           children: [
                             Icon(
                               Icons.image,
-                              size: 40,
+                              size:30,
                             ),
                             Text("Gallery")
                           ],
