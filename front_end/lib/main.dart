@@ -1,12 +1,12 @@
 // ignore_for_file: avoid_print, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:front_end/presentation/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:front_end/core/constant/colors.dart';
-import 'package:front_end/presentation/main_page/screen_main.dart';
 import 'package:get/get.dart';
 
-//const save_key_name= "jhvdb";
+const save_key_name= "jhvdb";
 
 void main() async {
    WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: mainColor,
         useMaterial3: true,
       ),
-      home:const  HomeScreen()
+      home:const  SplashScreen()
     );
   }
 }

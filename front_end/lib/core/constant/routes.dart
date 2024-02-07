@@ -1,6 +1,4 @@
-
-
-final url = 'http://192.168.56.121:8000/';
+final url = 'http://localhost:8000/';
 
 final registration = url + "api/v1/user/signup";
 final login = url + 'api/v1/user/signin';
