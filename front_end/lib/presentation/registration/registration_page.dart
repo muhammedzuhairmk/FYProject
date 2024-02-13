@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, camel_case_types, prefer_const_constructors_in_immutables
+
 import 'package:flutter/material.dart';
 import 'package:front_end/configtation/api/authantication_servies.dart';
 import 'package:front_end/core/constant/colors.dart';
@@ -43,7 +45,7 @@ class _Reg_pageState extends State<Reg_page> {
             shadowColor: Colors.black,
             elevation: 10,
             toolbarHeight: 100,
-            backgroundColor: Color.fromARGB(255, 246, 246, 246),
+            backgroundColor: const Color.fromARGB(255, 246, 246, 246),
             title: const Padding(
               padding: EdgeInsets.only(top: 25),
               child: Text(
@@ -98,9 +100,9 @@ class _Reg_pageState extends State<Reg_page> {
                         controller: GmailController,
                         decoration: const InputDecoration(
                           enabledBorder: InputBorder.none,
-                          fillColor: const Color.fromARGB(212, 237, 235, 235),
+                          fillColor:  Color.fromARGB(212, 237, 235, 235),
                           filled: true,
-                          prefixIcon: const Icon(Icons.mail),
+                          prefixIcon:  Icon(Icons.mail),
                           hintText: "Gmail",
                         ),
                         validator: (value) {
@@ -201,7 +203,7 @@ class _Reg_pageState extends State<Reg_page> {
                 //button
 
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: SizedBox(
                     width: 250,
                     height: 40,
@@ -221,7 +223,7 @@ class _Reg_pageState extends State<Reg_page> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 189, 3, 47),
+                          backgroundColor: const Color.fromARGB(255, 189, 3, 47),
                           shadowColor: Colors.black,
                           elevation: 15),
                       child: const Text(

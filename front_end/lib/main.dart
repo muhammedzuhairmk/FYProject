@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:front_end/presentation/splash_screen.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:front_end/core/constant/colors.dart';
 import 'package:get/get.dart';
+
 
 const save_key_name= "jhvdb";
 
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: mainColor,
         useMaterial3: true,
       ),
-      home:const  SplashScreen()
+      home:  SplashScreen()
     );
   }
 }

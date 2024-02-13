@@ -1,9 +1,8 @@
 // ignore_for_file: prefer_final_fields, use_key_in_widget_constructors, library_private_types_in_public_api, file_names
 
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
-import 'package:front_end/presentation/account_page/pickProfile.dart';
-
 import 'profile.dart';
 
 
@@ -16,13 +15,13 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   TextEditingController fullNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController gmailController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController admissionYearController = TextEditingController();
   TextEditingController admissionNumberController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  
 
-
+Uint8List? _image;
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +33,23 @@ class _AccountPageState extends State<AccountPage> {
         padding: const EdgeInsets.all(15.0),
         child:  ListView(
           children: [
-            const pickProfile(),
+            
             const SizedBox(height: 5),
 
+           
+              Center(
+        heightFactor: 1.2,
+        child: Stack(
+          children: [
+            _image != null ? CircleAvatar( radius: 60, backgroundImage: MemoryImage(_image!))
+                : const CircleAvatar(
+                    radius: 90,
+                    backgroundImage: NetworkImage(
+                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
+                  ),
+          ]
+          ),
+              ),
 
 Container(
   height: 50,
@@ -75,10 +88,11 @@ Container(
   ),
 ),
 
+const SizedBox(height: 10),
 
             Center(
               child: Container(
-                height:400,
+                height:380,
                 width: 300,
                 margin: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -90,7 +104,7 @@ Container(
                     const SizedBox(height: 30),
                     Container(
                         height: 50,
-                        width: 200,
+                        width: 180,
                         margin: const EdgeInsets.symmetric(horizontal:20),
                       decoration: BoxDecoration(
                         color: mainColor,
@@ -103,17 +117,16 @@ Container(
                              padding: EdgeInsets.symmetric(horizontal: 10),
                              child: Icon(Icons.person),
                            ),
-                           SizedBox(width: 20,),
                            Text( "suhair"),
                         ],
                       ),
                       ),
                 
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 14),
                 
                      Container(
                         height: 50,
-                        width: 200,
+                        width: 250,
                         margin: const EdgeInsets.symmetric(horizontal:20),
                       decoration: BoxDecoration(
                         color: mainColor,
@@ -130,7 +143,7 @@ Container(
                       ),
                       ),
                 
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 14),
                       
                      Container(
                         height: 50,
@@ -149,11 +162,11 @@ Container(
                         ],
                       ),),
                 
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 14),
                 
                      Container(
                         height: 50,
-                        width: 200,
+                        width: 150,
                         margin: const EdgeInsets.symmetric(horizontal:20),
                       decoration: BoxDecoration(
                         color: mainColor,
@@ -169,11 +182,11 @@ Container(
                         ],
                       ),),
                       
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 14),
                 
                      Container(
                         height: 50,
-                        width: 200,
+                        width: 180,
                         margin: const EdgeInsets.symmetric(horizontal:20),
                       decoration: BoxDecoration(
                         color: mainColor,
@@ -189,25 +202,9 @@ Container(
                         ],
                       ),),
                       
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 14),
                 
-                     Container(
-                        height: 50,
-                        width: 200,
-                        margin: const EdgeInsets.symmetric(horizontal:20),
-                      decoration: BoxDecoration(
-                        color: mainColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child:const  Row(
-                        children: [
-                          Padding(padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Icon(Icons.lock),
-                          ),
-                           Text( "7510382986"),
-                        ],
-                      ),),
-                  
+                     
                   ],
                 ),
               ),
@@ -217,7 +214,9 @@ Container(
       ),
     );
   }
+
 }
+
 
 
 

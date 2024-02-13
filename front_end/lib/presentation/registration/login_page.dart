@@ -1,10 +1,18 @@
+// ignore_for_file: non_constant_identifier_names, camel_case_types, prefer_const_constructors_in_immutables, avoid_print, prefer_const_constructors
+
+
+
+import 'dart:convert';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:front_end/configtation/api/authantication_servies.dart';
 import 'package:front_end/core/constant/colors.dart';
+import 'package:front_end/core/constant/routes.dart';
 import 'package:front_end/presentation/main_page/screen_main.dart';
 import 'package:front_end/presentation/registration/forget_pass.dart';
 import 'package:front_end/presentation/registration/registration_page.dart';
+import 'package:http/http.dart' as http;
+
 
 //import 'package:front_end/core/constant/colors.dart';
 
@@ -16,12 +24,41 @@ class login_page extends StatefulWidget {
 }
 
 class _login_pageState extends State<login_page> {
-  final _GmailKey = GlobalKey<FormState>();
-  final _PassKey = GlobalKey<FormState>();
-  final _GmailController = TextEditingController();
-  final _passController = TextEditingController();
+  final GmailKey = GlobalKey<FormState>();
+  final PassKey = GlobalKey<FormState>();
+  final TextEditingController gmailController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
 
   bool _securePass = true;
+  
+  bool isLoading = false;
+
+  Future<void> loginUser(context) async{
+    final res =  await http.post(Uri.parse(login),
+    body: {
+      'email' : gmailController.text,
+      'password' : passController.text,
+    });
+    if(res.statusCode == 200){
+
+    Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    print(res.body);
+     final Map<String, dynamic> responseData = json.decode(res.body);
+    print(responseData['token']);
+    }
+else{
+  throw Exception("Failed to login");
+  
+}
+  }
+
+  void _navigateToReplacement(BuildContext context, Widget destination) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => destination),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +67,7 @@ class _login_pageState extends State<login_page> {
           shadowColor: Colors.black,
           elevation: 10,
           toolbarHeight: 100,
-          backgroundColor: Color.fromARGB(255, 246, 246, 246),
+          backgroundColor: const Color.fromARGB(255, 246, 246, 246),
           title: const Padding(
             padding: EdgeInsets.only(top: 25),
             child: Text(
@@ -58,11 +95,11 @@ class _login_pageState extends State<login_page> {
 
               //gmail
               Form(
-                key: _GmailKey,
+                key: GmailKey,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 35, left: 35),
                   child: TextFormField(
-                      controller: _GmailController,
+                      controller: gmailController,
                       decoration: const InputDecoration(
                         enabledBorder: InputBorder.none,
                         fillColor: Color.fromARGB(212, 237, 235, 235),
@@ -71,7 +108,7 @@ class _login_pageState extends State<login_page> {
                         hintText: "Gmail",
                       ),
                       validator: (value) {
-                        if (!EmailValidator.validate(_GmailController.text)) {
+                        if (!EmailValidator.validate(gmailController.text)) {
                           return "Please enter a valid gmail";
                         } else {
                           return null;
@@ -86,11 +123,11 @@ class _login_pageState extends State<login_page> {
               //PASSWORD
 
               Form(
-                key: _PassKey,
+                key: PassKey,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 35, left: 35),
                   child: TextFormField(
-                      controller: _passController,
+                      controller: passController,
                       decoration: InputDecoration(
                         enabledBorder: InputBorder.none,
                         fillColor: const Color.fromARGB(212, 237, 235, 235),
@@ -152,11 +189,11 @@ class _login_pageState extends State<login_page> {
                   height: 40,
                   child: ElevatedButton(
                     onPressed: () {
-                      var form1 = _GmailKey.currentState!.validate();
-                      var form2 = _PassKey.currentState!.validate();
+                      var form1 = GmailKey.currentState!.validate();
+                      var form2 = PassKey.currentState!.validate();
                       if (form1 && form2) {
-                        signIn(_GmailController.text, _passController.text,
-                            context);
+                        // _login(context);
+                        loginUser(context);
                       }
                     },
                     style: ElevatedButton.styleFrom(
