@@ -1,7 +1,5 @@
 // ignore_for_file: non_constant_identifier_names, camel_case_types, prefer_const_constructors_in_immutables, avoid_print, prefer_const_constructors
 
-
-
 import 'dart:convert';
 
 import 'package:email_validator/email_validator.dart';
@@ -12,7 +10,7 @@ import 'package:front_end/presentation/main_page/screen_main.dart';
 import 'package:front_end/presentation/registration/forget_pass.dart';
 import 'package:front_end/presentation/registration/registration_page.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 //import 'package:front_end/core/constant/colors.dart';
 
@@ -30,27 +28,27 @@ class _login_pageState extends State<login_page> {
   final TextEditingController passController = TextEditingController();
 
   bool _securePass = true;
-  
+
   bool isLoading = false;
 
-  Future<void> loginUser(context) async{
-    final res =  await http.post(Uri.parse(login),
-    body: {
-      'email' : gmailController.text,
-      'password' : passController.text,
-    });
-    if(res.statusCode == 200){
+  Future<void> loginUser(context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    Navigator.pushReplacement(
+    final res = await http.post(Uri.parse(login), body: {
+      'email': gmailController.text,
+      'password': passController.text,
+    });
+    if (res.statusCode == 200) {
+      Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomeScreen()));
-    print(res.body);
-     final Map<String, dynamic> responseData = json.decode(res.body);
-    print(responseData['token']);
+      print(res.body);
+      final Map<String, dynamic> responseData = json.decode(res.body);
+      print(responseData['token']);
+      final token = responseData['token'].toString();
+      prefs.setString('token', token);
+    } else {
+      throw Exception("Failed to login");
     }
-else{
-  throw Exception("Failed to login");
-  
-}
   }
 
   void _navigateToReplacement(BuildContext context, Widget destination) {
@@ -191,6 +189,12 @@ else{
                     onPressed: () {
                       var form1 = GmailKey.currentState!.validate();
                       var form2 = PassKey.currentState!.validate();
+
+                      ///to remove
+                      // Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => HomeScreen()));
                       if (form1 && form2) {
                         // _login(context);
                         loginUser(context);
