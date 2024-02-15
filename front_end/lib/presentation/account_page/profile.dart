@@ -27,6 +27,8 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController number = TextEditingController();
+  TextEditingController admission_year = TextEditingController();
+  TextEditingController admission_no = TextEditingController();
   String avatar = "";
 
   bool isLoading = false;
@@ -88,8 +90,8 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
           ..headers['Content-Type'] = 'multipart/form-data'
           ..fields['name'] = name.text
           ..fields['phoneNumber'] = phoneNumber.text
-          ..fields['admissionNumber'] = "52021"
-          ..fields['admissionYear'] = "2021"
+          ..fields['admissionNumber'] = admission_no.text
+          ..fields['admissionYear'] = admission_year.text
           ..fields['email'] = email.text;
 
         if (selectedImage != null) {
@@ -322,6 +324,74 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                             },
                             readOnly: false,
                             controller: email,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: const EdgeInsets.all(15),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  color: Colors
+                                      .transparent, // Set the border color
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  color: Colors
+                                      .transparent, // Set the border color when focused
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Text(
+                            "Admission Year",
+                            style: TextStyle(
+                                color: Colors.green[900], fontSize: 20),
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter admission year';
+                              }
+                              return null;
+                            },
+                            controller: admission_year,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: const EdgeInsets.all(15),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  color: Colors
+                                      .transparent, // Set the border color
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  color: Colors
+                                      .transparent, // Set the border color when focused
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Text(
+                            "Admission Number",
+                            style: TextStyle(
+                                color: Colors.green[900], fontSize: 20),
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter admission Number';
+                              }
+                              return null;
+                            },
+                            controller: admission_no,
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,

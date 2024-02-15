@@ -6,6 +6,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/core/constant/routes.dart';
+import 'package:front_end/main.dart';
 import 'package:front_end/presentation/main_page/screen_main.dart';
 import 'package:front_end/presentation/registration/forget_pass.dart';
 import 'package:front_end/presentation/registration/registration_page.dart';
@@ -41,6 +42,8 @@ class _login_pageState extends State<login_page> {
     if (res.statusCode == 200) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      final sharepref = await SharedPreferences.getInstance();
+      sharepref.setBool(save_key_name, true);
       print(res.body);
       final Map<String, dynamic> responseData = json.decode(res.body);
       print(responseData['token']);

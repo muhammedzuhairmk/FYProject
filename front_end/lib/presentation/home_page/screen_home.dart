@@ -4,12 +4,15 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:front_end/main.dart';
+import 'package:front_end/presentation/splash_screen.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:image_picker/image_picker.dart';
 import 'package:front_end/presentation/account_page/screen_Account.dart';
 import 'package:front_end/presentation/admin_page/admin_panel.dart';
 import 'package:front_end/presentation/home_page/widgets/main_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constant/colors.dart';
 import '../event_list_page/widget/screen_event_list.dart';
 import 'widgets/Notification.dart';
@@ -218,7 +221,14 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                     'Logout',
                     style: TextStyle(color: drawertext),
                   ),
-                  onTap: () {},
+                  onTap: () async {
+                    final sharepref = await SharedPreferences.getInstance();
+                    sharepref.setBool(save_key_name, false);
+
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                    );
+                  },
                 ),
               ),
             ),
