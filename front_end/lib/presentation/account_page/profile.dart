@@ -1,9 +1,10 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously, non_constant_identifier_names
+// ignore_for_file: avoid_print, use_build_context_synchronously, non_constant_identifier_names, unused_local_variable
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/core/constant/routes.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -26,9 +27,8 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
   TextEditingController name = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController email = TextEditingController();
-  TextEditingController number = TextEditingController();
-  TextEditingController admission_year = TextEditingController();
-  TextEditingController admission_no = TextEditingController();
+  TextEditingController admissionYear = TextEditingController();
+  TextEditingController admissionNumber = TextEditingController();
   String avatar = "";
 
   bool isLoading = false;
@@ -55,10 +55,11 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
         // Populate form fields with existing data
         setState(() {
           name.text = ProfileData['data']['name'] ?? '';
-          phoneNumber.text =
-              ProfileData['data']['phoneNumber'].toString() ?? '';
+          phoneNumber.text = ProfileData['data']['phoneNumber'].toString();
           email.text = ProfileData['data']['email'] ?? '';
-
+          admissionNumber.text = ProfileData['data']['admissionNumber'].toString() ;
+          admissionYear.text = ProfileData['data']['admissionYear'].toString() ;
+         
           avatar = ProfileData['data']['avatar'] ?? '';
         });
       } else {
@@ -90,9 +91,9 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
           ..headers['Content-Type'] = 'multipart/form-data'
           ..fields['name'] = name.text
           ..fields['phoneNumber'] = phoneNumber.text
-          ..fields['admissionNumber'] = admission_no.text
-          ..fields['admissionYear'] = admission_year.text
-          ..fields['email'] = email.text;
+          ..fields['email'] = email.text
+           ..fields['admissionNumber'] = admissionNumber.text
+          ..fields['admissionYear'] = admissionYear.text;
 
         if (selectedImage != null) {
           request.files.add(
@@ -136,7 +137,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
       //   context,
       //   'Network Error!',
       //   'Check your connection!',
-      // );
+      // ); 
     }
   }
 
@@ -163,12 +164,12 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[900],
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
             Container(
-              color: Colors.green[900],
+              color: Colors.white,
               height: 150,
               width: double.infinity,
               child: const Padding(
@@ -180,9 +181,10 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                     Text(
                       "Profile Page",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 35,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 38,
+                        
                       ),
                     ),
                   ],
@@ -191,9 +193,9 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
             ),
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.green[100],
-                  borderRadius: const BorderRadius.vertical(
+                decoration: const BoxDecoration(
+                  color: mainColor,
+                  borderRadius: BorderRadius.vertical(
                     top: Radius.circular(30),
                   ),
                 ),
@@ -239,12 +241,8 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
-                          Text(
-                            "Name",
-                            style: TextStyle(
-                                color: Colors.green[900], fontSize: 20),
-                          ),
+                          const SizedBox(height: 30),
+                          
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -254,6 +252,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                             },
                             controller: name,
                             decoration: InputDecoration(
+                              icon: const Icon(Icons.person),
                               filled: true,
                               fillColor: Colors.white,
                               contentPadding: const EdgeInsets.all(15),
@@ -274,13 +273,9 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                             ),
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 12,
                           ),
-                          Text(
-                            "phoneNumber",
-                            style: TextStyle(
-                                color: Colors.green[900], fontSize: 20),
-                          ),
+                          
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -290,6 +285,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                             },
                             controller: phoneNumber,
                             decoration: InputDecoration(
+                              icon: const Icon(Icons.phone),
                               filled: true,
                               fillColor: Colors.white,
                               contentPadding: const EdgeInsets.all(15),
@@ -310,21 +306,18 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Text(
-                            "email",
-                            style: TextStyle(
-                                color: Colors.green[900], fontSize: 20),
-                          ),
+                          
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter email';
+                                return 'Please enter Gmail';
                               }
                               return null;
                             },
                             readOnly: false,
                             controller: email,
                             decoration: InputDecoration(
+                              icon: const Icon(Icons.mail),
                               filled: true,
                               fillColor: Colors.white,
                               contentPadding: const EdgeInsets.all(15),
@@ -344,12 +337,8 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20),
-                          Text(
-                            "Admission Year",
-                            style: TextStyle(
-                                color: Colors.green[900], fontSize: 20),
-                          ),
+                          const SizedBox(height: 10),
+                          
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -357,8 +346,10 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                               }
                               return null;
                             },
-                            controller: admission_year,
+                            readOnly: false,
+                            controller: admissionYear,
                             decoration: InputDecoration(
+                              icon: const Icon(Icons.calendar_month),
                               filled: true,
                               fillColor: Colors.white,
                               contentPadding: const EdgeInsets.all(15),
@@ -378,21 +369,19 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20),
-                          Text(
-                            "Admission Number",
-                            style: TextStyle(
-                                color: Colors.green[900], fontSize: 20),
-                          ),
+                          const SizedBox(height: 10),
+                          
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter admission Number';
+                                return 'Please enter admission number';
                               }
                               return null;
                             },
-                            controller: admission_no,
+                            readOnly: false,
+                            controller: admissionNumber,
                             decoration: InputDecoration(
+                              icon: const Icon(Icons.confirmation_num),
                               filled: true,
                               fillColor: Colors.white,
                               contentPadding: const EdgeInsets.all(15),
@@ -412,6 +401,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                               ),
                             ),
                           ),
+                          
                           const SizedBox(height: 20),
                           TextButton(
                               onPressed: () {
@@ -437,8 +427,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          color: Colors.green[900],
-                                        ),
+                                          color: const Color.fromARGB(255, 56, 105, 148)                                 ),
                                         width: double.infinity,
                                       ),
                                     ),

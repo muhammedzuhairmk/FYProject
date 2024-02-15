@@ -1,33 +1,105 @@
-// ignore_for_file: prefer_final_fields, use_key_in_widget_constructors, library_private_types_in_public_api, file_names
+// ignore_for_file: prefer_final_fields, use_key_in_widget_constructors, library_private_types_in_public_api, file_names, avoid_print, unused_local_variable, non_constant_identifier_names
 
+import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/constant/routes.dart';
 import 'profile.dart';
 
 
 
 class AccountPage extends StatefulWidget {
+
+  final int? id;
+
+  const AccountPage({
+    this.id,
+    super.key,
+  });
+
   @override
   _AccountPageState createState() => _AccountPageState();
 }
 
 
 class _AccountPageState extends State<AccountPage> {
-  TextEditingController fullNameController = TextEditingController();
-  TextEditingController gmailController = TextEditingController();
-  TextEditingController phoneNumberController = TextEditingController();
-  TextEditingController admissionYearController = TextEditingController();
-  TextEditingController admissionNumberController = TextEditingController();
   
+  TextEditingController name = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController admissionYear = TextEditingController();
+  TextEditingController admissionNumber = TextEditingController();
+  String avatar = "";
 
-Uint8List? _image;
+  bool isLoading = true;
+
+  Future<void> fetchProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final userId = prefs.getInt('id');
+
+    try {
+      final response = await http.get(
+        Uri.parse(profile),
+        headers: <String, String>{
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> ProfileData = json.decode(response.body);
+        
+        // Populate form fields with existing data
+        setState(() {
+          name.text = ProfileData['data']['name'] ?? '';
+          phoneNumber.text = ProfileData['data']['phoneNumber'].toString() ;
+          email.text = ProfileData['data']['email'] ?? '';
+          admissionNumber.text = ProfileData['data']['admissionNumber'].toString() ;
+          admissionYear.text = ProfileData['data']['admissionYear'].toString() ;
+         
+          avatar = ProfileData['data']['avatar'] ?? '';
+        }
+        );
+      } else {
+        print('Failed to fetch Profile details. Status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error fetching Profile details: $error');
+    }
+  }
+   Future<void> _pickImage() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returnImage == null) return;
+    setState(() {
+      selectedImage = File(returnImage.path);
+      _image = File(returnImage.path).readAsBytesSync();
+    });
+  }
+ 
+  @override
+  void initState() {
+    super.initState();
+
+    fetchProfile();
+  }
+  
+  Uint8List? _image;
+  File? selectedImage;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account Settings'),
+        title: const Text('Profile Page'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -70,7 +142,7 @@ Container(
             fontWeight: FontWeight.bold,
           ),
         ),
-        Padding(padding: EdgeInsets.symmetric(horizontal: 30)),
+        const Padding(padding: EdgeInsets.symmetric(horizontal: 30)),
        const  SizedBox(width: 0),
         IconButton(
           hoverColor: const Color.fromARGB(255, 78, 131, 175),
@@ -79,7 +151,7 @@ Container(
             // Navigate to the AccountPage using Navigator
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AccountProfilePage()),
+              MaterialPageRoute(builder: (context) => const AccountProfilePage()),
             );
           },
         ),
@@ -88,132 +160,189 @@ Container(
   ),
 ),
 
-const SizedBox(height: 10),
+    const SizedBox(height: 10),
 
-            Center(
-              child: Container(
-                height:380,
-                width: 300,
-                margin: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 30),
-                    Container(
-                        height: 50,
-                        width: 180,
-                        margin: const EdgeInsets.symmetric(horizontal:20),
-                      decoration: BoxDecoration(
-                        color: mainColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                  
-                      child:const  Row(
-                        children: [
-                           Padding(
-                             padding: EdgeInsets.symmetric(horizontal: 10),
-                             child: Icon(Icons.person),
-                           ),
-                           Text( "suhair"),
-                        ],
-                      ),
-                      ),
-                
-                      const SizedBox(height: 14),
-                
-                     Container(
-                        height: 50,
-                        width: 250,
-                        margin: const EdgeInsets.symmetric(horizontal:20),
-                      decoration: BoxDecoration(
-                        color: mainColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child:const  Row(
-                        children: [
-                           Padding(
-                             padding: EdgeInsets.symmetric(horizontal:10),
-                             child: Icon(Icons.email_outlined),
-                           ),
-                           Text( "zuhairmk@gmail.com"),
-                        ],
-                      ),
-                      ),
-                
-                      const SizedBox(height: 14),
-                      
-                     Container(
-                        height: 50,
-                        width: 200,
-                        margin: const EdgeInsets.symmetric(horizontal:20),
-                       decoration: BoxDecoration(
-                        color: mainColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),child:const  Row(
-                        children: [
-                           Padding(
-                             padding: EdgeInsets.symmetric(horizontal: 10),
-                             child: Icon(Icons.phone),
-                           ),
-                           Text( "7510382986"),
-                        ],
-                      ),),
-                
-                      const SizedBox(height: 14),
-                
-                     Container(
-                        height: 50,
-                        width: 150,
-                        margin: const EdgeInsets.symmetric(horizontal:20),
-                      decoration: BoxDecoration(
-                        color: mainColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child:const  Row(
-                        children: [
-                           Padding(
-                             padding: EdgeInsets.symmetric(horizontal: 10),
-                             child: Icon(Icons.calendar_today),
-                           ),
-                           Text( "2021"),
-                        ],
-                      ),),
-                      
-                      const SizedBox(height: 14),
-                
-                     Container(
-                        height: 50,
-                        width: 180,
-                        margin: const EdgeInsets.symmetric(horizontal:20),
-                      decoration: BoxDecoration(
-                        color: mainColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child:const  Row(
-                        children: [
-                           Padding(
-                             padding: EdgeInsets.symmetric(horizontal: 10),
-                             child: Icon(Icons.confirmation_number),
-                           ),
-                           Text( "860601"),
-                        ],
-                      ),),
-                      
-                      const SizedBox(height: 14),
-                
-                     
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+                          Container(
+                            padding: const EdgeInsets.all(30),
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                            ),
+                              
+                              child: Column(
+                              children: [
+                               
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter Name';
+                                    }
+                                    return null;
+                                  },
+                                  readOnly: true,
+                                  controller: name,
+                                  decoration: InputDecoration(
+                                    icon:const Icon(Icons.person),
+                                    filled: true,
+                                    fillColor: mainColor,
+                                    contentPadding: const EdgeInsets.all(15),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                        color: Colors
+                                            .transparent, // Set the border color
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                        color: Colors
+                                            .transparent, // Set the border color when focused
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 10,),
+                                
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter a phoneNumber';
+                                    }
+                                    return null;
+                                  },
+                                  readOnly: true,
+                                  controller: phoneNumber,
+                                  decoration: InputDecoration(
+                                    icon:const Icon(Icons.phone),
+                                    filled: true,
+                                    fillColor: mainColor,
+                                    contentPadding: const EdgeInsets.all(15),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                        color: Colors
+                                            .transparent, // Set the border color
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                        color: Colors
+                                            .transparent, // Set the border color when focused
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 10),
+                               
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter Gmail';
+                                    }
+                                    return null;
+                                  },
+                                  readOnly: true,
+                                  controller: email,
+                                  decoration: InputDecoration(
+                                    icon:const Icon(Icons.mail),
+                                    filled: true,
+                                    fillColor: mainColor,
+                                    contentPadding: const EdgeInsets.all(15),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                        color: Colors
+                                            .transparent, // Set the border color
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                        color: Colors
+                                            .transparent, // Set the border color when focused
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 10),
+                                
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter admission year';
+                                    }
+                                    return null;
+                                  },
+                                  readOnly: true,
+                                  controller: admissionYear,
+                                  decoration: InputDecoration(
+                                    icon:const Icon(Icons.calendar_month),
+                                    filled: true,
+                                    fillColor: mainColor,
+                                    contentPadding: const EdgeInsets.all(15),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                        color: Colors
+                                            .transparent, // Set the border color
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                        color: Colors
+                                            .transparent, // Set the border color when focused
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 10),
+                               
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter admission year';
+                                    }
+                                    return null;
+                                  },
+                                  readOnly: true,
+                                  controller: admissionNumber,
+                                  decoration: InputDecoration(
+                                    icon:const Icon(Icons.confirmation_number),
+                                    filled: true,
+                                    fillColor: mainColor,
+                                    contentPadding: const EdgeInsets.all(15),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                        color: Colors
+                                            .transparent, // Set the border color
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                        color: Colors
+                                            .transparent, // Set the border color when focused
+                                      ),
+                                    ),
+                                 ),
+                                                       ),
+                              ],
+                            ),
+                          ),     
+                     ],
+                   ),
+               ),
+            );
+          }
 
 }
 

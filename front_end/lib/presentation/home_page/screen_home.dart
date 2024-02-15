@@ -1,9 +1,11 @@
-//ignore_for_file: use_build_context_synchronously, prefer_const_constructors, avoid_print, library_private_types_in_public_api, use_key_in_widget_constructors
+//ignore_for_file: use_build_context_synchronously, prefer_const_constructors, avoid_print, library_private_types_in_public_api, use_key_in_widget_constructors, unused_local_variable
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:front_end/main.dart';
 import 'package:front_end/presentation/splash_screen.dart';
 import 'package:http/http.dart' as http;
@@ -14,10 +16,17 @@ import 'package:front_end/presentation/admin_page/admin_panel.dart';
 import 'package:front_end/presentation/home_page/widgets/main_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constant/colors.dart';
+import '../../core/constant/routes.dart';
 import '../event_list_page/widget/screen_event_list.dart';
 import 'widgets/Notification.dart';
 
 class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
+  final int? id;
+
+  const ScreenMain({
+    this.id,
+    super.key,
+  });
   @override
   _AnimatedAppBarState createState() => _AnimatedAppBarState();
 
@@ -26,7 +35,46 @@ class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _AnimatedAppBarState extends State<ScreenMain> {
-  File? selectedIMage;
+
+    TextEditingController name = TextEditingController();
+    TextEditingController email = TextEditingController();
+    String avatar = "";
+
+   Future<void> fetchProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final userId = prefs.getInt('id');
+
+    try {
+      final response = await http.get(
+        Uri.parse(profile),
+        headers: <String, String>{
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> ProfileData = json.decode(response.body);
+        
+        // Populate form fields with existing data
+        setState(() {
+          name.text = ProfileData['data']['name'] ?? '';
+          email.text = ProfileData['data']['email'] ?? '';
+         
+          // avatar = ProfileData['data']['avatar'] ?? '';
+        }
+        );
+      } else {
+        print('Failed to fetch Profile details. Status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error fetching Profile details: $error');
+    }
+  }
+  
 
   final ScrollController _scrollController = ScrollController();
   bool _isScrolled = false;
@@ -34,12 +82,18 @@ class _AnimatedAppBarState extends State<ScreenMain> {
   @override
   void initState() {
     super.initState();
+
+    fetchProfile();
+    
     _scrollController.addListener(() {
       setState(() {
         _isScrolled = _scrollController.offset > 50;
       });
     });
   }
+  
+  Uint8List? _image;
+  File? selectedIMage;
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +132,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
               child: UserAccountsDrawerHeader(
                 accountName: const Text(
                   "Name",
+                  // controller: name,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 20,
@@ -85,20 +140,24 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                   ),
                 ),
                 accountEmail: const Text(
-                  "email@gail.com",
+                  "email",
+                  // controller: email,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 14,
                   ),
                 ),
-                currentAccountPicture: CircleAvatar(
-                  child: ClipOval(
-                    child: Image.asset(
-                      "assets/images/image.jpg",
-                      fit: BoxFit.cover,
-                    ),
+                currentAccountPicture:  
+         Stack(
+          children: [
+            _image != null ? CircleAvatar( radius: 60, backgroundImage: MemoryImage(_image!))
+                : const CircleAvatar(
+                    radius: 90,
+                    backgroundImage: AssetImage(
+                        "assets/images/user.jpg"),
                   ),
-                ),
+          ]
+          ),
                 decoration: BoxDecoration(
                   color: mainColor,
                   border: Border.all(

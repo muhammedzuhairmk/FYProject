@@ -1,18 +1,24 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, unused_local_variable, avoid_print, non_constant_identifier_names, unnecessary_null_in_if_null_operators, prefer_final_fields, use_build_context_synchronously
 
+import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../core/constant/routes.dart';
 
 
 class Event {
-  final String name;
+  final String title;
   final String date;
   final String location;
   final String imageUrl;
 
   Event({
-    required this.name,
+    required this.title,
     required this.date,
     required this.location,
     required this.imageUrl,
@@ -27,9 +33,11 @@ class ScreenEventList extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<ScreenEventList> {
+
+  
   List<Event> events = [
     Event(
-      name: 'Flutter Workshop',
+      title: 'Flutter Workshop',
       date: '2024-01-15',
       location: 'City Hall',
       imageUrl: 'https://www.example.com/images/flutter_workshop_image.jpg',
@@ -39,29 +47,12 @@ class _MyHomePageState extends State<ScreenEventList> {
 
   List<Event> comingSoonEvents = [
     Event(
-      name: 'Future Event 1',
+      title: 'Future Event 1',
       date: '2024-02-01',
       location: 'TBD',
       imageUrl: 'https://www.example.com/images/future_event_1_image.jpg',
     ),
-    Event(
-      name: 'Future Event 2',
-      date: '2024-02-15',
-      location: 'TBD',
-      imageUrl: 'https://www.example.com/images/future_event_2_image.jpg',
-    ),
-    Event(
-      name: 'Future Event 3',
-      date: '2024-02-01',
-      location: 'TBD',
-      imageUrl: 'https://www.example.com/images/future_event_1_image.jpg',
-    ),
-    Event(
-      name: 'Future Event 4',
-      date: '2024-02-15',
-      location: 'TBD',
-      imageUrl: 'https://www.example.com/images/future_event_2_image.jpg',
-    ),
+   
   ];
 
   @override
@@ -111,7 +102,7 @@ class _MyHomePageState extends State<ScreenEventList> {
                           ),
                         ),
                       ),
-                      title: Text(events[index].name),
+                      title: Text(events[index].title),
                       subtitle: Text(
                         'Date: ${events[index].date}\nLocation: ${events[index].location}',
                       ),
@@ -173,7 +164,7 @@ class _MyHomePageState extends State<ScreenEventList> {
                           ),
                         ),
                       ),
-                      title: Text(comingSoonEvents[index].name),
+                      title: Text(comingSoonEvents[index].title),
                       subtitle: Text(
                         'Date: ${comingSoonEvents[index].date}\nLocation: ${comingSoonEvents[index].location}',
                       ),
@@ -205,34 +196,136 @@ class AddEventDialog extends StatefulWidget {
 }
 
 class _AddEventDialogState extends State<AddEventDialog> {
-  late TextEditingController _titleController;
-  late TextEditingController _dateController;
-  late TextEditingController _descriptionController;
+
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _locationController = TextEditingController();
   File? _selectedImage;
+
+  bool isLoading = false;
+
+  Future<void> fetchEvent() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final userId = prefs.getInt('id');
+
+    try {
+      final response = await http.get(
+        Uri.parse(getEventList),
+        headers: <String, String>{
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> ProfileData = json.decode(response.body);
+
+        // Populate form fields with existing data
+        setState(() {
+          _titleController.text = ProfileData['data']['title'].toString();
+          _descriptionController.text = ProfileData['data']['description'].toString();
+          _locationController.text = ProfileData['data']['location'].toString();
+          _dateController.text = ProfileData['data']['eventDate'].toString();
+         
+          _selectedImage = File(ProfileData['data']['avatar']) ?? null;
+        });
+      } else {
+        print(
+            'Failed to fetch Profile details. Status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error fetching Profile details: $error');
+    }
+  }
+
+  Future<void> eventSubmitData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final token = prefs.getString('token');
+    final userId = prefs.getInt('id');
+
+    try {
+      if (_formKey.currentState?.validate() ?? false) {
+        setState(() {
+          isLoading = true;
+        });
+        final request = http.MultipartRequest(
+          'POST',
+          Uri.parse(eventList),
+        )
+          ..headers['Authorization'] = 'Bearer $token'
+          ..headers['Accept'] = 'application/json'
+          ..headers['Content-Type'] = 'multipart/form-data'
+          ..fields['title'] = _titleController.text
+          ..fields['description'] = _descriptionController.text
+          ..fields['eventDate'] = _dateController.text
+          ..fields['location'] = _locationController.text;
+          
+
+        if (_selectedImage != null) {
+          request.files.add(
+            await http.MultipartFile.fromPath(
+              'images',
+              _selectedImage!.path,
+              filename: 'avatar.jpg',
+            ),
+          );
+        }
+
+        final response = await request.send();
+        final responseData = await response.stream.bytesToString();
+
+        print('Response Body: $responseData');
+
+        if (response.statusCode == 200) {
+          setState(() {
+            isLoading = false;
+          });
+          Navigator.pop(context, "reload");
+          CustomDialog.showDialogBox(
+            context,
+            'Updated successfully',
+            'Profile updated successfully.',
+          );
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+          CustomDialog.showDialogBox(
+            context,
+            'Failed to Update',
+            'Profile updating failed. Status: ${response.statusCode}',
+          );
+        }
+      }
+    } catch (error) {
+      CustomDialog.showDialogBox(
+        context,
+        'Network Error!',
+        'Check your connection!',
+      ); 
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returnImage == null) return;
+    setState(() {
+      _selectedImage = File(returnImage.path);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController();
-    _dateController = TextEditingController();
-    _descriptionController = TextEditingController();
-  }
 
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _dateController.dispose();
-    _descriptionController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-    }
+    fetchEvent();
   }
 
   @override
@@ -247,98 +340,149 @@ class _AddEventDialogState extends State<AddEventDialog> {
     );
   }
 
- contentBox(context) {
-  return SingleChildScrollView(
-    child: Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        shape: BoxShape.rectangle,
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black,
-            offset: Offset(0, 10),
-            blurRadius: 10,
-          ),
-        ],
-      ),     child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            onTap: _pickImage,
-            child: Container(
-              width: 300,
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey[200],
+  contentBox(context) {
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black,
+              offset: Offset(0, 10),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GestureDetector(
+              onTap: _pickImage,
+              child: Form(
+                key: _formKey,
+                child: Container(
+                  width: 300,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey[200],
+                  ),
+                  child: _selectedImage != null
+                      ? Image.file(_selectedImage!, fit: BoxFit.cover)
+                      : const Icon(Icons.add_a_photo, size: 40, color: Colors.grey),
+                ),
               ),
-              child: _selectedImage != null
-                  ? Image.file(_selectedImage!, fit: BoxFit.cover)
-                  : const Icon(Icons.add_a_photo, size: 40, color: Colors.grey),
             ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _titleController,
-            decoration: const InputDecoration(
-              hintText: 'Title',
-              labelText: 'Title',
-            ),
-          ),
-          const SizedBox(height: 8),
-          TextField(
-            controller: _dateController,
-            decoration: const InputDecoration(
-              hintText: 'Date',
-              labelText: 'Date',
-            ),
-          ),
-          const SizedBox(height: 8),
-          TextField(
-            controller: _descriptionController,
-            maxLines: 3,
-            decoration: const InputDecoration(
-              hintText: 'Description',
-              labelText: 'Description',
-            ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Cancel'),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _titleController,
+              decoration: const InputDecoration(
+                hintText: 'Title',
+                labelText: 'Title',
               ),
-              ElevatedButton(
-                onPressed: () {
-                  // Add your logic to save the event here
-                  Event newEvent = Event(
-                    name: _titleController.text,
-                    date: _dateController.text,
-                    location: 'TBD',
-                    imageUrl: _selectedImage != null
-                        ? _selectedImage!.path
-                        : 'https://www.example.com/images/default_image.jpg',
-                  );
-                  setState(() {
-                    // ignore: prefer_typing_uninitialized_variables
-                    var comingSoonEvents;
-                    comingSoonEvents.add(newEvent);
-                  });
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Submit'),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _dateController,
+              decoration: const InputDecoration(
+                hintText: 'Date',
+                labelText: 'Date',
               ),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _locationController,
+              decoration: const InputDecoration(
+                hintText: 'Location',
+                labelText: 'Location',
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _descriptionController,
+              maxLines: 3,
+              decoration: const InputDecoration(
+                hintText: 'Description',
+                labelText: 'Description',
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color.fromARGB(255, 56, 105, 148),
+                          ),
+                          width: double.infinity,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: isLoading
+                            ? null
+                            : () async {
+                                await eventSubmitData();
+                              },
+                        child: isLoading
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ))
+                            : const Text(
+                                "Submit",
+                                style: TextStyle(
+                                    color: Colors.white),
+                              ),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey[500],
+                          ),
+                          width: double.infinity,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: isLoading
+                            ? null
+                            : () {
+                                Navigator.pop(context, "");
+                              },
+                        child: const Text(
+                          "Cancel",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
     );
   }
 }
@@ -352,7 +496,7 @@ class EventDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(event.name),
+        title: Text(event.title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -391,7 +535,7 @@ class EventDetailsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              event.imageUrl, // Displaying description as text
+              event.title, // Displaying title as text
               style: const TextStyle(fontSize: 16, color: Colors.black),
             ),
           ],
@@ -400,3 +544,26 @@ class EventDetailsScreen extends StatelessWidget {
     );
   }
 }
+
+class CustomDialog {
+  static void showDialogBox(BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
