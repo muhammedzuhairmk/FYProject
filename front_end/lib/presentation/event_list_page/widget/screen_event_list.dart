@@ -1,15 +1,14 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, unused_local_variable, avoid_print, non_constant_identifier_names, unnecessary_null_in_if_null_operators, prefer_final_fields, use_build_context_synchronously
 
 import 'dart:convert';
-import 'dart:io';
+
 import 'package:flutter/services.dart';
+import 'package:front_end/presentation/event_list_page/addEvent.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/constant/routes.dart';
-
 
 class Event {
   final String title;
@@ -25,24 +24,20 @@ class Event {
   });
 }
 
-
-
 class ScreenEventList extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<ScreenEventList> {
-
-  
   List<Event> events = [
     Event(
       title: 'Flutter Workshop',
       date: '2024-01-15',
       location: 'City Hall',
-      imageUrl: 'https://www.example.com/images/flutter_workshop_image.jpg',
+      imageUrl:
+          'https://img.freepik.com/premium-photo/advance-cyberspace-concept_862994-20265.jpg?size=626&ext=jpg&ga=GA1.1.1315563093.1704684554&semt=ais',
     ),
-    
   ];
 
   List<Event> comingSoonEvents = [
@@ -50,9 +45,9 @@ class _MyHomePageState extends State<ScreenEventList> {
       title: 'Future Event 1',
       date: '2024-02-01',
       location: 'TBD',
-      imageUrl: 'https://www.example.com/images/future_event_1_image.jpg',
+      imageUrl:
+          'https://img.freepik.com/premium-photo/advance-cyberspace-concept_862994-20265.jpg?size=626&ext=jpg&ga=GA1.1.1315563093.1704684554&semt=ais',
     ),
-   
   ];
 
   @override
@@ -80,7 +75,7 @@ class _MyHomePageState extends State<ScreenEventList> {
               ),
             ),
             Expanded(
-             flex: 1,
+              flex: 1,
               child: ListView.builder(
                 itemCount: events.length,
                 itemBuilder: (context, index) {
@@ -132,10 +127,14 @@ class _MyHomePageState extends State<ScreenEventList> {
                   IconButton(
                     icon: const Icon(Icons.add),
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AddEventDialog(),
-                      );
+                      // showDialog(
+                      //   context: context,
+                      //   builder: (
+                      //context) => AddEventDialog(),
+                      // );
+
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (builder) => AddEvent()));
                     },
                   ),
                 ],
@@ -196,13 +195,11 @@ class AddEventDialog extends StatefulWidget {
 }
 
 class _AddEventDialogState extends State<AddEventDialog> {
-
   final _formKey = GlobalKey<FormState>();
   TextEditingController _titleController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _locationController = TextEditingController();
-  File? _selectedImage;
 
   bool isLoading = false;
 
@@ -228,11 +225,12 @@ class _AddEventDialogState extends State<AddEventDialog> {
         // Populate form fields with existing data
         setState(() {
           _titleController.text = ProfileData['data']['title'].toString();
-          _descriptionController.text = ProfileData['data']['description'].toString();
+          _descriptionController.text =
+              ProfileData['data']['description'].toString();
           _locationController.text = ProfileData['data']['location'].toString();
           _dateController.text = ProfileData['data']['eventDate'].toString();
-         
-          _selectedImage = File(ProfileData['data']['avatar']) ?? null;
+
+          // _selectedImage = File(ProfileData['data']['avatar']) ?? null;
         });
       } else {
         print(
@@ -241,84 +239,6 @@ class _AddEventDialogState extends State<AddEventDialog> {
     } catch (error) {
       print('Error fetching Profile details: $error');
     }
-  }
-
-  Future<void> eventSubmitData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    final token = prefs.getString('token');
-    final userId = prefs.getInt('id');
-
-    try {
-      if (_formKey.currentState?.validate() ?? false) {
-        setState(() {
-          isLoading = true;
-        });
-        final request = http.MultipartRequest(
-          'POST',
-          Uri.parse(eventList),
-        )
-          ..headers['Authorization'] = 'Bearer $token'
-          ..headers['Accept'] = 'application/json'
-          ..headers['Content-Type'] = 'multipart/form-data'
-          ..fields['title'] = _titleController.text
-          ..fields['description'] = _descriptionController.text
-          ..fields['eventDate'] = _dateController.text
-          ..fields['location'] = _locationController.text;
-          
-
-        if (_selectedImage != null) {
-          request.files.add(
-            await http.MultipartFile.fromPath(
-              'images',
-              _selectedImage!.path,
-              filename: 'avatar.jpg',
-            ),
-          );
-        }
-
-        final response = await request.send();
-        final responseData = await response.stream.bytesToString();
-
-        print('Response Body: $responseData');
-
-        if (response.statusCode == 200) {
-          setState(() {
-            isLoading = false;
-          });
-          Navigator.pop(context, "reload");
-          CustomDialog.showDialogBox(
-            context,
-            'Updated successfully',
-            'Profile updated successfully.',
-          );
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-          CustomDialog.showDialogBox(
-            context,
-            'Failed to Update',
-            'Profile updating failed. Status: ${response.statusCode}',
-          );
-        }
-      }
-    } catch (error) {
-      CustomDialog.showDialogBox(
-        context,
-        'Network Error!',
-        'Check your connection!',
-      ); 
-    }
-  }
-
-  Future<void> _pickImage() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage == null) return;
-    setState(() {
-      _selectedImage = File(returnImage.path);
-    });
   }
 
   @override
@@ -360,7 +280,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             GestureDetector(
-              onTap: _pickImage,
+              onTap: null,
               child: Form(
                 key: _formKey,
                 child: Container(
@@ -370,43 +290,129 @@ class _AddEventDialogState extends State<AddEventDialog> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.grey[200],
                   ),
-                  child: _selectedImage != null
-                      ? Image.file(_selectedImage!, fit: BoxFit.cover)
-                      : const Icon(Icons.add_a_photo, size: 40, color: Colors.grey),
+                  child: const Icon(Icons.add_a_photo,
+                      size: 40, color: Colors.grey),
                 ),
               ),
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Title';
+                }
+                return null;
+              },
               controller: _titleController,
-              decoration: const InputDecoration(
-                hintText: 'Title',
-                labelText: 'Title',
+              decoration: InputDecoration(
+                hintText: "Title",
+                // icon: const Icon(Icons.person),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.all(15),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    color: Colors.transparent, // Set the border color
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    color:
+                        Colors.transparent, // Set the border color when focused
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 8),
-            TextField(
-              controller: _dateController,
-              decoration: const InputDecoration(
-                hintText: 'Date',
-                labelText: 'Date',
-              ),
-            ),
+            // TextFormField(
+            //   validator: (value) {
+            //     if (value == null || value.isEmpty) {
+            //       return 'Please enter Date';
+            //     }
+            //     return null;
+            //   },
+            //   controller: _datecontroller,
+            //   decoration: InputDecoration(
+            //     hintText: "Date",
+            //     // icon: const Icon(Icons.person),
+            //     filled: true,
+            //     fillColor: Colors.white,
+            //     contentPadding: const EdgeInsets.all(15),
+            //     enabledBorder: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(15),
+            //       borderSide: const BorderSide(
+            //         color: Colors.transparent, // Set the border color
+            //       ),
+            //     ),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(15),
+            //       borderSide: const BorderSide(
+            //         color:
+            //             Colors.transparent, // Set the border color when focused
+            //       ),
+            //     ),
+            //   ),
+            // ),
             const SizedBox(height: 8),
-            TextField(
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Place';
+                }
+                return null;
+              },
               controller: _locationController,
-              decoration: const InputDecoration(
-                hintText: 'Location',
-                labelText: 'Location',
+              decoration: InputDecoration(
+                hintText: "Place",
+                // icon: const Icon(Icons.person),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.all(15),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    color: Colors.transparent, // Set the border color
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    color:
+                        Colors.transparent, // Set the border color when focused
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 8),
-            TextField(
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Description';
+                }
+                return null;
+              },
               controller: _descriptionController,
-              maxLines: 3,
-              decoration: const InputDecoration(
-                hintText: 'Description',
-                labelText: 'Description',
+              decoration: InputDecoration(
+                hintText: "Description",
+                // icon: const Icon(Icons.person),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.all(15),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    color: Colors.transparent, // Set the border color
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    color:
+                        Colors.transparent, // Set the border color when focused
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -426,11 +432,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
                         ),
                       ),
                       TextButton(
-                        onPressed: isLoading
-                            ? null
-                            : () async {
-                                await eventSubmitData();
-                              },
+                        onPressed: null,
                         child: isLoading
                             ? const SizedBox(
                                 width: 20,
@@ -441,8 +443,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
                                 ))
                             : const Text(
                                 "Submit",
-                                style: TextStyle(
-                                    color: Colors.white),
+                                style: TextStyle(color: Colors.white),
                               ),
                       )
                     ],
@@ -489,7 +490,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
 
 class EventDetailsScreen extends StatelessWidget {
   final Event event;
-  
+
   EventDetailsScreen({required this.event});
 
   @override
@@ -531,7 +532,10 @@ class EventDetailsScreen extends StatelessWidget {
             const SizedBox(height: 16),
             const Text(
               'Description:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
             ),
             const SizedBox(height: 8),
             Text(
@@ -546,7 +550,8 @@ class EventDetailsScreen extends StatelessWidget {
 }
 
 class CustomDialog {
-  static void showDialogBox(BuildContext context, String title, String message) {
+  static void showDialogBox(
+      BuildContext context, String title, String message) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -566,4 +571,3 @@ class CustomDialog {
     );
   }
 }
-
