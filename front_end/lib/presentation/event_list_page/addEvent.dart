@@ -10,7 +10,6 @@ import 'package:front_end/core/constant/routes.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'widget/screen_event_list.dart';
 
 class AddEvent extends StatefulWidget {
@@ -33,9 +32,6 @@ class _AddEventState extends State<AddEvent> {
 
   String avatar = "";
 
- 
-
- 
   Future<void> submitData() async {
     print("event here");
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -80,7 +76,7 @@ class _AddEventState extends State<AddEvent> {
         print('Response Body: $responseData');
 
         if (response.statusCode == 201) {
-    print("event here on 200");
+        print("event here on 200");
           setState(() {
             isLoading = false;
           });
@@ -91,7 +87,7 @@ class _AddEventState extends State<AddEvent> {
             'Profile updated successfully.',
           );
         } else {
-    print("event here on not 201");
+        print("event here on not 201");
           setState(() {
             isLoading = false;
           });

@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, unused_local_variable, avoid_print, non_constant_identifier_names, unnecessary_null_in_if_null_operators, prefer_final_fields, use_build_context_synchronously
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, unused_local_variable, avoid_print, non_constant_identifier_names, unnecessary_null_in_if_null_operators, prefer_final_fields, use_build_context_synchronously, must_be_immutable
 
 import 'dart:convert';
 
@@ -50,6 +50,7 @@ class _MyHomePageState extends State<ScreenEventList> {
   bool isLoading = true;
 
   List<Map<dynamic, dynamic>> presentEvents = [];
+  List<Map<dynamic, dynamic>> commingEvents = [];
 
   Future<void> fecthPresentEventList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -86,18 +87,90 @@ class _MyHomePageState extends State<ScreenEventList> {
     }
   }
 
+
+  Future<void> fecthCommingEventList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final userId = prefs.getInt('id');
+
+    print("i a here on fetch");
+    try {
+      print("i a here on fetch try");
+      final response = await http.get(
+        Uri.parse(commingeventList),
+        headers: <String, String>{
+          // 'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      print('Response Status Code: ${response.statusCode}');
+      print('gallery: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        setState(() {
+          commingEvents = List<Map<String, dynamic>>.from(responseData['data']);
+        });
+        print('Response Body: ${response.body}');
+      } else {
+        print(
+            'Failed to fetch present gallery itsms. Status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error fetching present gallery itsms: $error');
+    }
+  }
+
+ Future<void> fecthEventList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final userId = prefs.getInt('id');
+
+    print("i a here on fetch");
+    try {
+      print("i a here on fetch try");
+      final response = await http.get(
+        Uri.parse(getEventList),
+        headers: <String, String>{
+          // 'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      print('Response Status Code: ${response.statusCode}');
+      print('gallery: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        setState(() {
+          presentEvents = List<Map<String, dynamic>>.from(responseData['data']);
+        });
+        print('Response Body: ${response.body}');
+      } else {
+        print(
+            'Failed to fetch present gallery itsms. Status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error fetching present gallery itsms: $error');
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();
 
     fecthPresentEventList();
+    fecthCommingEventList();
+    fecthEventList();
+
     print("evetn page");
   }
 
-  List<Event> comingSoonEvents = [
-    Event(
-        id: 1, title: 'sd ', date: '2024-02-01', location: ' ', imageUrl: ' '),
-  ];
+  
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +199,7 @@ class _MyHomePageState extends State<ScreenEventList> {
             Expanded(
               flex: 1,
               child: presentEvents.isEmpty
-                  ? Center(child: Text("no present wevens"))
+                  ? const Center(child: Text("no present events"))
                   : ListView.builder(
                       itemCount: presentEvents.length,
                       itemBuilder: (context, index) {
@@ -198,41 +271,45 @@ class _MyHomePageState extends State<ScreenEventList> {
             ),
             Expanded(
               flex: 3,
-              child: ListView.builder(
-                itemCount: comingSoonEvents.length,
-                itemBuilder: (context, index) {
+              child:  commingEvents.isEmpty
+                  ? const Center(child: Text("no Comming events"))
+                  : ListView.builder(
+                      itemCount: commingEvents.length,
+                      itemBuilder: (context, index) {
+                        final item = commingEvents[index];
+                        print(item['image']);
+                        print("image url");
                   return Card(
                     child: ListTile(
                       leading: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Center(
-                            // child: Image.network(
-                            //   comingSoonEvents[index].imageUrl,
-                            //   width: 40,
-                            //   height: 40,
-                            //   fit: BoxFit.cover,
-                            // ),
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              
+                              child: Image.network(
+                                "${ImageUrl}${item['thumbnail']['image']}",
+                                
+                                fit: BoxFit.cover, // Adjust the fit as needed
+                              ),
                             ),
-                      ),
-                      title: Text(comingSoonEvents[index].title),
-                      subtitle: Text(
-                        'Date: ${comingSoonEvents[index].date}\nLocation: ${comingSoonEvents[index].location}',
-                      ),
-                      onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => EventDetailsScreen(
-                        //     singleEvent: item,
-                        //     ),
-                        //   ),
-                        // );
-                      },
+                            title: Text(
+                              '${item['title']}',
+                            ),
+                            subtitle: Text(
+                              'Date: ${item['eventDate']}\nLocation: ${item['location']}',
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      EventDetailsScreen(singleEvent: item,),
+                                ),
+                              );
+                            },
                     ),
                   );
                 },
@@ -255,11 +332,11 @@ class EventDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(singleEvent['thumbnail']['image']);
-
     String imageUrl = ImageUrl + singleEvent['thumbnail']['image'] ;
     return Scaffold(
       appBar: AppBar(
-        title: Text(singleEvent['title']),
+        title: Text(singleEvent['title'], // Displaying title as text
+              style: const TextStyle(fontSize: 26, color: Colors.black),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -291,6 +368,8 @@ class EventDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
+            
+            
             const SizedBox(height: 16),
             const Text(
               'Description:',
