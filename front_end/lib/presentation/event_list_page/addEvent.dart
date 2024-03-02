@@ -1,5 +1,6 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously, non_constant_identifier_names, unused_local_variable
-import 'dart:convert';
+// ignore_for_file: avoid_print, use_build_context_synchronously, non_constant_identifier_names, unused_local_variable, file_names
+
+
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -9,6 +10,8 @@ import 'package:front_end/core/constant/routes.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'widget/screen_event_list.dart';
 
 class AddEvent extends StatefulWidget {
   final int? id;
@@ -24,85 +27,49 @@ class AddEvent extends StatefulWidget {
 
 class _AddEventState extends State<AddEvent> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController name = TextEditingController();
-  TextEditingController phoneNumber = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController admissionYear = TextEditingController();
-  TextEditingController admissionNumber = TextEditingController();
+  TextEditingController title = TextEditingController();
+  TextEditingController location = TextEditingController();
+  TextEditingController description = TextEditingController();
+
   String avatar = "";
 
-  bool isLoading = false;
+ 
 
-  Future<void> fetchProfile() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-    final userId = prefs.getInt('id');
-
-    try {
-      final response = await http.get(
-        Uri.parse(profile),
-        headers: <String, String>{
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
-      print('Response Status Code: ${response.statusCode}');
-      print('Response Body: ${response.body}');
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> ProfileData = json.decode(response.body);
-
-        // Populate form fields with existing data
-        setState(() {
-          name.text = ProfileData['data']['name'] ?? '';
-          phoneNumber.text = ProfileData['data']['phoneNumber'].toString();
-          email.text = ProfileData['data']['email'] ?? '';
-          admissionNumber.text =
-              ProfileData['data']['admissionNumber'].toString();
-          admissionYear.text = ProfileData['data']['admissionYear'].toString();
-
-          avatar = ProfileData['data']['avatar'] ?? '';
-        });
-      } else {
-        print(
-            'Failed to fetch Profile details. Status: ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Error fetching Profile details: $error');
-    }
-  }
-
+ 
   Future<void> submitData() async {
+    print("event here");
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     final token = prefs.getString('token');
     final userId = prefs.getInt('id');
 
     try {
+    print("event here on try");
       if (_formKey.currentState?.validate() ?? false) {
+    
         setState(() {
           isLoading = true;
         });
         final request = http.MultipartRequest(
-          'PATCH',
-          Uri.parse(profile),
+          'POST',
+          Uri.parse(eventList),
         )
           ..headers['Authorization'] = 'Bearer $token'
           ..headers['Accept'] = 'application/json'
           ..headers['Content-Type'] = 'multipart/form-data'
-          ..fields['name'] = name.text
-          ..fields['phoneNumber'] = phoneNumber.text
-          ..fields['email'] = email.text
-          ..fields['admissionNumber'] = admissionNumber.text
-          ..fields['admissionYear'] = admissionYear.text;
+          ..fields['title'] = title.text
+          ..fields['eventDate'] = DateTime.now().toString()
+          ..fields['location'] = location.text
+          ..fields['description'] = description.text;
+        
 
         if (selectedImage != null) {
           request.files.add(
             http.MultipartFile(
-              'avatar',
+              'image',
               http.ByteStream.fromBytes(_image!),
               _image!.length,
-              filename: 'avatar.jpg',
+              filename: 'images.jpg',
             ),
           );
         }
@@ -112,35 +79,40 @@ class _AddEventState extends State<AddEvent> {
 
         print('Response Body: $responseData');
 
-        if (response.statusCode == 200) {
+        if (response.statusCode == 201) {
+    print("event here on 200");
           setState(() {
             isLoading = false;
           });
           Navigator.pop(context, "reload");
-          // CustomDialog.showDialogBox(
-          //   context,
-          //   'Updated successfully',
-          //   'Profile updated successfully.',
-          // );
+          CustomDialog.showDialogBox(
+            context,
+            'Updated successfully',
+            'Profile updated successfully.',
+          );
         } else {
+    print("event here on not 201");
           setState(() {
             isLoading = false;
           });
-          // CustomDialog.showDialogBox(
-          //   context,
-          //   'Failed to Update',
-          //   'Profile updating failed. Status: ${response.statusCode}',
-          // );
+          CustomDialog.showDialogBox(
+            context,
+            'Failed to Update',
+            'Profile updating failed. Status: ${response.statusCode}',
+          );
         }
       }
     } catch (error) {
-      // CustomDialog.showDialogBox(
-      //   context,
-      //   'Network Error!',
-      //   'Check your connection!',
-      // );
+    print("event here on catch");
+      CustomDialog.showDialogBox(
+        context,
+        'Network Error!',
+        'Check your connection!',
+      );
     }
   }
+
+ bool isLoading = false;
 
   Future<void> _pickImage() async {
     final returnImage =
@@ -156,7 +128,7 @@ class _AddEventState extends State<AddEvent> {
   void initState() {
     super.initState();
 
-    fetchProfile();
+    
   }
 
   Uint8List? _image;
@@ -180,7 +152,7 @@ class _AddEventState extends State<AddEvent> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Profile Page",
+                      "Add Event",
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
@@ -209,21 +181,21 @@ class _AddEventState extends State<AddEvent> {
                         children: [
                           Column(
                             children: [
-                              Stack(
+                                     Stack(
                                 children: [
                                   _image != null
                                       ? CircleAvatar(
-                                          radius: 50,
+                                          radius: 100,
                                           backgroundImage: MemoryImage(_image!),
                                         )
                                       : (avatar.isNotEmpty
                                           ? CircleAvatar(
-                                              radius: 50,
+                                              radius: 100,
                                               backgroundImage:
-                                                  NetworkImage(avatar),
+                                                  NetworkImage(url + avatar),
                                             )
                                           : const CircleAvatar(
-                                              radius: 50,
+                                              radius: 100,
                                               backgroundImage: AssetImage(
                                                   'assets/images/user.jpg'),
                                             )),
@@ -239,21 +211,23 @@ class _AddEventState extends State<AddEvent> {
                                   ),
                                 ],
                               ),
+                       
                             ],
                           ),
                           const SizedBox(height: 30),
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter Name';
+                                return 'Enter The Event Title';
                               }
                               return null;
                             },
-                            controller: name,
+                            autofillHints:Characters("string"),
+                            controller: title,
                             decoration: InputDecoration(
-                              icon: const Icon(Icons.person),
                               filled: true,
                               fillColor: Colors.white,
+                              hintText: "Event Title",
                               contentPadding: const EdgeInsets.all(15),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
@@ -277,13 +251,14 @@ class _AddEventState extends State<AddEvent> {
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter a phoneNumber';
+                                return 'Enter The place Of Event';
                               }
                               return null;
                             },
-                            controller: phoneNumber,
+                            readOnly: false,
+                            controller: location,
                             decoration: InputDecoration(
-                              icon: const Icon(Icons.phone),
+                              hintText: "Event location",
                               filled: true,
                               fillColor: Colors.white,
                               contentPadding: const EdgeInsets.all(15),
@@ -307,14 +282,14 @@ class _AddEventState extends State<AddEvent> {
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter Gmail';
+                                return 'Enter The Description';
                               }
                               return null;
                             },
                             readOnly: false,
-                            controller: email,
+                            controller: description,
                             decoration: InputDecoration(
-                              icon: const Icon(Icons.mail),
+                              hintText: "Description",
                               filled: true,
                               fillColor: Colors.white,
                               contentPadding: const EdgeInsets.all(15),
@@ -335,81 +310,6 @@ class _AddEventState extends State<AddEvent> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter admission year';
-                              }
-                              return null;
-                            },
-                            readOnly: false,
-                            controller: admissionYear,
-                            decoration: InputDecoration(
-                              icon: const Icon(Icons.calendar_month),
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: const EdgeInsets.all(15),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  color: Colors
-                                      .transparent, // Set the border color
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  color: Colors
-                                      .transparent, // Set the border color when focused
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter admission number';
-                              }
-                              return null;
-                            },
-                            readOnly: false,
-                            controller: admissionNumber,
-                            decoration: InputDecoration(
-                              icon: const Icon(Icons.confirmation_num),
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: const EdgeInsets.all(15),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  color: Colors
-                                      .transparent, // Set the border color
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  color: Colors
-                                      .transparent, // Set the border color when focused
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          TextButton(
-                              onPressed: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (builder) =>
-                                //             ResetPassword(email: email.text)));
-                              },
-                              child: const Text(
-                                "Reset Password",
-                                style: TextStyle(color: Colors.red),
-                              )),
-                          const SizedBox(height: 20),
                           Row(
                             children: [
                               ClipRRect(
@@ -440,6 +340,7 @@ class _AddEventState extends State<AddEvent> {
                                                 strokeWidth: 2,
                                                 color: Colors.white,
                                               ))
+                                            
                                           : const Text(
                                               "Submit",
                                               style: TextStyle(

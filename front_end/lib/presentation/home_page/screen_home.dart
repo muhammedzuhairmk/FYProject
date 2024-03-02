@@ -1,4 +1,4 @@
-//ignore_for_file: use_build_context_synchronously, prefer_const_constructors, avoid_print, library_private_types_in_public_api, use_key_in_widget_constructors, unused_local_variable
+//ignore_for_file: use_build_context_synchronously, prefer_const_constructors, avoid_print, library_private_types_in_public_api, use_key_in_widget_constructors, unused_local_variable, non_constant_identifier_names
 
 import 'dart:convert';
 import 'dart:io';

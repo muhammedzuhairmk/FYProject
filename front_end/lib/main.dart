@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, non_constant_identifier_names
+// ignore_for_file: avoid_print, non_constant_identifier_names, prefer_typing_uninitialized_variables, constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:front_end/presentation/splash_screen.dart';
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: mainColor,
         useMaterial3: true,
       ),
-      home:  SplashScreen()
+      home: const  SplashScreen()
     );
   }
 }

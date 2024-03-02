@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/core/constant/routes.dart';
+import 'package:front_end/presentation/event_list_page/widget/screen_event_list.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -111,33 +112,33 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
 
         print('Response Body: $responseData');
 
-        if (response.statusCode == 200) {
+        if (response.statusCode == 201) {
           setState(() {
             isLoading = false;
           });
           Navigator.pop(context, "reload");
-          // CustomDialog.showDialogBox(
-          //   context,
-          //   'Updated successfully',
-          //   'Profile updated successfully.',
-          // );
+          CustomDialog.showDialogBox(
+            context,
+            'Updated successfully',
+            'Profile updated successfully.',
+          );
         } else {
           setState(() {
             isLoading = false;
           });
-          // CustomDialog.showDialogBox(
-          //   context,
-          //   'Failed to Update',
-          //   'Profile updating failed. Status: ${response.statusCode}',
-          // );
+          CustomDialog.showDialogBox(
+            context,
+            'Failed to Update',
+            'Profile updating failed. Status: ${response.statusCode}',
+          );
         }
       }
     } catch (error) {
-      // CustomDialog.showDialogBox(
-      //   context,
-      //   'Network Error!',
-      //   'Check your connection!',
-      // ); 
+      CustomDialog.showDialogBox(
+        context,
+        'Network Error!',
+        'Check your connection!',
+      ); 
     }
   }
 
