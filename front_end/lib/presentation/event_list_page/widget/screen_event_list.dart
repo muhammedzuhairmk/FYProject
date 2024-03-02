@@ -23,11 +23,19 @@ class Event {
     required this.imageUrl,
   });
 
-  
+  factory Event.fromJson(Map<String, dynamic> json) {
+    return Event(
+      id: json['id'],
+      title: json['title'],
+      date: json['date'],
+      location: json['location'],
+      imageUrl: json['imageUrl'],
+    );
+  }
 }
 
 class ScreenEventList extends StatefulWidget {
-   final int? id;
+  final int? id;
 
   const ScreenEventList({
     this.id,
@@ -39,66 +47,56 @@ class ScreenEventList extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<ScreenEventList> {
-   
-  
-
   bool isLoading = true;
 
-   Future<void> fecthPresentEventList() async {
+  List<Map<dynamic, dynamic>> presentEvents = [];
+
+  Future<void> fecthPresentEventList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final userId = prefs.getInt('id');
 
+    print("i a here on fetch");
     try {
+      print("i a here on fetch try");
       final response = await http.get(
         Uri.parse(presenteventList),
         headers: <String, String>{
-          'Accept': 'application/json',
+          // 'Accept': 'application/json',
           'Authorization': 'Bearer $token',
         },
       );
+
       print('Response Status Code: ${response.statusCode}');
       print('gallery: ${response.body}');
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> ProfileData = json.decode(response.body);
-        
-      print('Response Body: ${response.body}');
-       
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        setState(() {
+          presentEvents = List<Map<String, dynamic>>.from(responseData['data']);
+        });
+        print('Response Body: ${response.body}');
       } else {
-        print('Failed to fetch present gallery itsms. Status: ${response.statusCode}');
+        print(
+            'Failed to fetch present gallery itsms. Status: ${response.statusCode}');
       }
     } catch (error) {
       print('Error fetching present gallery itsms: $error');
     }
   }
-  
-   @override
+
+  @override
   void initState() {
     super.initState();
 
     fecthPresentEventList();
+    print("evetn page");
   }
- 
-  List<Event> events = [
-    Event(
-    id: 1,
-      title: ' ',
-      date: '2024-01-15',
-      location: ' ',
-      imageUrl:
-          ' ',
-    ),
-  ];
 
   List<Event> comingSoonEvents = [
     Event(
-    id: 1,
-      title: ' ',
-      date: '2024-02-01',
-      location: ' ',
-      imageUrl:' ' 
-         ),
+        id: 1, title: 'sd ', date: '2024-02-01', location: ' ', imageUrl: ' '),
   ];
 
   @override
@@ -127,44 +125,49 @@ class _MyHomePageState extends State<ScreenEventList> {
             ),
             Expanded(
               flex: 1,
-              child: ListView.builder(
-                itemCount: events.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      leading: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Center(
-                          // child: Image.network(
-                          //   events[index].imageUrl,
-                          //   width: 40,
-                          //   height: 40,
-                          //   fit: BoxFit.cover,
-                          // ),
-                        ),
-                      ),
-                      title: Text(events[index].title),
-                      subtitle: Text(
-                        'Date: ${events[index].date}\nLocation: ${events[index].location}',
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                EventDetailsScreen(event: events[index]),
+              child: presentEvents.isEmpty
+                  ? Center(child: Text("no present wevens"))
+                  : ListView.builder(
+                      itemCount: presentEvents.length,
+                      itemBuilder: (context, index) {
+                        final item = presentEvents[index];
+                        print(item['image']);
+                        print("image url");
+                        return Card(
+                          child: ListTile(
+                            leading: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              
+                              child: Image.network(
+                                "${ImageUrl}${item['thumbnail']['image']}",
+                                
+                                fit: BoxFit.cover, // Adjust the fit as needed
+                              ),
+                            ),
+                            title: Text(
+                              '${item['title']}',
+                            ),
+                            subtitle: Text(
+                              'Date: ${item['eventDate']}\nLocation: ${item['location']}',
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      EventDetailsScreen(singleEvent: item,),
+                                ),
+                              );
+                            },
                           ),
                         );
                       },
                     ),
-                  );
-                },
-              ),
             ),
             Container(
               padding: const EdgeInsets.all(16),
@@ -184,8 +187,10 @@ class _MyHomePageState extends State<ScreenEventList> {
                       //context) => AddEventDialog(),
                       // );
 
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (builder) => const AddEvent()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => const AddEvent()));
                     },
                   ),
                 ],
@@ -206,27 +211,27 @@ class _MyHomePageState extends State<ScreenEventList> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Center(
-                          // child: Image.network(
-                          //   comingSoonEvents[index].imageUrl,
-                          //   width: 40,
-                          //   height: 40,
-                          //   fit: BoxFit.cover,
-                          // ),
-                        ),
+                            // child: Image.network(
+                            //   comingSoonEvents[index].imageUrl,
+                            //   width: 40,
+                            //   height: 40,
+                            //   fit: BoxFit.cover,
+                            // ),
+                            ),
                       ),
                       title: Text(comingSoonEvents[index].title),
                       subtitle: Text(
                         'Date: ${comingSoonEvents[index].date}\nLocation: ${comingSoonEvents[index].location}',
                       ),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EventDetailsScreen(
-                              event: comingSoonEvents[index],
-                            ),
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => EventDetailsScreen(
+                        //     singleEvent: item,
+                        //     ),
+                        //   ),
+                        // );
                       },
                     ),
                   );
@@ -240,18 +245,21 @@ class _MyHomePageState extends State<ScreenEventList> {
   }
 }
 
-
-
 class EventDetailsScreen extends StatelessWidget {
-  final Event event;
+  
+   Map<dynamic,dynamic> singleEvent;
 
-  EventDetailsScreen({required this.event});
+  EventDetailsScreen({required this.singleEvent});
 
+  
   @override
   Widget build(BuildContext context) {
+    print(singleEvent['thumbnail']['image']);
+
+    String imageUrl = ImageUrl + singleEvent['thumbnail']['image'] ;
     return Scaffold(
       appBar: AppBar(
-        title: Text(event.title),
+        title: Text(singleEvent['title']),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -276,10 +284,10 @@ class EventDetailsScreen extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  // child: Image.network(
-                  //   event.imageUrl,
-                  //   fit: BoxFit.cover,
-                  // ),
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -293,7 +301,7 @@ class EventDetailsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              event.title, // Displaying title as text
+             singleEvent['title'], // Displaying title as text
               style: const TextStyle(fontSize: 16, color: Colors.black),
             ),
           ],
@@ -317,7 +325,7 @@ class CustomDialog {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child:const  Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
