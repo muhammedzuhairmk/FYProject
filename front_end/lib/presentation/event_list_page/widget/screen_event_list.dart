@@ -1,7 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, unused_local_variable, avoid_print, non_constant_identifier_names, unnecessary_null_in_if_null_operators, prefer_final_fields, use_build_context_synchronously, must_be_immutable
-
+import 'package:intl/intl.dart';
 import 'dart:convert';
-
 import 'package:front_end/core/constant/routes.dart';
 import 'package:http/http.dart' as http;
 import 'package:front_end/presentation/event_list_page/addEvent.dart';
@@ -49,8 +48,14 @@ class ScreenEventList extends StatefulWidget {
 class _MyHomePageState extends State<ScreenEventList> {
   bool isLoading = true;
 
+
+
   List<Map<dynamic, dynamic>> presentEvents = [];
   List<Map<dynamic, dynamic>> commingEvents = [];
+
+  
+
+
 
   Future<void> fecthPresentEventList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -76,7 +81,10 @@ class _MyHomePageState extends State<ScreenEventList> {
 
         setState(() {
           presentEvents = List<Map<String, dynamic>>.from(responseData['data']);
+          
+                                  
         });
+      
         print('Response Body: ${response.body}');
       } else {
         print(
@@ -112,7 +120,13 @@ class _MyHomePageState extends State<ScreenEventList> {
 
         setState(() {
           commingEvents = List<Map<String, dynamic>>.from(responseData['data']);
+          
+           
         });
+        
+
+    
+          
         print('Response Body: ${response.body}');
       } else {
         print(
@@ -148,7 +162,7 @@ class _MyHomePageState extends State<ScreenEventList> {
         setState(() {
           presentEvents = List<Map<String, dynamic>>.from(responseData['data']);
         });
-        print('Response Body: ${response.body}');
+        print('Response Bodyyy: ${response.body}');
       } else {
         print(
             'Failed to fetch present gallery itsms. Status: ${response.statusCode}');
@@ -157,6 +171,15 @@ class _MyHomePageState extends State<ScreenEventList> {
       print('Error fetching present gallery itsms: $error');
     }
   }
+
+
+String formateda(String tmpD,String tmpL){
+DateTime dt = DateTime.parse(tmpD);
+final formattedDate = DateFormat('dd-MM-yyyy').format(dt);
+final formattedTime = DateFormat('HH:mm').format(dt);
+String loc=tmpL;
+return 'Date :$formattedDate  Time :$formattedTime\nLocation :$loc';
+}
 
 
   @override
@@ -226,7 +249,8 @@ class _MyHomePageState extends State<ScreenEventList> {
                               '${item['title']}',
                             ),
                             subtitle: Text(
-                              'Date: ${item['eventDate']}\nLocation: ${item['location']}',
+formateda(item['eventDate'],item['location'])
+                              //'Date: ${item['eventDate']}\nLocation: ${item['location']}',
                             ),
                             onTap: () {
                               Navigator.push(
@@ -299,7 +323,8 @@ class _MyHomePageState extends State<ScreenEventList> {
                               '${item['title']}',
                             ),
                             subtitle: Text(
-                              'Date: ${item['eventDate']}\nLocation: ${item['location']}',
+                              formateda(item['eventDate'],item['location'])
+                            //'Date: ${item['eventDate']}\nLocation: ${item['location']}',
                             ),
                             onTap: () {
                               Navigator.push(

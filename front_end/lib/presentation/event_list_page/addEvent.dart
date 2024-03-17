@@ -32,6 +32,14 @@ class _AddEventState extends State<AddEvent> {
 
   String avatar = "";
 
+DateTime selectedDate = DateTime.now();
+  late TimeOfDay selectedtime;
+  String date = "Enter date";
+  String time = "enter time";
+  var t1 = null;
+  var t2 = null;
+
+
   Future<void> submitData() async {
     print("event here");
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -41,6 +49,8 @@ class _AddEventState extends State<AddEvent> {
 
     try {
     print("event here on try");
+    print(DateTime.now().toString());
+    print('$date$time:00.000000');
       if (_formKey.currentState?.validate() ?? false) {
     
         setState(() {
@@ -54,7 +64,7 @@ class _AddEventState extends State<AddEvent> {
           ..headers['Accept'] = 'application/json'
           ..headers['Content-Type'] = 'multipart/form-data'
           ..fields['title'] = title.text
-          ..fields['eventDate'] = DateTime.now().toString()
+          ..fields['eventDate'] = '$date$time:00.000000'//"2024-03-05 20:46:47.139673"
           ..fields['location'] = location.text
           ..fields['description'] = description.text;
         
@@ -180,29 +190,78 @@ class _AddEventState extends State<AddEvent> {
                                      Stack(
                                 children: [
                                   _image != null
-                                      ? CircleAvatar(
-                                          radius: 100,
-                                          backgroundImage: MemoryImage(_image!),
+                                       ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                          child: Container(
+                                            height: 300.0,
+                                            width: 300.0,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: MemoryImage(_image!),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
                                         )
                                       : (avatar.isNotEmpty
-                                          ? CircleAvatar(
-                                              radius: 100,
-                                              backgroundImage:
-                                                  NetworkImage(url + avatar),
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                              child: Container(
+                                                height: 300.0,
+                                                width: 300.0,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        url + avatar),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
                                             )
-                                          : const CircleAvatar(
-                                              radius: 100,
-                                              backgroundImage: AssetImage(
-                                                  'assets/images/user.jpg'),
+                                          : ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                              child: Container(
+                                                height: 300.0,
+                                                width: 300.0,
+                                                decoration:const BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: AssetImage(
+                                                        'assets/images/user.jpg'),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
                                             )),
+                                  // ? CircleAvatar(
+                                  //     radius: 100,
+                                  //     backgroundImage: MemoryImage(_image!),
+                                  //   )
+                                  // : (avatar.isNotEmpty
+                                  //     ? CircleAvatar(
+                                  //         radius: 100,
+                                  //         backgroundImage:
+                                  //             NetworkImage(url + avatar),
+                                  //       )
+                                  //     : const CircleAvatar(
+                                  //         radius: 100,
+                                  //         backgroundImage: AssetImage(
+                                  //             'assets/images/user.jpg'),
+                                  //       )),
                                   Positioned(
-                                    bottom: -10,
-                                    left: 60,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        _pickImage();
-                                      },
-                                      icon: const Icon(Icons.add_a_photo),
+                                    bottom: 0,
+                                    
+                                    child: SizedBox(height: 30,width: 300,
+                                      child: TextButton(
+                                        onPressed: () {
+                                          _pickImage();
+                                        },style: TextButton.styleFrom(backgroundColor: Colors.white,foregroundColor: Colors.black),
+                                       // icon: const Icon(Icons.add_a_photo),
+                                       child:const Text("Upload Image",style: TextStyle(fontWeight:FontWeight.bold),),
+                                       
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -282,6 +341,7 @@ class _AddEventState extends State<AddEvent> {
                               }
                               return null;
                             },
+                            maxLines: 3,
                             readOnly: false,
                             controller: description,
                             decoration: InputDecoration(
@@ -305,6 +365,71 @@ class _AddEventState extends State<AddEvent> {
                               ),
                             ),
                           ),
+                           const SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 1),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))),
+                                    onPressed: () async {
+                                      DateTime? pickedDate =
+                                          await showDatePicker(
+                                        context: context,
+                                        initialDate: selectedDate,
+                                        firstDate: DateTime(2020),
+                                        lastDate: DateTime(2030),
+                                      );
+
+                                      if (pickedDate != null &&
+                                          pickedDate != selectedDate) {
+                                        setState(() {
+                                          selectedDate = pickedDate;
+
+                                          date =
+                                              '${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}';
+                                          t1 = date;
+                                        });
+                                        print(date);
+                                      }
+                                    },
+                                    child: Text(date),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10))),
+                                  onPressed: () async {
+                                    final TimeOfDay? newTime =
+                                        await showTimePicker(
+                                      context: context,
+                                      initialTime: TimeOfDay.now(),
+                                    );
+                                    if (newTime != null) {
+                                      setState(() {
+                                        selectedtime = newTime;
+
+                                        print('selected time $selectedtime');
+
+                                        time =
+                                            ' ${selectedtime.hour.toString().padLeft(2, '0')}:${selectedtime.minute.toString().padLeft(2, '0')}';
+                                        print(time);
+                                        
+                                        t2 = time;
+                                      });
+                                    }
+                                  },
+                                  child: Text(time),
+                                ),
+                              ]),
                           const SizedBox(height: 10),
                           Row(
                             children: [

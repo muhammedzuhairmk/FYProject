@@ -183,7 +183,7 @@ class _Reg_pageState extends State<Reg_page> {
                                 : Icons.visibility_off),
                           ),
                         ),
-                        obscureText: true,
+                        obscureText:_secureConPass,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "please enter the confirm password";
