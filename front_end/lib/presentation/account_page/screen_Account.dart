@@ -114,11 +114,17 @@ class _AccountPageState extends State<AccountPage> {
         child: Stack(
           children: [
             _image != null ? CircleAvatar( radius: 60, backgroundImage: MemoryImage(_image!))
-                : const CircleAvatar(
-                    radius: 90,
-                    backgroundImage: NetworkImage(
-                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
-                  ),
+                : (avatar.isNotEmpty
+                                          ? CircleAvatar(
+                                              radius: 50,
+                                              backgroundImage:
+                                                  NetworkImage(avatar),
+                                            )
+                                          : const CircleAvatar(
+                                              radius: 50,
+                                              backgroundImage: AssetImage(
+                                                  'assets/images/user.jpg'),
+                                            )),
           ]
           ),
               ),
