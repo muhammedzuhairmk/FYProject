@@ -1,205 +1,233 @@
-// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, file_names
+// ignore_for_file: avoid_print
 
 import 'dart:convert';
-import 'package:flutter/material.dart';
+import 'package:front_end/core/constant/routes.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ToDo {
-  final String id;
-  final String title;
-  final String description;
 
-  ToDo({
-    required this.id,
-    required this.title,
-    required this.description,
-  });
-
-  factory ToDo.fromJson(Map<String, dynamic> json) {
-    return ToDo(
-      id: json['_id'],
-      title: json['title'],
-      description: json['description'],
-    );
-  }
+class NotificationPage extends StatefulWidget {
+  @override
+  _NotificationPageState createState() => _NotificationPageState();
 }
 
-class ScreenNotification extends StatefulWidget {
-  const ScreenNotification({Key? key}) : super(key: key);
+class _NotificationPageState extends State<NotificationPage> {
+  List<Map<dynamic, dynamic>> getEventList= [];
+  TextEditingController titleController = TextEditingController();
+    TextEditingController contentController = TextEditingController();
 
-  @override
-  _ToDoListPageState createState() => _ToDoListPageState();
-}
-
-class _ToDoListPageState extends State<ScreenNotification> {
-  List<ToDo> todos = [];
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchToDos();
-  }
-
-  Future<void> fetchToDos() async {
-    setState(() {
-      isLoading = true;
-    });
-    final response = await http.get(Uri.parse('http://192.168.159.240:3000/userRegistration'));
-    if (response.statusCode == 200) {
-      final List<dynamic> todoList = jsonDecode(response.body);
-      setState(() {
-        todos = todoList.map((json) => ToDo.fromJson(json)).toList();
-        isLoading = false;
-      });
-    } else {
-      // Handle error
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  Future<void> addToDo() async {
-    setState(() {
-      isLoading = true;
-    });
+Future<void> addnotification(String t,String d) async {
+  print("Here comes");
+  try {
+    print("Here comesd");
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
     final response = await http.post(
-      Uri.parse('http://192.168.159.240:3000/userRegistration'),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"title": "New ToDo", "description": "Description"}),
+      Uri.parse(createnotification),
+      headers: <String, String>{
+        'Accept': "application/json",
+         'Authorization': 'Bearer $token',
+      },
+      body: {
+        "title": t,
+        "description": d,
+        
+      },
     );
-    if (response.statusCode == 200) {
-      fetchToDos();
-    } else {
-      // Handle error
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
 
-  Future<void> deleteToDo(String id) async {
-    setState(() {
-      isLoading = true;
-    });
-    final response = await http.delete(Uri.parse('http://192.168.159.240:3000/userRegistration/$id'));
-    if (response.statusCode == 200) {
-      fetchToDos();
-    } else {
-      // Handle error
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
+    if (response.statusCode == 201) {
+      print("Here comessssssssss");
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      print(responseData);
+      print('added!');
 
-  Future<void> updateToDoTitle(String id, String newTitle) async {
-    setState(() {
-      isLoading = true;
-    });
-    final response = await http.put(
-      Uri.parse('http://your-backend-url/updateToDo/$id'),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"title": newTitle}),
+      // Extract any additional information you may need from the response
+      
+    } else {
+      print("errrors comes");
+      print('Error : ${response.statusCode}');
+      // Handle signup errors here
+      // You might want to throw an exception or return an error message
+    }
+  } catch (e) {
+    print("errrors comessssdddd");
+    print('Error aaaaaaadd: $e');
+    // Handle signup errors here
+    throw e; // Rethrow the exception for the caller to handle
+  }
+}
+
+
+Future<void> getnotification() async {
+  print("Here comes");
+  try {
+    print("Here comesd");
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.post(
+      Uri.parse(getNotification),
+      headers: <String, String>{
+        
+         'Authorization': 'Bearer $token',
+      },
+     
     );
-    if (response.statusCode == 200) {
-      fetchToDos();
-    } else {
-      // Handle error
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
 
+    if (response.statusCode == 201) {
+      print("Here comessssssssss");
+      final Map<String, dynamic> responseData = json.decode(response.body);
+        setState(() {
+          getEventList = List<Map<String, dynamic>>.from(responseData['data']);
+        });
+        
+
+      print(responseData);
+      print('added!');
+
+      // Extract any additional information you may need from the response
+      
+    } else {
+      print("errrors comes");
+      print('Error : ${response.statusCode}');
+      // Handle signup errors here
+      // You might want to throw an exception or return an error message
+    }
+  } catch (e) {
+    print("errrors comessssdddd");
+    print('Error aaaaaaadd: $e');
+    // Handle signup errors here
+    throw e; // Rethrow the exception for the caller to handle
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('To-Do List')),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : todos.isEmpty
-              ? const Center(child: Text('No To-Dos found'))
-              : ListView.builder(
-                  itemCount: todos.length,
-                  itemBuilder: (context, index) {
-                    final todo = todos[index];
-                    return ListTile(
-                      title: Text(todo.title),
-                      subtitle: Text(todo.description),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () => _showEditDialog(context, todo),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () => _showDeleteDialog(context, todo.id),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+      appBar: AppBar(
+        title: Text('Notification Page'),
+        centerTitle: false,
+        elevation: 0,
+      ),
+      body: ListView.builder(
+        itemCount: getEventList.length,
+        itemBuilder: (context, index) {
+          final notification = getEventList[index];
+          return Card(
+            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ExpansionTile(
+              title: Text(
+                notification['title'],
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
+              ),
+              childrenPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              children: [
+                Text(notification['description']),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // _deleteNotification(getEventList);
+                      },
+                      child: Text('Delete'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: addToDo,
-        child: const Icon(Icons.add),
+        onPressed: () {
+          _showAddNotificationDialog(context);
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
 
-  Future<void> _showEditDialog(BuildContext context, ToDo todo) async {
-    TextEditingController titleController = TextEditingController(text: todo.title);
-    return showDialog(
+  void _showAddNotificationDialog(BuildContext context) {
+    
+
+    showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Edit ToDo'),
-        content: TextField(controller: titleController),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('Cancel'),
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Add Notification'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: titleController,
+                decoration: InputDecoration(
+                  labelText: 'Title',
+                ),
+              ),
+              TextField(
+                controller: contentController,
+                decoration: InputDecoration(
+                  labelText: 'Content',
+                ),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () async {
-              await updateToDoTitle(todo.id, titleController.text);
-              Navigator.of(context).pop();
-            },
-            child: const Text('Save'),
-          ),
-        ],
-      ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                _addNotification(titleController.text, contentController.text);
+                addnotification(titleController.text,contentController.text);
+                Navigator.of(context).pop();
+              },
+              child: Text('Add'),
+            ),
+          ],
+        );
+      },
     );
   }
 
-  Future<void> _showDeleteDialog(BuildContext context, String id) async {
-    return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete ToDo'),
-        content: const Text('Are you sure you want to delete this ToDo?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async {
-              await deleteToDo(id);
-              Navigator.of(context).pop();
-            },
-            child: const Text('Delete'),
-          ),
-        ],
-      ),
+  void _addNotification(String title, String content) {
+    int id = getEventList.isNotEmpty ? getEventList.last.id + 1 : 1;
+    NotificationItem newNotification = NotificationItem(
+      id: id,
+      title: title,
+      content: content,
     );
+    setState(() {
+      getEventList.add(newNotification);
+    });
+  }
+
+  void _deleteNotification(NotificationItem notification) {
+    setState(() {
+      getEventList.remove(notification);
+    });
   }
 }
 
+class NotificationItem {
+  final int id;
+  final String title;
+  final String content;
+
+  NotificationItem({
+    required this.id,
+    required this.title,
+    required this.content,
+  });
+}

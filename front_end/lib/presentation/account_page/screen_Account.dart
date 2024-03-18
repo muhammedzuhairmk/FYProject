@@ -6,7 +6,6 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constant/routes.dart';
 import 'profile.dart';
@@ -38,7 +37,7 @@ class _AccountPageState extends State<AccountPage> {
 
   bool isLoading = true;
 
-  Future<void> fetchProfile() async {
+ Future<void> fetchProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final userId = prefs.getInt('id');
@@ -54,35 +53,26 @@ class _AccountPageState extends State<AccountPage> {
       print('Response Status Code: ${response.statusCode}');
       print('Response Body: ${response.body}');
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         final Map<String, dynamic> ProfileData = json.decode(response.body);
-        
+
         // Populate form fields with existing data
         setState(() {
           name.text = ProfileData['data']['name'] ?? '';
-          phoneNumber.text = ProfileData['data']['phoneNumber'].toString() ;
+          phoneNumber.text = ProfileData['data']['phoneNumber'].toString();
           email.text = ProfileData['data']['email'] ?? '';
           admissionNumber.text = ProfileData['data']['admissionNumber'].toString() ;
           admissionYear.text = ProfileData['data']['admissionYear'].toString() ;
          
           avatar = ProfileData['data']['avatar'] ?? '';
-        }
-        );
+        });
       } else {
-        print('Failed to fetch Profile details. Status: ${response.statusCode}');
+        print(
+            'Failed to fetch Profile details. Status: ${response.statusCode}');
       }
     } catch (error) {
       print('Error fetching Profile details: $error');
     }
-  }
-   Future<void> _pickImage() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage == null) return;
-    setState(() {
-      selectedImage = File(returnImage.path);
-      _image = File(returnImage.path).readAsBytesSync();
-    });
   }
  
   @override
@@ -114,17 +104,10 @@ class _AccountPageState extends State<AccountPage> {
         child: Stack(
           children: [
             _image != null ? CircleAvatar( radius: 60, backgroundImage: MemoryImage(_image!))
-                : (avatar.isNotEmpty
-                                          ? CircleAvatar(
-                                              radius: 50,
-                                              backgroundImage:
-                                                  NetworkImage(avatar),
-                                            )
-                                          : const CircleAvatar(
-                                              radius: 50,
-                                              backgroundImage: AssetImage(
-                                                  'assets/images/user.jpg'),
-                                            )),
+                : CircleAvatar(
+                    radius: 90,
+                    backgroundImage: NetworkImage("$ImageUrl$avatar"),
+                  ),
           ]
           ),
               ),

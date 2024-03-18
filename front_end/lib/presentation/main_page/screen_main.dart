@@ -15,9 +15,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _pages = [
-    ScreenMain(),
+    const ScreenMain(),
     SearchPage(),
-    ScreenEventList(),
+    const ScreenEventList(),
     
   ];
 

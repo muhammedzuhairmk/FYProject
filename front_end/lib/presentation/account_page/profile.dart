@@ -112,7 +112,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
 
         print('Response Body: $responseData');
 
-        if (response.statusCode == 201) {
+        if (response.statusCode == 201 || response.statusCode == 200) {
           setState(() {
             isLoading = false;
           });
@@ -221,7 +221,8 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                                           ? CircleAvatar(
                                               radius: 50,
                                               backgroundImage:
-                                                  NetworkImage(avatar),
+                                                NetworkImage("$ImageUrl$avatar"),
+                                                  //NetworkImage(avatar),
                                             )
                                           : const CircleAvatar(
                                               radius: 50,
@@ -254,21 +255,24 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                             controller: name,
                             decoration: InputDecoration(
                               icon: const Icon(Icons.person),
+                               labelText: "Name",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
                               filled: true,
                               fillColor: Colors.white,
                               contentPadding: const EdgeInsets.all(15),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
                                 borderSide: const BorderSide(
+                                  width: 1,
                                   color: Colors
-                                      .transparent, // Set the border color
+                                      .black, // Set the border color
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
                                 borderSide: const BorderSide(
+                                  width: 1,
                                   color: Colors
-                                      .transparent, // Set the border color when focused
+                                      .black,// Set the border color when focused
                                 ),
                               ),
                             ),
@@ -287,21 +291,24 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                             controller: phoneNumber,
                             decoration: InputDecoration(
                               icon: const Icon(Icons.phone),
+                               labelText: "Phone No",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
                               filled: true,
                               fillColor: Colors.white,
                               contentPadding: const EdgeInsets.all(15),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
                                 borderSide: const BorderSide(
+                                  width: 1,
                                   color: Colors
-                                      .transparent, // Set the border color
+                                      .black, // Set the border color
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                               borderRadius: BorderRadius.circular(15),
                                 borderSide: const BorderSide(
+                                  width: 1,
                                   color: Colors
-                                      .transparent, // Set the border color when focused
+                                      .black,// Set the border color when focused
                                 ),
                               ),
                             ),
@@ -319,21 +326,24 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                             controller: email,
                             decoration: InputDecoration(
                               icon: const Icon(Icons.mail),
+                               labelText: "Email",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
                               filled: true,
                               fillColor: Colors.white,
                               contentPadding: const EdgeInsets.all(15),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                               borderRadius: BorderRadius.circular(15),
                                 borderSide: const BorderSide(
+                                  width: 1,
                                   color: Colors
-                                      .transparent, // Set the border color
+                                      .black, // Set the border color
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                               borderRadius: BorderRadius.circular(15),
                                 borderSide: const BorderSide(
+                                  width: 1,
                                   color: Colors
-                                      .transparent, // Set the border color when focused
+                                      .black,// Set the border color when focused
                                 ),
                               ),
                             ),
@@ -351,21 +361,24 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                             controller: admissionYear,
                             decoration: InputDecoration(
                               icon: const Icon(Icons.calendar_month),
+                               labelText: "Admission Year",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
                               filled: true,
                               fillColor: Colors.white,
                               contentPadding: const EdgeInsets.all(15),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                               borderRadius: BorderRadius.circular(15),
                                 borderSide: const BorderSide(
+                                  width: 1,
                                   color: Colors
-                                      .transparent, // Set the border color
+                                      .black, // Set the border color
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                               borderRadius: BorderRadius.circular(15),
                                 borderSide: const BorderSide(
+                                  width: 1,
                                   color: Colors
-                                      .transparent, // Set the border color when focused
+                                      .black, // Set the border color when focused
                                 ),
                               ),
                             ),
@@ -383,39 +396,42 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                             controller: admissionNumber,
                             decoration: InputDecoration(
                               icon: const Icon(Icons.confirmation_num),
+                              labelText: "Admission No",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
                               filled: true,
                               fillColor: Colors.white,
                               contentPadding: const EdgeInsets.all(15),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
                                 borderSide: const BorderSide(
+                                  width: 1,
                                   color: Colors
-                                      .transparent, // Set the border color
+                                      .black, // Set the border color
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                               borderRadius: BorderRadius.circular(15),
                                 borderSide: const BorderSide(
+                                  width: 1,
                                   color: Colors
-                                      .transparent, // Set the border color when focused
+                                      .black,// Set the border color when focused
                                 ),
                               ),
                             ),
                           ),
                           
-                          const SizedBox(height: 20),
-                          TextButton(
-                              onPressed: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (builder) =>
-                                //             ResetPassword(email: email.text)));
-                              },
-                              child: const Text(
-                                "Reset Password",
-                                style: TextStyle(color: Colors.red),
-                              )),
+                          // const SizedBox(height: 20),
+                          // TextButton(
+                          //     onPressed: () {
+                          //       // Navigator.push(
+                          //       //     context,
+                          //       //     MaterialPageRoute(
+                          //       //         builder: (builder) =>
+                          //       //             ResetPassword(email: email.text)));
+                          //     },
+                          //     child: const Text(
+                          //       "Reset Password",
+                          //       style: TextStyle(color: Colors.red),
+                          //     )),
                           const SizedBox(height: 20),
                           Row(
                             children: [

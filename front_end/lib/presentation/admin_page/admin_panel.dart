@@ -3,6 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
 
+import '../home_page/widgets/Notification.dart';
+import 'approval.dart';
+import 'student_list.dart';
+
 class AdminPanel extends StatelessWidget {
   const AdminPanel({super.key});
 
@@ -80,11 +84,12 @@ class AdminPanel extends StatelessWidget {
                             icon:const  Icon(Icons.camera),
                             onPressed: () {
                               // Handle camera icon press
-                              
+                              Navigator.push(
+                               context,
+                               MaterialPageRoute(builder: (context) => AdminApprovalPage()),
+                               );
                             },
                           ),
-
-
                         const  Text(
                             'Camera',
                             style:  TextStyle(
@@ -94,8 +99,6 @@ class AdminPanel extends StatelessWidget {
                         ],
                       ),
                     ),
-
-
 
                      Container(
                       height: 70,
@@ -108,6 +111,10 @@ class AdminPanel extends StatelessWidget {
                             hoverColor: const Color.fromARGB(255, 78, 131, 175),
                             icon:const Icon(Icons.receipt_long),
                             onPressed: () {
+                              Navigator.push(
+                               context,
+                               MaterialPageRoute(builder: (context) => StudentListPage()),
+                               );
                               // Handle camera icon press
                               print('Student List icon pressed');
                             },
@@ -137,6 +144,10 @@ class AdminPanel extends StatelessWidget {
                             hoverColor: const Color.fromARGB(255, 78, 131, 175),
                             icon:const Icon(Icons.notification_add_rounded),
                             onPressed: () {
+                              Navigator.push(
+                               context,
+                               MaterialPageRoute(builder: (context) => NotificationPage()),
+                               );
                             }
                           ),
 
@@ -164,6 +175,7 @@ class AdminPanel extends StatelessWidget {
                             hoverColor:const  Color.fromARGB(255, 78, 131, 175),
                             icon: const Icon(Icons.upload),
                             onPressed: () {
+                              
                               // Handle camera icon press
                               print('upload icon pressed');
                             },
@@ -200,6 +212,10 @@ class AdminPanel extends StatelessWidget {
                             icon:const  Icon(Icons.verified_outlined),
                             onPressed: () {
                               // Handle camera icon press
+                              Navigator.push(
+                               context,
+                               MaterialPageRoute(builder: (context) => AdminApprovalPage()),
+                               );
                               print('verification icon pressed');
                             },
                           ),

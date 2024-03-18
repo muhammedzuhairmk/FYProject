@@ -1,25 +1,90 @@
 
-// ignore_for_file: avoid_unnecessary_containers, library_private_types_in_public_api, use_key_in_widget_constructors
+// ignore_for_file: avoid_unnecessary_containers, library_private_types_in_public_api, use_key_in_widget_constructors, avoid_print
+
+import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:front_end/core/constant/routes.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+class Event {
+  final int id;
+  final String imageUrl;
+
+  Event({
+    required this.id,
+    required this.imageUrl,
+  });
+
+  factory Event.fromJson(Map<String, dynamic> json) {
+    return Event(
+      id: json['id'],
+      imageUrl: json['imageUrl'],
+    );
+  }
+}
 
 class SlidingImage extends StatefulWidget {
+  final int? id;
+
+  const SlidingImage({
+    this.id,
+    super.key,
+  });
   @override
   _SlidingImageState createState() => _SlidingImageState();
 }
 
 class _SlidingImageState extends State<SlidingImage> {
-  final List<String> imageList = [
-     'https://img.freepik.com/premium-photo/advance-cyberspace-concept_862994-20265.jpg?size=626&ext=jpg&ga=GA1.1.1315563093.1704684554&semt=ais',
-     'https://img.freepik.com/premium-photo/advance-cyberspace-concept_862994-20265.jpg?size=626&ext=jpg&ga=GA1.1.1315563093.1704684554&semt=ais',
-     'https://img.freepik.com/premium-photo/advance-cyberspace-concept_862994-20265.jpg?size=626&ext=jpg&ga=GA1.1.1315563093.1704684554&semt=ais',
-     'https://img.freepik.com/premium-photo/advance-cyberspace-concept_862994-20265.jpg?size=626&ext=jpg&ga=GA1.1.1315563093.1704684554&semt=ais',
-     'https://img.freepik.com/premium-photo/advance-cyberspace-concept_862994-20265.jpg?size=626&ext=jpg&ga=GA1.1.1315563093.1704684554&semt=ais',
-    // Add more image URLs as needed
-    // ... (your list of image URLs)
-  ];
+   bool isLoading = true;
+   List<String> imageList = [];
 
+Future<void> fecthSlidingImage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final userId = prefs.getInt('id');
+
+    print("i a here on fetch");
+    try {
+      print("i a here on fetch try");
+      final response = await http.get(
+        Uri.parse('$getEventList/$userId'),
+        headers: <String, String>{
+          // 'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      print('Response Status Code: ${response.statusCode}');
+      print('gallery: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        setState(() {
+          imageList = List<String>.from(responseData['data']);                     
+        });
+      
+        print('Response Body: ${response.body}');
+      } else {
+        print(
+            'Failed to fetch present gallery itsms. Status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error fetching present gallery itsms: $error');
+    }
+  }
+
+@override
+  void initState() {
+    super.initState();
+
+    fecthSlidingImage();
+
+    print("image page");
+  }
   int _currentIndex = 0;
 
   @override

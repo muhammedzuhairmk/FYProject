@@ -53,6 +53,10 @@ class _MyHomePageState extends State<ScreenEventList> {
   List<Map<dynamic, dynamic>> presentEvents = [];
   List<Map<dynamic, dynamic>> commingEvents = [];
 
+  
+
+
+
   Future<void> fecthPresentEventList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
@@ -76,7 +80,9 @@ class _MyHomePageState extends State<ScreenEventList> {
         final Map<String, dynamic> responseData = json.decode(response.body);
 
         setState(() {
-          presentEvents = List<Map<String, dynamic>>.from(responseData['data']);                     
+          presentEvents = List<Map<String, dynamic>>.from(responseData['data']);
+          
+                                  
         });
       
         print('Response Body: ${response.body}');
@@ -243,7 +249,8 @@ return 'Date :$formattedDate  Time :$formattedTime\nLocation :$loc';
                               '${item['title']}',
                             ),
                             subtitle: Text(
-                            formateda(item['eventDate'],item['location'])
+formateda(item['eventDate'],item['location'])
+                              //'Date: ${item['eventDate']}\nLocation: ${item['location']}',
                             ),
                             onTap: () {
                               Navigator.push(

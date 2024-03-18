@@ -20,6 +20,8 @@ import '../../core/constant/routes.dart';
 import '../event_list_page/widget/screen_event_list.dart';
 import 'widgets/Notification.dart';
 
+var role;
+
 class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
   final int? id;
 
@@ -36,10 +38,12 @@ class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
 
 class _AnimatedAppBarState extends State<ScreenMain> {
 
-    TextEditingController name = TextEditingController();
-    TextEditingController email = TextEditingController();
-    String avatar = "";
+   String name="";
+   String email="";
+   String avatar = "";
+   var role;
 
+bool visi=false;
    Future<void> fetchProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
@@ -58,17 +62,23 @@ class _AnimatedAppBarState extends State<ScreenMain> {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> ProfileData = json.decode(response.body);
-        
+
         // Populate form fields with existing data
         setState(() {
-          name.text = ProfileData['data']['name'] ?? '';
-          email.text = ProfileData['data']['email'] ?? '';
+          name= ProfileData['data']['name'] ??'';
+          
+          email= ProfileData['data']['email'] ?? '';
+          
+          role=ProfileData['data']['role']??'';
          
-          // avatar = ProfileData['data']['avatar'] ?? '';
+          avatar = ProfileData['data']['avatar'] ?? '';
+        });
+        if(role=='admin'){
+          visi=true;
         }
-        );
       } else {
-        print('Failed to fetch Profile details. Status: ${response.statusCode}');
+        print(
+            'Failed to fetch Profile details. Status: ${response.statusCode}');
       }
     } catch (error) {
       print('Error fetching Profile details: $error');
@@ -130,8 +140,8 @@ class _AnimatedAppBarState extends State<ScreenMain> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: UserAccountsDrawerHeader(
-                accountName: const Text(
-                  "Name",
+                accountName:  Text(
+                  name,
                   // controller: name,
                   style: TextStyle(
                     color: Colors.black,
@@ -139,8 +149,8 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                accountEmail: const Text(
-                  "email",
+                accountEmail: Text(
+                  email,
                   // controller: email,
                   style: TextStyle(
                     color: Colors.black,
@@ -151,10 +161,9 @@ class _AnimatedAppBarState extends State<ScreenMain> {
          Stack(
           children: [
             _image != null ? CircleAvatar( radius: 60, backgroundImage: MemoryImage(_image!))
-                : const CircleAvatar(
+                :  CircleAvatar(
                     radius: 90,
-                    backgroundImage: AssetImage(
-                        "assets/images/user.jpg"),
+                    backgroundImage: NetworkImage("$ImageUrl$avatar"),
                   ),
           ]
           ),
@@ -210,23 +219,25 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 );
               },
             ),
-            ListTile(
-              leading: const Icon(
-                Icons.admin_panel_settings,
-                color: mainColor,
+            Visibility(visible: visi,
+              child: ListTile(
+                leading: const Icon(
+                  Icons.admin_panel_settings,
+                  color: mainColor,
+                ),
+                title: const Text(
+                  'Admin panel',
+                  style: TextStyle(color: drawertext),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AdminPanel(),
+                    ),
+                  );
+                },
               ),
-              title: const Text(
-                'Admin panel',
-                style: TextStyle(color: drawertext),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AdminPanel(),
-                  ),
-                );
-              },
             ),
             ListTile(
               leading: const Icon(
@@ -462,7 +473,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ScreenNotification()));
+                            builder: (context) => NotificationPage()));
                   },
                   icon: const Icon(Icons.navigate_next),
                 ),
