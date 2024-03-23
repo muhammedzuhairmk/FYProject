@@ -49,6 +49,8 @@ class _login_pageState extends State<login_page> {
       print(responseData['token']);
       final token = responseData['token'].toString();
       prefs.setString('token', token);
+      final userid = responseData['_id'].toString();
+      prefs.setString('userid', userid);
     } else {
       throw Exception("Failed to login");
     }

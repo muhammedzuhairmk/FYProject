@@ -20,7 +20,7 @@ import '../../core/constant/routes.dart';
 import '../event_list_page/widget/screen_event_list.dart';
 import 'widgets/Notification.dart';
 
-var role;
+
 
 class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
   final int? id;
@@ -41,7 +41,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
    String name="";
    String email="";
    String avatar = "";
-   var role;
+  var role;
 
 bool visi=false;
    Future<void> fetchProfile() async {
@@ -60,6 +60,7 @@ bool visi=false;
       print('Response Status Code: ${response.statusCode}');
       print('Response Body: ${response.body}');
 
+      // ignore: curly_braces_in_flow_control_structures
       if (response.statusCode == 200) {
         final Map<String, dynamic> ProfileData = json.decode(response.body);
 
@@ -75,7 +76,13 @@ bool visi=false;
         });
         if(role=='admin'){
           visi=true;
+          prefs.setString("role", role);
         }
+        else if (role=='user'){
+          visi=false;
+          prefs.setString("role", role);
+        }
+
       } else {
         print(
             'Failed to fetch Profile details. Status: ${response.statusCode}');

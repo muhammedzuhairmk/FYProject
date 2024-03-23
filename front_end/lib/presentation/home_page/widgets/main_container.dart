@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print, unnecessary_brace_in_string_interps, use_key_in_widget_constructors
 
 import 'dart:convert';
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,64 +43,94 @@ class MainContainer extends StatefulWidget {
 }
 
 class _MainContainerState extends State<MainContainer> {
-  List<Map<dynamic, dynamic>> userevents = [];
+  List<Map<dynamic, dynamic>> presentEvents= [];
   List<Map<dynamic, dynamic>> commingEvents = [];
 
-  Future<void> fetchUserEventList() async {
+   Future<void> fecthPresentEventList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+    //final userId = prefs.getInt('id');
 
+    print("i a here on fetch");
     try {
+      print("i a here on fetch try");
       final response = await http.get(
-        Uri.parse(getEventList),
+        Uri.parse(presenteventList),
         headers: <String, String>{
+          // 'Accept': 'application/json',
           'Authorization': 'Bearer $token',
         },
       );
 
+      print('Response Status Code: ${response.statusCode}');
+      print('gallery: ${response.body}');
+
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
+
         setState(() {
-          userevents = List<Map<String, dynamic>>.from(responseData['data']);
+          presentEvents = List<Map<String, dynamic>>.from(responseData['data']);
+          
+                                  
         });
+      
+        print('Response Body: ${response.body}');
       } else {
-        print('Failed to fetch present gallery items. Status: ${response.statusCode}');
+        print(
+            'Failed to fetch present gallery itsms. Status: ${response.statusCode}');
       }
     } catch (error) {
-      print('Error fetching present gallery items: $error');
+      print('Error fetching present gallery itsms: $error');
     }
   }
 
-  Future<void> fetchComingEventList() async {
+
+  Future<void> fecthCommingEventList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+   // final userId = prefs.getInt('id');
 
+    print("i a here on fetch");
     try {
+      print("i a here on fetch try");
       final response = await http.get(
         Uri.parse(commingeventList),
         headers: <String, String>{
+          // 'Accept': 'application/json',
           'Authorization': 'Bearer $token',
         },
       );
 
+      print('Response Status Code: ${response.statusCode}');
+      print('gallery: ${response.body}');
+
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
+
         setState(() {
           commingEvents = List<Map<String, dynamic>>.from(responseData['data']);
+          
+           
         });
+        
+
+    
+          
+        print('Response Body: ${response.body}');
       } else {
-        print('Failed to fetch coming gallery items. Status: ${response.statusCode}');
+        print(
+            'Failed to fetch present gallery itsms. Status: ${response.statusCode}');
       }
     } catch (error) {
-      print('Error fetching coming gallery items: $error');
+      print('Error fetching present gallery itsms: $error');
     }
   }
 
   @override
   void initState() {
     super.initState();
-    fetchUserEventList();
-    fetchComingEventList();
+     fecthPresentEventList();
+    fecthCommingEventList();
   }
 
   @override
@@ -133,12 +163,12 @@ class _MainContainerState extends State<MainContainer> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: const [BoxShadow(color: Colors.white)],
             ),
-            child: userevents.isEmpty
+            child: presentEvents.isEmpty
                 ? const Center(child: Text("No present events"))
                 : ListView.builder(
-                    itemCount: userevents.length,
+                    itemCount: presentEvents.length,
                     itemBuilder: (context, index) {
-                      final data = userevents[index];
+                      final data = presentEvents[index];
                       return Container(
                         padding: const EdgeInsets.all(20),
                         margin: const EdgeInsets.all(15),
@@ -201,23 +231,23 @@ class _MainContainerState extends State<MainContainer> {
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 height: 150,
-                child: userevents.isEmpty
+                child: presentEvents.isEmpty
                     ? const Center(child: Text("No present events"))
                     : ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: userevents.length,
+                      itemCount: presentEvents.length,
                         itemBuilder: (context, index) {
-                          final item = userevents[index];
+                          final item = presentEvents[index];
                           return GestureDetector(
                             child: Container(
                               alignment: Alignment.center,
                               margin: const EdgeInsets.all(8),
-                              color: Colors.black26,
+                              //color: Colors.black26,
                               width: 200,
-                              child: Image.network(
-                                "${ImageUrl}${item['thumbnail']['image']}",
-                                fit: BoxFit.cover,
-                              ),
+                              decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(
+                                "${ImageUrl}${item['thumbnail']['image']}",) ,
+                                 fit: BoxFit.cover,
+                              ),),
                             ),
                             onTap: () {
                               Navigator.push(
@@ -258,12 +288,12 @@ class _MainContainerState extends State<MainContainer> {
                             child: Container(
                               alignment: Alignment.center,
                               margin: const EdgeInsets.all(8),
-                              color: Colors.black26,
+                             // color: Colors.black26,
                               width: 200,
-                              child: Image.network(
-                                "${ImageUrl}${item['thumbnail']['image']}",
-                                fit: BoxFit.cover,
-                              ),
+                              decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(
+                                "${ImageUrl}${item['thumbnail']['image']}",) ,
+                                 fit: BoxFit.cover,
+                              ),),
                             ),
                             onTap: () {
                               Navigator.push(
@@ -285,68 +315,129 @@ class _MainContainerState extends State<MainContainer> {
   }
 }
 
-class EventDetailsScreen extends StatelessWidget {
-  final Map<dynamic, dynamic> singleEvent;
+// ignore: must_be_immutable
+class EventDetailsScreen extends StatefulWidget {
+  
+   Map<dynamic,dynamic> singleEvent;
 
-  const EventDetailsScreen({required this.singleEvent});
+  EventDetailsScreen({required this.singleEvent});
+
+  @override
+  State<EventDetailsScreen> createState() => _EventDetailsScreenState();
+}
+
+class _EventDetailsScreenState extends State<EventDetailsScreen> {
+String format(String date){
+ DateTime dt = DateTime.parse(date);
+final formattedDate = DateFormat('dd-MM-yyyy').format(dt);
+return formattedDate;
+}
+
+double? height=250;
+
+double? width=double.infinity;
 
   @override
   Widget build(BuildContext context) {
-    String imageUrl = ImageUrl + singleEvent['thumbnail']['image'];
+    print(widget.singleEvent['thumbnail']['image']);
+    String imageUrl = ImageUrl + widget.singleEvent['thumbnail']['image'] ;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          singleEvent['title'],
-          style: const TextStyle(fontSize: 26, color: Colors.black),
-        ),
+        title: Text(widget.singleEvent['title'], // Displaying title as text
+              style: const TextStyle(fontSize: 26, color: Colors.black),),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              height: 200,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue.shade400, Colors.blue.shade900],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+               
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.blue.shade400, Colors.blue.shade900],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
-                  child: Image.network(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                  ),
+                  borderRadius: BorderRadius.circular(12),
                 ),
+                child: Center(
+                  
+                    child: GestureDetector(
+                      child: Container(
+                        width:width ,
+                        height: height,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: ClipRRect(
+                            borderRadius:
+                        BorderRadius.circular(15.0),
+                          child: Image.network(
+                            imageUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),onTap: () {
+                        setState(() {
+                          width=null;
+                          height=null;
+                        });
+                      },onDoubleTap: () {
+                         setState(() {
+                          width=double.infinity;
+                          height=250;
+                        });
+                      },
+                    ),
+                  ),
+              
               ),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Description:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+              
+               const SizedBox(height: 16),
+              const Text(
+                'Description:',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              singleEvent['title'],
-              style: const TextStyle(fontSize: 16, color: Colors.black),
-            ),
-          ],
+             
+              Text(widget.singleEvent['description']
+               , // Displaying title as text
+                style: const TextStyle(fontSize: 16, color: Colors.black),
+              ),
+              SizedBox(height: 10,),  const Text(
+                'Event Location:',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+             
+              Text(widget.singleEvent['location']
+               , // Displaying title as text
+                style: const TextStyle(fontSize: 16, color: Colors.black),
+              ), SizedBox(height: 10,),
+               const Text(
+                'Event Date:',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+              
+              Text(format(widget.singleEvent['eventDate'])
+               , // Displaying title as text
+                style: const TextStyle(fontSize: 16, color: Colors.black),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+

@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously, non_constant_identifier_names, unused_local_variable, file_names
 
 
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -12,12 +13,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'widget/screen_event_list.dart';
 
-class AddEvent extends StatefulWidget {
-  final int? id;
-
-  const AddEvent({
-    this.id,
-    super.key,
+// ignore: must_be_immutable
+class  AddEvent extends StatefulWidget {
+  
+  String titl;
+  String id;
+   AddEvent({
+    
+    super.key,required this.titl,required this.id
   });
 
   @override
@@ -38,6 +41,51 @@ DateTime selectedDate = DateTime.now();
   String time = "enter time";
   var t1 = null;
   var t2 = null;
+
+
+
+Future<void> fetchevent() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final userId = prefs.getInt('id');
+
+    try {
+      final response = await http.get(
+        Uri.parse(getEventList+widget.id),
+        headers: <String, String>{
+          'Accept': 'ac',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<dynamic, dynamic> ProfileData = json.decode(response.body);
+
+        // Populate form fields with existing data
+        setState(() {
+          title.text = ProfileData['data']['title'] ?? '';
+          description.text = ProfileData['data']['description'].toString();
+          location.text = ProfileData['data']['location'] ?? '';
+          avatar = ProfileData['data']['thumbnail']['image'] ?? '';
+          print(avatar);
+        });
+      } else {
+        print(
+            'Failed to fetch Profile details. Status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error fetching Profile details: $error');
+    }
+  }
+
+
+
+
+
+
+
 
 
   Future<void> submitData() async {
@@ -64,7 +112,7 @@ DateTime selectedDate = DateTime.now();
           ..headers['Accept'] = 'application/json'
           ..headers['Content-Type'] = 'multipart/form-data'
           ..fields['title'] = title.text
-          ..fields['eventDate'] = '$date$time:00.000000'//"2024-03-05 20:46:47.139673"
+          ..fields['eventDate'] = date+" 23:55:00:000000"//time:00.000000//"2024-03-05 20:46:47.139673"
           ..fields['location'] = location.text
           ..fields['description'] = description.text;
         
@@ -90,11 +138,12 @@ DateTime selectedDate = DateTime.now();
           setState(() {
             isLoading = false;
           });
+          
           Navigator.pop(context, "reload");
           CustomDialog.showDialogBox(
             context,
-            'Updated successfully',
-            'Profile updated successfully.',
+           'Successfully created',
+            'event request send to the admin.',
           );
         } else {
         print("event here on not 201");
@@ -118,6 +167,89 @@ DateTime selectedDate = DateTime.now();
     }
   }
 
+ 
+  Future<void> updatedata() async {
+    print("event here");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final token = prefs.getString('token');
+    final userId = prefs.getInt('id');
+
+    try {
+    print("event here on try");
+    print(DateTime.now().toString());
+    print('$date$time:00.000000');
+      if (_formKey.currentState?.validate() ?? false) {
+    
+        setState(() {
+          isLoading = true;
+        });
+        final request = http.MultipartRequest(
+          'PATCH',
+          Uri.parse(editEvent+widget.id),
+        )
+          ..headers['Authorization'] = 'Bearer $token'
+          ..headers['Accept'] = '*/*'
+          ..headers['Content-Type'] = 'multipart/form-data'
+          ..fields['title'] = title.text
+          ..fields['eventDate'] = date+" 23:55:00:000000"//time:00.000000//"2024-03-05 20:46:47.139673"
+          ..fields['location'] = location.text
+          ..fields['description'] = description.text;
+        
+
+        if (selectedImage != null) {
+          request.files.add(
+            http.MultipartFile(
+              'thumbnail',
+              http.ByteStream.fromBytes(_image!),
+              _image!.length,
+              filename: 'images.jpg',
+            ),
+          );
+        }
+
+        final response = await request.send();
+        final responseData = await response.stream.bytesToString();
+
+        print('Response Body: $responseData');
+
+        if (response.statusCode == 200) {
+        print("event here on 200");
+          setState(() {
+            isLoading = false;
+           
+          });
+          
+          Navigator.pop(context, "reload");
+          CustomDialog.showDialogBox(
+            context,
+            'Successfully created',
+            'event request send to the admin.',
+          );
+        } else {
+        print("event here on not 201");
+          setState(() {
+            isLoading = false;
+          });
+          CustomDialog.showDialogBox(
+            context,
+            'Failed to Update',
+            'Profile updating failed. Status: ${response.statusCode}',
+          );
+        }
+      }
+    } catch (error) {
+    print("event here on catch");
+      CustomDialog.showDialogBox(
+        context,
+        'Network Error!',
+        'Check your connection!',
+      );
+    }
+  }
+
+
+
  bool isLoading = false;
 
   Future<void> _pickImage() async {
@@ -127,6 +259,7 @@ DateTime selectedDate = DateTime.now();
     setState(() {
       selectedImage = File(returnImage.path);
       _image = File(returnImage.path).readAsBytesSync();
+      
     });
   }
 
@@ -134,7 +267,9 @@ DateTime selectedDate = DateTime.now();
   void initState() {
     super.initState();
 
-    
+    if(widget.titl=="Edit Event"){
+fetchevent();
+    }
   }
 
   Uint8List? _image;
@@ -151,14 +286,14 @@ DateTime selectedDate = DateTime.now();
               color: Colors.white,
               height: 150,
               width: double.infinity,
-              child: const Padding(
+              child:  Padding(
                 padding: EdgeInsets.all(30),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Add Event",
+                      widget.titl,
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
@@ -194,8 +329,8 @@ DateTime selectedDate = DateTime.now();
                                           borderRadius:
                                               BorderRadius.circular(20.0),
                                           child: Container(
-                                            height: 300.0,
-                                            width: 300.0,
+                                            height: 250.0,
+                                            width: 250.0,
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
                                                 image: MemoryImage(_image!),
@@ -209,12 +344,12 @@ DateTime selectedDate = DateTime.now();
                                               borderRadius:
                                                   BorderRadius.circular(20.0),
                                               child: Container(
-                                                height: 300.0,
-                                                width: 300.0,
+                                                height: 250.0,
+                                                width: 250.0,
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(
                                                     image: NetworkImage(
-                                                        url + avatar),
+                                                        ImageUrl + avatar),
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
@@ -224,8 +359,8 @@ DateTime selectedDate = DateTime.now();
                                               borderRadius:
                                                   BorderRadius.circular(20.0),
                                               child: Container(
-                                                height: 300.0,
-                                                width: 300.0,
+                                                height: 250.0,
+                                                width: 250.0,
                                                 decoration:const BoxDecoration(
                                                   image: DecorationImage(
                                                     image: AssetImage(
@@ -253,7 +388,8 @@ DateTime selectedDate = DateTime.now();
                                   Positioned(
                                     bottom: 0,
                                     
-                                    child: SizedBox(height: 30,width: 300,
+                                    child: Container(height: 35,width:250,
+                                    
                                       child: TextButton(
                                         onPressed: () {
                                           _pickImage();
@@ -262,6 +398,7 @@ DateTime selectedDate = DateTime.now();
                                        child:const Text("Upload Image",style: TextStyle(fontWeight:FontWeight.bold),),
                                        
                                       ),
+                                      
                                     ),
                                   ),
                                 ],
@@ -368,68 +505,72 @@ DateTime selectedDate = DateTime.now();
                            const SizedBox(
                             height: 12,
                           ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 1),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    onPressed: () async {
-                                      DateTime? pickedDate =
-                                          await showDatePicker(
-                                        context: context,
-                                        initialDate: selectedDate,
-                                        firstDate: DateTime(2020),
-                                        lastDate: DateTime(2030),
-                                      );
-
-                                      if (pickedDate != null &&
-                                          pickedDate != selectedDate) {
-                                        setState(() {
-                                          selectedDate = pickedDate;
-
-                                          date =
-                                              '${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}';
-                                          t1 = date;
-                                        });
-                                        print(date);
-                                      }
-                                    },
-                                    child: Text(date),
+                          SingleChildScrollView(
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 1),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10))),
+                                      onPressed: () async {
+                                        DateTime? pickedDate =
+                                            await showDatePicker(
+                                          context: context,
+                                          initialDate: selectedDate,
+                                          firstDate: DateTime(2020),
+                                          lastDate: DateTime(2030),
+                                        );
+                            
+                                        if (pickedDate != null &&
+                                            pickedDate != selectedDate) {
+                                          setState(() {
+                                            selectedDate = pickedDate;
+                            
+                                            date =
+                                                '${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}';
+                                            t1 = date;
+                                          });
+                                          print(date);
+                                        }
+                                      },
+                                      child: Text(date),
+                                    ),
                                   ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10))),
-                                  onPressed: () async {
-                                    final TimeOfDay? newTime =
-                                        await showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay.now(),
-                                    );
-                                    if (newTime != null) {
-                                      setState(() {
-                                        selectedtime = newTime;
-
-                                        print('selected time $selectedtime');
-
-                                        time =
-                                            ' ${selectedtime.hour.toString().padLeft(2, '0')}:${selectedtime.minute.toString().padLeft(2, '0')}';
-                                        print(time);
-                                        
-                                        t2 = time;
-                                      });
-                                    }
-                                  },
-                                  child: Text(time),
-                                ),
-                              ]),
+                                  Visibility(visible: false,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10))),
+                                      onPressed: () async {
+                                        final TimeOfDay? newTime =
+                                            await showTimePicker(
+                                          context: context,
+                                          initialTime: TimeOfDay.now(),
+                                        );
+                                        if (newTime != null) {
+                                          setState(() {
+                                            selectedtime = newTime;
+                                                                
+                                            print('selected time $selectedtime');
+                                                                
+                                            time =
+                                                ' ${selectedtime.hour.toString().padLeft(2, '0')}:${selectedtime.minute.toString().padLeft(2, '0')}';
+                                            print(time);
+                                            
+                                            t2 = time;
+                                          });
+                                        }
+                                      },
+                                      child: Text(time),
+                                    ),
+                                  ),
+                                ]),
+                          ),
                           const SizedBox(height: 10),
                           Row(
                             children: [
@@ -451,7 +592,8 @@ DateTime selectedDate = DateTime.now();
                                       onPressed: isLoading
                                           ? null
                                           : () async {
-                                              await submitData();
+                                            if(widget.titl=="Add Event"){await submitData();}
+                                              else if(widget.titl=="Edit Event"){await updatedata();}
                                             },
                                       child: isLoading
                                           ? const SizedBox(
