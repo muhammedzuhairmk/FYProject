@@ -66,7 +66,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (_userLoggedIn == null || _userLoggedIn == false) {
       // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+        MaterialPageRoute(builder: (context) =>  login_page()),
       );
     } else {
 // ignore: use_build_context_synchronously

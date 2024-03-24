@@ -2,11 +2,12 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+
+import 'package:front_end/presentation/event_list_page/widget/screen_event_list.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constant/routes.dart';
-import '../../presentation/event_list_page/widget/screen_event_list.dart';
 import '../../presentation/registration/login_page.dart';
 
 Future<void> signUp(String name, String email, String password,
@@ -15,7 +16,7 @@ Future<void> signUp(String name, String email, String password,
     final response = await http.post(
       Uri.parse(registration),
       headers: {
-        'Accept': "application/json",
+        'Accept': "*/*",
       },
       body: {
         'name': name,
@@ -31,12 +32,9 @@ Future<void> signUp(String name, String email, String password,
       print(responseData);
       print('Signed up successfully!');
 
-          Navigator.pop(context, "reload");
-          UserSuccessfully.showDialogBox(
-            context,
-           'Successfully created',
-            'Login EventSnap',
-          );
+      // Extract any additional information you may need from the response
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => login_page()));
     } else {
       print('Error signing up: ${response.statusCode}');
        

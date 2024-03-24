@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
+import 'package:front_end/presentation/registration/registration_page.dart';
 
 import '../home_page/widgets/Notification.dart';
 import 'approval.dart';
@@ -173,9 +174,12 @@ class AdminPanel extends StatelessWidget {
                           IconButton(
                             color: Colors.white,
                             hoverColor:const  Color.fromARGB(255, 78, 131, 175),
-                            icon: const Icon(Icons.upload),
+                            icon: const Icon(Icons.person_2),
                             onPressed: () {
-                              
+                               Navigator.push(
+                               context,
+                               MaterialPageRoute(builder: (context) => Reg_page()),
+                               );
                               // Handle camera icon press
                               print('upload icon pressed');
                             },
@@ -183,7 +187,7 @@ class AdminPanel extends StatelessWidget {
 
 
                          const  Text(
-                            'Upload',
+                            'Register',
                             style: TextStyle(
                               color: Colors.white,
                             ),

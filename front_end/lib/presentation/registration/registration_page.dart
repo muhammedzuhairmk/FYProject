@@ -5,7 +5,7 @@ import 'package:front_end/configtation/api/authantication_servies.dart';
 import 'package:front_end/core/constant/colors.dart';
 
 import 'package:email_validator/email_validator.dart';
-import 'package:front_end/presentation/registration/login_page.dart';
+//import 'package:front_end/presentation/registration/login_page.dart';
 
 class Reg_page extends StatefulWidget {
   Reg_page({super.key});
@@ -35,13 +35,13 @@ class _Reg_pageState extends State<Reg_page> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      canPop: true,
       child: Scaffold(
           appBar: AppBar(
-            leading: BackButton(color: Colors.black, onPressed: () { Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => login_page()));}),
+            // leading: BackButton(color: Colors.black, onPressed: () { Navigator.pushReplacement(
+            //                 context,
+            //                 MaterialPageRoute(
+            //                     builder: (context) => login_page()));}),
             shadowColor: Colors.black,
             elevation: 10,
             toolbarHeight: 100,
@@ -81,7 +81,10 @@ class _Reg_pageState extends State<Reg_page> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Please enter the name";
-                          } else {
+                          } else if(value.length <4){
+                            return("Nmae must be atleast 4 characters");
+                          }
+                          else {
                             return null;
                           }
                         }),
@@ -236,20 +239,20 @@ class _Reg_pageState extends State<Reg_page> {
                 const SizedBox(
                   height: 10,
                 ),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  const Text("Already have an account?"),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => login_page()));
-                      },
-                      child: const Text(
-                        " Signin",
-                        style:
-                            TextStyle(color: Color.fromARGB(255, 3, 87, 157)),
-                      ))
+                const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  // const Text("Already have an account?"),
+                  // TextButton(
+                  //     onPressed: () {
+                  //       Navigator.pushReplacement(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //               builder: (context) => login_page()));
+                  //     },
+                  //     child: const Text(
+                  //       " Signin",
+                  //       style:
+                  //           TextStyle(color: Color.fromARGB(255, 3, 87, 157)),
+                  //     ))
                 ]),
               ]),
             ),

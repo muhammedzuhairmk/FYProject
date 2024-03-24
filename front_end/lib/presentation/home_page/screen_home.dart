@@ -9,7 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:front_end/main.dart';
 import 'package:front_end/presentation/home_page/widgets/Calender.dart';
 import 'package:front_end/presentation/home_page/widgets/album.dart';
-import 'package:front_end/presentation/splash_screen.dart';
+import 'package:front_end/presentation/registration/login_page.dart';
+
 import 'package:http/http.dart' as http;
 
 import 'package:image_picker/image_picker.dart';
@@ -133,7 +134,9 @@ bool visi=false;
                 color: _isScrolled ? Colors.black : mainColor,
               ),
               onPressed: () {
-                NotificationPage();
+                 Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => NotificationPage()),
+                    );
               },
             ),
           ],
@@ -314,7 +317,7 @@ bool visi=false;
                     sharepref.setBool(save_key_name, false);
 
                     Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                      MaterialPageRoute(builder: (context) => login_page()),
                     );
                   },
                 ),

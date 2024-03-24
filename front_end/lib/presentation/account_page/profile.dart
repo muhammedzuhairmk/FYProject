@@ -30,6 +30,8 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
   TextEditingController email = TextEditingController();
   TextEditingController admissionYear = TextEditingController();
   TextEditingController admissionNumber = TextEditingController();
+   TextEditingController pass = TextEditingController();
+    TextEditingController conpass = TextEditingController();
   String avatar = "";
 
   bool isLoading = false;
@@ -72,6 +74,44 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
     }
   }
 
+
+
+  Future<void> resetPassword() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    //final userId = prefs.getInt('id');
+
+    try {
+      final response = await http.patch(
+        Uri.parse(resetpass),
+        headers: <String, String>{
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: {
+          'password':pass.text,
+         'confirmPassword':conpass.text,
+        }
+      );
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> ProfileData = json.decode(response.body);
+          CustomDialog.showDialogBox(
+        context,
+        'successfully updated',
+        'successfully updated the password',
+      ); 
+      } else {
+        print(
+            'Failed to upadate password. Status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error fetching Profile details: $error');
+    }
+  }
+
   Future<void> submitData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -95,7 +135,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
           ..fields['email'] = email.text
            ..fields['admissionNumber'] = admissionNumber.text
           ..fields['admissionYear'] = admissionYear.text;
-
+         
         if (selectedImage != null) {
           request.files.add(
             http.MultipartFile(
@@ -151,7 +191,8 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
       _image = File(returnImage.path).readAsBytesSync();
     });
   }
-
+bool visi=true;
+bool pvisi=false;
   @override
   void initState() {
     super.initState();
@@ -245,34 +286,36 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                           ),
                           const SizedBox(height: 30),
                           
-                          TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter Name';
-                              }
-                              return null;
-                            },
-                            controller: name,
-                            decoration: InputDecoration(
-                              icon: const Icon(Icons.person),
-                               labelText: "Name",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: const EdgeInsets.all(15),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: Colors
-                                      .black, // Set the border color
+                          Visibility(visible: visi,
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter Name';
+                                }
+                                return null;
+                              },
+                              controller: name,
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.person),
+                                 labelText: "Name",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: const EdgeInsets.all(15),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black, // Set the border color
+                                  ),
                                 ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: Colors
-                                      .black,// Set the border color when focused
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black,// Set the border color when focused
+                                  ),
                                 ),
                               ),
                             ),
@@ -281,157 +324,246 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                             height: 12,
                           ),
                           
-                          TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a phoneNumber';
-                              }
-                              return null;
-                            },
-                            controller: phoneNumber,
-                            decoration: InputDecoration(
-                              icon: const Icon(Icons.phone),
-                               labelText: "Phone No",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: const EdgeInsets.all(15),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: Colors
-                                      .black, // Set the border color
+                          Visibility(visible: visi,
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a phoneNumber';
+                                }
+                                return null;
+                              },
+                              controller: phoneNumber,
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.phone),
+                                 labelText: "Phone No",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: const EdgeInsets.all(15),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black, // Set the border color
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                 borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black,// Set the border color when focused
+                                  ),
                                 ),
                               ),
-                              focusedBorder: OutlineInputBorder(
-                               borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: Colors
-                                      .black,// Set the border color when focused
+                            ),
+                          ),
+                        
+                          
+
+                          
+                          
+                          Visibility(visible: pvisi,
+                            child: TextFormField(
+                               validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a passwordr';
+                                }else if(value.length<4){
+ return 'Password mustbe 4 digits';
+                                }else{return null;}
+                                
+                              },
+                              readOnly: false,
+                              controller: pass,
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.password),
+                                 labelText: "Password",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: const EdgeInsets.all(15),
+                                enabledBorder: OutlineInputBorder(
+                                 borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black, // Set the border color
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                 borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black,// Set the border color when focused
+                                  ),
+                                ),
+                              ),obscureText: true,
+                            ),
+                          ),
+
+ const SizedBox(height: 10),
+                          
+ Visibility(visible: pvisi,
+                            child: TextFormField(
+                               validator: (value) {
+                                if (value !=pass.text) {
+                                  return 'Please enter a passwordr';
+                                }else{return null;}
+                                
+                              },
+                              readOnly: false,
+                              controller: conpass,
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.password),
+                                 labelText: "Confirm Password",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: const EdgeInsets.all(15),
+                                enabledBorder: OutlineInputBorder(
+                                 borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black, // Set the border color
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                 borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black,// Set the border color when focused
+                                  ),
+                                ),
+                              ),obscureText: true,
+                            ),
+                          ),
+
+ const SizedBox(height: 10),
+
+                          Visibility(visible: visi,
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter Gmail';
+                                }
+                                return null;
+                              },
+                              readOnly: false,
+                              controller: email,
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.mail),
+                                 labelText: "Email",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: const EdgeInsets.all(15),
+                                enabledBorder: OutlineInputBorder(
+                                 borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black, // Set the border color
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                 borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black,// Set the border color when focused
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                           const SizedBox(height: 10),
                           
-                          TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter Gmail';
-                              }
-                              return null;
-                            },
-                            readOnly: false,
-                            controller: email,
-                            decoration: InputDecoration(
-                              icon: const Icon(Icons.mail),
-                               labelText: "Email",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: const EdgeInsets.all(15),
-                              enabledBorder: OutlineInputBorder(
-                               borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: Colors
-                                      .black, // Set the border color
+                          Visibility(visible: visi,
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter admission year';
+                                }
+                                return null;
+                              },
+                              readOnly: false,
+                              controller: admissionYear,
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.calendar_month),
+                                 labelText: "Admission Year",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: const EdgeInsets.all(15),
+                                enabledBorder: OutlineInputBorder(
+                                 borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black, // Set the border color
+                                  ),
                                 ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                               borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: Colors
-                                      .black,// Set the border color when focused
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          
-                          TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter admission year';
-                              }
-                              return null;
-                            },
-                            readOnly: false,
-                            controller: admissionYear,
-                            decoration: InputDecoration(
-                              icon: const Icon(Icons.calendar_month),
-                               labelText: "Admission Year",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: const EdgeInsets.all(15),
-                              enabledBorder: OutlineInputBorder(
-                               borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: Colors
-                                      .black, // Set the border color
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                               borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: Colors
-                                      .black, // Set the border color when focused
+                                focusedBorder: OutlineInputBorder(
+                                 borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black, // Set the border color when focused
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                           const SizedBox(height: 10),
                           
-                          TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter admission number';
-                              }
-                              return null;
-                            },
-                            readOnly: false,
-                            controller: admissionNumber,
-                            decoration: InputDecoration(
-                              icon: const Icon(Icons.confirmation_num),
-                              labelText: "Admission No",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: const EdgeInsets.all(15),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: Colors
-                                      .black, // Set the border color
+                          Visibility(visible: visi,
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter admission number';
+                                }
+                                return null;
+                              },
+                              readOnly: false,
+                              controller: admissionNumber,
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.confirmation_num),
+                                labelText: "Admission No",labelStyle:const TextStyle(fontWeight: FontWeight.bold),
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: const EdgeInsets.all(15),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black, // Set the border color
+                                  ),
                                 ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                               borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: Colors
-                                      .black,// Set the border color when focused
+                                focusedBorder: OutlineInputBorder(
+                                 borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: Colors
+                                        .black,// Set the border color when focused
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                           
-                          // const SizedBox(height: 20),
-                          // TextButton(
-                          //     onPressed: () {
-                          //       // Navigator.push(
-                          //       //     context,
-                          //       //     MaterialPageRoute(
-                          //       //         builder: (builder) =>
-                          //       //             ResetPassword(email: email.text)));
-                          //     },
-                          //     child: const Text(
-                          //       "Reset Password",
-                          //       style: TextStyle(color: Colors.red),
-                          //     )),
+                          const SizedBox(height: 20),
+                          TextButton(
+                              onPressed: () {
+                               setState(() {
+                                 visi=false;
+                                 pvisi=true;
+                               });
+
+                              },
+                              child: const Text(
+                                "Reset Password",
+                                style: TextStyle(color: Colors.red),
+                              )),
                           const SizedBox(height: 20),
                           Row(
                             children: [
@@ -452,7 +584,12 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                                       onPressed: isLoading
                                           ? null
                                           : () async {
+                                            if(visi==true){
                                               await submitData();
+                                            }
+                                              else if(pvisi == true){
+                                                await resetPassword();
+                                              }
                                             },
                                       child: isLoading
                                           ? const SizedBox(
