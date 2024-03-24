@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/colors.dart';
 import 'package:front_end/core/constant/routes.dart';
 import 'package:front_end/main.dart';
+import 'package:front_end/presentation/event_list_page/widget/screen_event_list.dart';
 import 'package:front_end/presentation/main_page/screen_main.dart';
-import 'package:front_end/presentation/registration/forget_pass.dart';
-import 'package:front_end/presentation/registration/registration_page.dart';
+// import 'package:front_end/presentation/registration/forget_pass.dart';
+// import 'package:front_end/presentation/registration/registration_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -52,7 +53,12 @@ class _login_pageState extends State<login_page> {
       final userid = responseData['_id'].toString();
       prefs.setString('userid', userid);
     } else {
-      throw Exception("Failed to login");
+       CustomDialog.showDialogBox(
+            context,
+            'failed login',
+            'Invalid login please try again.',
+          );
+      //throw Exception("Failed to login");
     }
   }
 
@@ -163,20 +169,20 @@ class _login_pageState extends State<login_page> {
               Padding(
                 padding: const EdgeInsets.only(left: 35),
                 child:
-                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => forget_Pass()));
-                      },
-                      child: const Text(
-                        "forget password",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 3, 87, 157),
-                            fontSize: 15),
-                      )),
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
+                  // TextButton(
+                  //     onPressed: () {
+                  //       Navigator.pushReplacement(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //               builder: (context) => forget_Pass()));
+                  //     },
+                  //     child: const Text(
+                  //       "forget password",
+                  //       style: TextStyle(
+                  //           color: Color.fromARGB(255, 3, 87, 157),
+                  //           fontSize: 15),
+                  //     )),
                 ]),
               ),
               const SizedBox(
@@ -219,17 +225,17 @@ class _login_pageState extends State<login_page> {
               const SizedBox(
                 height: 10,
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const Text("No account?"),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => Reg_page()));
-                    },
-                    child: const Text(
-                      " Create",
-                      style: TextStyle(color: Color.fromARGB(255, 3, 87, 157)),
-                    ))
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+                // const Text("No account?"),
+                // TextButton(
+                //     onPressed: () {
+                //       Navigator.pushReplacement(context,
+                //           MaterialPageRoute(builder: (context) => Reg_page()));
+                //     },
+                //     child: const Text(
+                //       " Create",
+                //       style: TextStyle(color: Color.fromARGB(255, 3, 87, 157)),
+                //     ))
               ]),
             ]),
           ),

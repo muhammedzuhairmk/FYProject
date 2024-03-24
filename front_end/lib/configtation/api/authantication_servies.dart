@@ -2,11 +2,13 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+
+import 'package:front_end/presentation/event_list_page/widget/screen_event_list.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constant/routes.dart';
-import '../../presentation/registration/login_page.dart';
+//import '../../presentation/registration/login_page.dart';
 
 Future<void> signUp(String name, String email, String password,
     String confirmPwd, BuildContext context) async {
@@ -14,7 +16,7 @@ Future<void> signUp(String name, String email, String password,
     final response = await http.post(
       Uri.parse(registration),
       headers: {
-        'Accept': "application/json",
+        'Accept': "*/*",
       },
       body: {
         'name': name,
@@ -29,10 +31,14 @@ Future<void> signUp(String name, String email, String password,
       final Map<String, dynamic> responseData = json.decode(response.body);
       print(responseData);
       print('Signed up successfully!');
-
+      CustomDialog.showDialogBox(
+            context,
+            'User created',
+            'Successfully created the user .',
+          );
       // Extract any additional information you may need from the response
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => login_page()));
+      // Navigator.pushReplacement(
+      //     context, MaterialPageRoute(builder: (context) =>const  AdminPanel()));
     } else {
       print('Error signing up: ${response.statusCode}');
       // Handle signup errors here

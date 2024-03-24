@@ -39,18 +39,18 @@ class SlidingImage extends StatefulWidget {
 
 class _SlidingImageState extends State<SlidingImage> {
    bool isLoading = true;
-   List<String> imageList = [];
+   List<Map<dynamic,dynamic>> imageList = [];
 
 Future<void> fecthSlidingImage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    final userId = prefs.getInt('id');
+    //final userId = prefs.getInt('id');
 
     print("i a here on fetch");
     try {
       print("i a here on fetch try");
       final response = await http.get(
-        Uri.parse('$getEventList/$userId'),
+        Uri.parse(admineventview),
         headers: <String, String>{
           // 'Accept': 'application/json',
           'Authorization': 'Bearer $token',
@@ -64,7 +64,7 @@ Future<void> fecthSlidingImage() async {
         final Map<String, dynamic> responseData = json.decode(response.body);
 
         setState(() {
-          imageList = List<String>.from(responseData['data']);                     
+          imageList = List<Map<String, dynamic>>.from(responseData['data']);                    
         });
       
         print('Response Body: ${response.body}');
@@ -83,7 +83,7 @@ Future<void> fecthSlidingImage() async {
 
     fecthSlidingImage();
 
-    print("image page");
+   
   }
   int _currentIndex = 0;
 
@@ -102,7 +102,7 @@ Future<void> fecthSlidingImage() async {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20.0), // Set image border radius
                   child: Image.network(
-                    url,
+                    ImageUrl+ url['thumbnail']['image'],
                     fit: BoxFit.cover,
                     height: 180,
                     width: 400,

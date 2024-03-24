@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/routes.dart';
+import 'package:front_end/presentation/event_list_page/widget/screen_event_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,54 +19,34 @@ class StudentListPage extends StatefulWidget {
 String role = "";
 String avatar = "";
 
-List<Map<dynamic, dynamic>> studentsList = [];
+
 
 
 class _StudentListPageState extends State<StudentListPage> {
-  List<Student> students = [
-    Student(
-      id: 1,
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: 'password123',
-      isAdmin: false,
-    ),
-    Student(
-      id: 2,
-      name: 'Jane Smith',
-      email: 'janesmith@example.com',
-      password: 'password456',
-      isAdmin: true,
-    ),
-  ];
+ List<Map<dynamic, dynamic>> studentsList = [];
 
-  Future<void> pushStudentList() async {
+  Future<void> fetchProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     // final userId = prefs.getInt('id');
 
     try {
-      final response = await http.patch(
+      final response = await http.get(
         Uri.parse(getstudentlist),
         headers: <String, String>{
-          'Accept': 'application/json',
+         
           'Authorization': 'Bearer $token',
         },
       );
-      print('Response Status Code: ${response.statusCode}');
-      print('Response Body: ${response.body}');
+     
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> ProfileData = json.decode(response.body);
           
-        // Populate form fields with existing data
+       
         setState(() {
           studentsList = List<Map<String, dynamic>>.from(ProfileData['data']);
-          nameControllerr.text = ProfileData['data']['name'] ?? '';
-          nameControllerr.text = ProfileData['data']['email'] ?? '';
-          passwordControllerr.text=ProfileData['data']['password']?? '';
-          role = ProfileData['data']['role'] ?? '';
-          avatar = ProfileData['data']['avatar'] ?? '';
+          
         });
       } else {
         print(
@@ -74,6 +55,45 @@ class _StudentListPageState extends State<StudentListPage> {
     } catch (error) {
       print('Error fetching Profile details: $error');
     }
+  }
+
+  void deleteuser(String id)async{
+ SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+     try {
+      final response = await http.delete(
+        Uri.parse(deleteUser+id),
+        headers: <String, String>{
+          'Authorization': 'Bearer $token',
+        },
+      );
+     
+
+      if (response.statusCode == 200) {
+       // final Map<String, dynamic> ProfileData = json.decode(response.body);
+          
+       
+       
+       fetchProfile();
+        // ignore: use_build_context_synchronously
+        CustomDialog.showDialogBox(
+            context,
+            'Delete succesfull',
+            'Successfully deleted the user .',
+          );
+      } else {
+        print(
+            'Failed to fetch Profile details. Status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error fetching Profile details: $error');
+    }
+  
+  }
+  @override void initState() {
+    
+    super.initState();
+    fetchProfile();
   }
 
   @override
@@ -85,9 +105,9 @@ class _StudentListPageState extends State<StudentListPage> {
         elevation: 0,
       ),
       body: ListView.builder(
-        itemCount: students.length,
+        itemCount: studentsList.length,
         itemBuilder: (context, index) {
-          final student = students[index];
+          final student = studentsList[index];
           return Card(
             margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             elevation: 4,
@@ -97,21 +117,22 @@ class _StudentListPageState extends State<StudentListPage> {
             child: ExpansionTile(
               leading: GestureDetector(
                 onTap: () {
-                  _showProfilePicture(context, student.name);
+                  _showProfilePicture(context, student['avatar'],student['name']);
                 },
-                child: CircleAvatar(
+                child:CircleAvatar(
                   backgroundColor: Colors.teal,
-                  child: Text(
-                    student.name.substring(0, 1).toUpperCase(),
+                  child:
+                   Text(
+                    student['name'].substring(0, 1).toUpperCase(),
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
-                  ),
-                ),
+                  )
+                )
               ),
               title: Text(
-                student.name,
+                student['name'],
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -119,19 +140,27 @@ class _StudentListPageState extends State<StudentListPage> {
               ),
               children: [
                 ListTile(
-                  title: Text('Email: ${student.email}'),
+                  title: Text('Email: ${student['email']}'),
+                ),
+                ListTile(
+                  title: Text('phone no : ${student['phoneNumber']}'),
+                ),
+                 ListTile(
+                  title: Text('Admission no : ${student['admissionNumber']}'),
+                ),  ListTile(
+                  title: Text('Admission year : ${student['admissionYear']}'),
                 ),
                 ListTile(
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Role: ${student.isAdmin ? 'Admin' : 'User'}'),
-                      IconButton(
-                        icon: Icon(Icons.edit, color: Colors.teal),
-                        onPressed: () {
-                          _showRoleEditDialog(student);
-                        },
-                      ),
+                      // Text('Role: ${student.isAdmin ? 'Admin' : 'User'}'),
+                      // IconButton(
+                      //   icon: Icon(Icons.edit, color: Colors.teal),
+                      //   onPressed: () {
+                      //     _showRoleEditDialog(student);
+                      //   },
+                      // ),
                     ],
                   ),
                 ),
@@ -139,11 +168,13 @@ class _StudentListPageState extends State<StudentListPage> {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Edit Student'),
+                      Text('Delete user'),
                       IconButton(
-                        icon: Icon(Icons.edit, color: Colors.teal),
+                        icon: Icon(Icons.delete, color: Colors.teal),
                         onPressed: () {
-                          _showStudentEditDialog(student);
+                        // _showStudentEditDialog(student);
+                        print(student["_id"]);
+deleteuser(student["_id"]);
                         },
                       ),
                     ],
@@ -157,7 +188,7 @@ class _StudentListPageState extends State<StudentListPage> {
     );
   }
 
-  void _showProfilePicture(BuildContext context, String name) {
+  void _showProfilePicture(BuildContext context, var avatar,String name) {
     showDialog(
       context: context,
       builder: (context) {
@@ -171,10 +202,12 @@ class _StudentListPageState extends State<StudentListPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                 avatar==null?
                 CircleAvatar(
                   backgroundColor: Colors.teal,
                   radius: 60,
-                  child: Text(
+                 child:
+                  Text(
                     name.substring(0, 1).toUpperCase(),
                     style: TextStyle(
                       color: Colors.white,
@@ -182,7 +215,7 @@ class _StudentListPageState extends State<StudentListPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
+                ):CircleAvatar(backgroundImage: NetworkImage(ImageUrl+avatar),radius: 60,),
                 SizedBox(height: 16),
                 Text(
                   name,
