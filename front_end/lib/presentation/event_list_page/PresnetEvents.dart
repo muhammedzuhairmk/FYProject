@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widget/screen_event_list.dart';
 
-
 class Event {
   final int id;
   final String title;
@@ -48,7 +47,7 @@ class PresentEventList extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<ScreenEventList> {
+class _MyHomePageState extends State<PresentEventList> {
   bool isLoading = true;
 
 

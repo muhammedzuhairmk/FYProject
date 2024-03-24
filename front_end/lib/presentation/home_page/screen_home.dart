@@ -7,13 +7,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:front_end/main.dart';
+import 'package:front_end/presentation/event_list_page/PresnetEvents.dart';
 import 'package:front_end/presentation/home_page/widgets/Calender.dart';
 import 'package:front_end/presentation/home_page/widgets/album.dart';
 import 'package:front_end/presentation/registration/login_page.dart';
 
 import 'package:http/http.dart' as http;
-
-import 'package:image_picker/image_picker.dart';
 import 'package:front_end/presentation/account_page/screen_Account.dart';
 import 'package:front_end/presentation/admin_page/admin_panel.dart';
 import 'package:front_end/presentation/home_page/widgets/main_container.dart';
@@ -22,8 +21,6 @@ import '../../core/constant/colors.dart';
 import '../../core/constant/routes.dart';
 import '../event_list_page/widget/screen_event_list.dart';
 import 'widgets/Notification.dart';
-
-
 
 class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
   final int? id;
@@ -40,14 +37,13 @@ class ScreenMain extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _AnimatedAppBarState extends State<ScreenMain> {
-
-   String name="";
-   String email="";
-   String avatar = "";
+  String name = "";
+  String email = "";
+  String avatar = "";
   var role;
 
-bool visi=false;
-   Future<void> fetchProfile() async {
+  bool visi = false;
+  Future<void> fetchProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final userId = prefs.getInt('id');
@@ -69,20 +65,18 @@ bool visi=false;
 
         // Populate form fields with existing data
         setState(() {
-          name= ProfileData['data']['name'] ??'';
-          email= ProfileData['data']['email'] ?? '';
-          role=ProfileData['data']['role']??'';
+          name = ProfileData['data']['name'] ?? '';
+          email = ProfileData['data']['email'] ?? '';
+          role = ProfileData['data']['role'] ?? '';
           avatar = ProfileData['data']['avatar'] ?? '';
         });
-        if(role=='admin'){
-          visi=true;
+        if (role == 'admin') {
+          visi = true;
+          prefs.setString("role", role);
+        } else if (role == 'user') {
+          visi = false;
           prefs.setString("role", role);
         }
-        else if (role=='user'){
-          visi=false;
-          prefs.setString("role", role);
-        }
-
       } else {
         print(
             'Failed to fetch Profile details. Status: ${response.statusCode}');
@@ -91,7 +85,6 @@ bool visi=false;
       print('Error fetching Profile details: $error');
     }
   }
-  
 
   final ScrollController _scrollController = ScrollController();
   bool _isScrolled = false;
@@ -101,14 +94,14 @@ bool visi=false;
     super.initState();
 
     fetchProfile();
-    
+
     _scrollController.addListener(() {
       setState(() {
         _isScrolled = _scrollController.offset > 50;
       });
     });
   }
-  
+
   Uint8List? _image;
   File? selectedIMage;
 
@@ -134,9 +127,9 @@ bool visi=false;
                 color: _isScrolled ? Colors.black : mainColor,
               ),
               onPressed: () {
-                 Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => NotificationPage()),
-                    );
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => NotificationPage()),
+                );
               },
             ),
           ],
@@ -149,7 +142,7 @@ bool visi=false;
             Padding(
               padding: const EdgeInsets.all(10),
               child: UserAccountsDrawerHeader(
-                accountName:  Text(
+                accountName: Text(
                   name,
                   // controller: name,
                   style: TextStyle(
@@ -166,16 +159,15 @@ bool visi=false;
                     fontSize: 14,
                   ),
                 ),
-                currentAccountPicture:  
-         Stack(
-          children: [
-            _image != null ? CircleAvatar( radius: 60, backgroundImage: MemoryImage(_image!))
-                :  CircleAvatar(
-                    radius: 90,
-                    backgroundImage: NetworkImage("$ImageUrl$avatar"),
-                  ),
-          ]
-          ),
+                currentAccountPicture: Stack(children: [
+                  _image != null
+                      ? CircleAvatar(
+                          radius: 60, backgroundImage: MemoryImage(_image!))
+                      : CircleAvatar(
+                          radius: 90,
+                          backgroundImage: NetworkImage("$ImageUrl$avatar"),
+                        ),
+                ]),
                 decoration: BoxDecoration(
                   color: mainColor,
                   border: Border.all(
@@ -228,7 +220,8 @@ bool visi=false;
                 );
               },
             ),
-            Visibility(visible: visi,
+            Visibility(
+              visible: visi,
               child: ListTile(
                 leading: const Icon(
                   Icons.admin_panel_settings,
@@ -286,7 +279,7 @@ bool visi=false;
                 style: TextStyle(color: drawertext),
               ),
               onTap: () {
-                  Navigator.of(context).push(
+                Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (contex) => AlbumListPage(),
                   ),
@@ -363,37 +356,24 @@ bool visi=false;
                   children: [
                     Column(
                       children: [
-                        IconButton(
-                          color: mainColor,
-                          hoverColor: const Color.fromARGB(255, 78, 131, 175),
-                          icon: const Icon(Icons.camera),
-                          onPressed: () {
-                            _pickImageCamera();
-                          },
-                        ),
                         const Text(
-                          'Camera',
+                          'Choose The Event',
                           style: TextStyle(
-                            color: mainColor,
+                            color: drawertext,
                           ),
                         ),
-                      ],
-                    ),
-                    Column(
-                      children: [
                         IconButton(
-                          color: mainColor,
+                          color: drawertext,
+                          iconSize: 60,
                           hoverColor: const Color.fromARGB(255, 78, 131, 175),
-                          icon: const Icon(Icons.upload),
+                          icon: const Icon(Icons.camera_alt_outlined,
+                          size: 40,),
                           onPressed: () {
-                            _pickImageGallery();
+                             Navigator.of(context).push(
+                           MaterialPageRoute(builder: (context) => PresentEventList(),
+                           )
+                          );
                           },
-                        ),
-                        const Text(
-                          'Upload',
-                          style: TextStyle(
-                            color: mainColor,
-                          ),
                         ),
                       ],
                     ),
@@ -406,68 +386,4 @@ bool visi=false;
       },
     );
   }
-
-  Future<void> _pickImageGallery() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage == null) return;
-    setState(() {
-      selectedIMage = File(returnImage.path);
-    });
-
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse('http://192.168.14.131:3000/upload'),
-    );
-    request.files.add(
-      await http.MultipartFile.fromPath(
-        'image',
-        selectedIMage!.path, // Use selectedIMage instead of compressedFile
-      ),
-    );
-
-    try {
-      final response = await request.send();
-      if (response.statusCode == 200) {
-        print('Image uploaded successfully');
-      } else {
-        print('Failed to upload image');
-      }
-    } catch (e) {
-      print('Error uploading image: $e');
-    }
-  }
-
-  Future<void> _pickImageCamera() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (returnImage == null) return;
-    setState(() {
-      selectedIMage = File(returnImage.path);
-    });
-
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse('http://192.168.14.131:3000/upload'),
-    );
-    request.files.add(
-      await http.MultipartFile.fromPath(
-        'image',
-        selectedIMage!.path, // Use selectedIMage instead of compressedFile
-      ),
-    );
-
-    try {
-      final response = await request.send();
-      if (response.statusCode == 200) {
-        print('Image uploaded successfully');
-      } else {
-        print('Failed to upload image');
-      }
-    } catch (e) {
-      print('Error uploading image: $e');
-    }
-  }
-
-  
 }

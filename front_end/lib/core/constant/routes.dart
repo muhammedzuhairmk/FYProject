@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings, prefer_const_declarations, non_constant_identifier_names
 
 //ipaddress
-final url = 'http://192.:5000/';
-final ImageUrl = 'http://19.:5000';
+final url = 'http://192.168.138.240:8000/';
+final ImageUrl = 'http://192.168.138.240:8000';
 
 //user
 final registration = url + "api/v1/user/signup";
