@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print, unnecessary_brace_in_string_interps, use_key_in_widget_constructors
 
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -8,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:front_end/core/constant/routes.dart';
 import 'package:front_end/presentation/home_page/widgets/sliding_image.dart';
+
 
 class Event {
   final int id;
@@ -139,7 +142,7 @@ class _MainContainerState extends State<MainContainer> {
       children: [
         const SizedBox(height: 20),
 
-        SlidingImage(),
+        const SlidingImage(),
 
         Container(
           height: 40,
@@ -171,13 +174,18 @@ class _MainContainerState extends State<MainContainer> {
                       final data = presentEvents[index];
                       return Container(
                         padding: const EdgeInsets.all(20),
-                        margin: const EdgeInsets.all(15),
+                        margin: const EdgeInsets.only(left: 20, right: 20,top: 15,bottom: 15),
+                         decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(topLeft:Radius.circular(30),bottomRight: Radius.circular(30)),
+                          boxShadow:  [BoxShadow(color: Color.fromARGB(255, 137, 177, 208),)],
+                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               '${data['title']}',
                               style: const TextStyle(
+                                decoration: TextDecoration.underline,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24,
                               ),
@@ -206,8 +214,8 @@ class _MainContainerState extends State<MainContainer> {
           ),
         ),
         Container(
-          height: 500,
-          margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          height: 480,
+          margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -217,11 +225,11 @@ class _MainContainerState extends State<MainContainer> {
             children: [
               Container(
                 height: 40,
-                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                margin: const EdgeInsets.only(left: 15, right: 15,top: 15,bottom: 3),
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: const [BoxShadow(color: Colors.white)],
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(topLeft:Radius.circular(22),bottomRight: Radius.circular(22)),
+                  boxShadow:  [BoxShadow(color: Color.fromARGB(255, 137, 177, 208),)],
                 ),
                 child: const Text(
                   'Today Event Images',
@@ -229,45 +237,57 @@ class _MainContainerState extends State<MainContainer> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                height: 150,
-                child: presentEvents.isEmpty
-                    ? const Center(child: Text("No present events"))
-                    : ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                      itemCount: presentEvents.length,
-                        itemBuilder: (context, index) {
-                          final item = presentEvents[index];
-                          return GestureDetector(
-                            child: Container(
-                              alignment: Alignment.center,
-                              margin: const EdgeInsets.all(8),
-                              //color: Colors.black26,
-                              width: 200,
-                              decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(
-                                "${ImageUrl}${item['thumbnail']['image']}",) ,
-                                 fit: BoxFit.cover,
-                              ),),
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EventDetailsScreen(singleEvent: item),
+                margin: const EdgeInsets.symmetric(horizontal: 14),
+                decoration: const BoxDecoration(
+                  color:  Color.fromARGB(255, 175, 211, 240),
+                                borderRadius: BorderRadius.only(topRight:Radius.circular(30),bottomLeft: Radius.circular(30))
                                 ),
-                              );
-                            },
-                          );
-                        },
-                      ),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 14),
+                  height: 160,
+                  decoration:const BoxDecoration(
+                                borderRadius: BorderRadius.only(topRight:Radius.circular(30),bottomLeft: Radius.circular(30)),
+                                ),
+                  child: presentEvents.isEmpty
+                      ? const Center(child: Text("No present events Images"))
+                      : ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                        itemCount: presentEvents.length,
+                          itemBuilder: (context, index) {
+                            final item = presentEvents[index];
+                            return GestureDetector(
+                              child: Container(
+                                alignment: Alignment.center,
+                                margin: const EdgeInsets.only(top: 14,bottom: 14,left:2,right: 8),
+                                //color: Colors.black26,
+                                width: 180,
+                                decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(
+                                  "${ImageUrl}${item['thumbnail']['image']}",) ,
+                                   fit: BoxFit.cover,
+                                   
+                                ),
+                                borderRadius: const BorderRadius.only(topRight:Radius.circular(30),bottomLeft: Radius.circular(30))),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EventDetailsScreen(singleEvent: item),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                ),
               ),
               Container(
                 height: 40,
-                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+                margin: const EdgeInsets.only(left: 15, right: 15,top: 15,bottom: 3),
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: const [BoxShadow(color: Colors.white)],
+                decoration:const BoxDecoration(
+                    borderRadius: BorderRadius.only(topLeft:Radius.circular(22),bottomRight: Radius.circular(22)),
+                  boxShadow:  [BoxShadow(color: Color.fromARGB(255, 137, 177, 208),blurRadius: BorderSide.strokeAlignCenter)],
                 ),
                 child: const Text(
                   'Coming Events',
@@ -275,37 +295,47 @@ class _MainContainerState extends State<MainContainer> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                height: 150,
-                child: commingEvents.isEmpty
-                    ? const Center(child: Text("No Coming events"))
-                    : ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: commingEvents.length,
-                        itemBuilder: (context, index) {
-                          final item = commingEvents[index];
-                          return GestureDetector(
-                            child: Container(
-                              alignment: Alignment.center,
-                              margin: const EdgeInsets.all(8),
-                             // color: Colors.black26,
-                              width: 200,
-                              decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(
-                                "${ImageUrl}${item['thumbnail']['image']}",) ,
-                                 fit: BoxFit.cover,
-                              ),),
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EventDetailsScreen(singleEvent: item),
+                margin: const EdgeInsets.symmetric(horizontal: 14),
+                decoration: const BoxDecoration(
+                  color:  Color.fromARGB(255, 175, 211, 240),
+                                borderRadius: BorderRadius.only(topRight:Radius.circular(30),bottomLeft: Radius.circular(30))
                                 ),
-                              );
-                            },
-                          );
-                        },
-                      ),
+                child: Container(
+                  margin: const EdgeInsets.only(left: 15,right: 15),
+                  height: 180,
+                  decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(topRight:Radius.circular(30),bottomLeft: Radius.circular(30))
+                                ),
+                  child: commingEvents.isEmpty
+                      ? const Center(child: Text("No Coming events"))
+                      : ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: commingEvents.length,
+                          itemBuilder: (context, index) {
+                            final item = commingEvents[index];
+                            return GestureDetector(
+                              child: Container(
+                                alignment: Alignment.center,
+                                margin: const EdgeInsets.all(8),
+                                width: 110,
+                                decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(
+                                  "${ImageUrl}${item['thumbnail']['image']}",) ,
+                                   fit: BoxFit.cover,
+                                ),
+                                borderRadius:const  BorderRadius.only(topRight:Radius.circular(30),bottomLeft: Radius.circular(30))),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EventDetailsScreen(singleEvent: item),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                ),
               ),
             ],
           ),
@@ -409,7 +439,7 @@ double? width=double.infinity;
                , // Displaying title as text
                 style: const TextStyle(fontSize: 16, color: Colors.black),
               ),
-              SizedBox(height: 10,),  const Text(
+              const SizedBox(height: 10,),  const Text(
                 'Event Location:',
                 style: TextStyle(
                     fontSize: 18,
@@ -420,7 +450,7 @@ double? width=double.infinity;
               Text(widget.singleEvent['location']
                , // Displaying title as text
                 style: const TextStyle(fontSize: 16, color: Colors.black),
-              ), SizedBox(height: 10,),
+              ), const SizedBox(height: 10,),
                const Text(
                 'Event Date:',
                 style: TextStyle(

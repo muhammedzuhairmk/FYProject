@@ -39,14 +39,14 @@ class _StudentListPageState extends State<StudentListPage> {
     ),
   ];
 
-  Future<void> fetchProfile() async {
+  Future<void> pushStudentList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     // final userId = prefs.getInt('id');
 
     try {
-      final response = await http.get(
-        Uri.parse(profile),
+      final response = await http.patch(
+        Uri.parse(getstudentlist),
         headers: <String, String>{
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',

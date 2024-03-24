@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:front_end/main.dart';
+import 'package:front_end/presentation/home_page/widgets/Calender.dart';
+import 'package:front_end/presentation/home_page/widgets/album.dart';
 import 'package:front_end/presentation/splash_screen.dart';
 import 'package:http/http.dart' as http;
 
@@ -67,11 +69,8 @@ bool visi=false;
         // Populate form fields with existing data
         setState(() {
           name= ProfileData['data']['name'] ??'';
-          
           email= ProfileData['data']['email'] ?? '';
-          
           role=ProfileData['data']['role']??'';
-         
           avatar = ProfileData['data']['avatar'] ?? '';
         });
         if(role=='admin'){
@@ -134,7 +133,7 @@ bool visi=false;
                 color: _isScrolled ? Colors.black : mainColor,
               ),
               onPressed: () {
-                _showNotificationDialog(context, " ");
+                NotificationPage();
               },
             ),
           ],
@@ -255,7 +254,13 @@ bool visi=false;
                 'Calender',
                 style: TextStyle(color: drawertext),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (contex) => CalendarPage(),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(
@@ -277,7 +282,13 @@ bool visi=false;
                 'Event Album',
                 style: TextStyle(color: drawertext),
               ),
-              onTap: () {},
+              onTap: () {
+                  Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (contex) => AlbumListPage(),
+                  ),
+                );
+              },
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -354,7 +365,6 @@ bool visi=false;
                           hoverColor: const Color.fromARGB(255, 78, 131, 175),
                           icon: const Icon(Icons.camera),
                           onPressed: () {
-                            // Handle camera icon press
                             _pickImageCamera();
                           },
                         ),
@@ -373,7 +383,6 @@ bool visi=false;
                           hoverColor: const Color.fromARGB(255, 78, 131, 175),
                           icon: const Icon(Icons.upload),
                           onPressed: () {
-                            // Handle upload icon press
                             _pickImageGallery();
                           },
                         ),
@@ -457,38 +466,5 @@ bool visi=false;
     }
   }
 
-  void _showNotificationDialog(BuildContext context, String response) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Notification'),
-          content: const Text('This is a notification message.'),
-          actions: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'),
-                ),
-                IconButton(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NotificationPage()));
-                  },
-                  icon: const Icon(Icons.navigate_next),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  }
+  
 }
