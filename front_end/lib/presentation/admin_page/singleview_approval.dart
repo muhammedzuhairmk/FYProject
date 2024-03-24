@@ -225,7 +225,7 @@ final response = await http.delete(
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     
-                      Text(desc),
+                      Text(loc),
                       const Text(
                         "Date",
                         style: TextStyle(fontWeight: FontWeight.bold),

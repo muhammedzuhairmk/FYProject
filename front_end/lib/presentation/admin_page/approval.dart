@@ -5,25 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:front_end/core/constant/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+
 class AdminApprovalPage extends StatefulWidget {
   @override
   _AdminApprovalPageState createState() => _AdminApprovalPageState();
 }
 
 class _AdminApprovalPageState extends State<AdminApprovalPage> {
+  List<Map<dynamic, dynamic>> presentEvents = [];
+  List<Map<dynamic, dynamic>> singleEvents = [];
 
-
- List<Map<dynamic, dynamic>> presentEvents = [];
- List<Map<dynamic, dynamic>> singleEvents = [];
-  
-
-
-void fecthPresentEventList() async {
-     
+  void fecthPresentEventList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    
-   // final userId = prefs.getInt('id');
+
+    // final userId = prefs.getInt('id');
 
     print("i a here on fetch");
     try {
@@ -43,12 +39,9 @@ void fecthPresentEventList() async {
         final Map<String, dynamic> responseData = json.decode(response.body);
 
         setState(() {
-         
           presentEvents = List<Map<String, dynamic>>.from(responseData['data']);
-          
-                                  
         });
-   
+
         print('Response Body: ${response.body}');
       } else {
         print(
@@ -59,21 +52,19 @@ void fecthPresentEventList() async {
     }
   }
 
-
-
-String formateda(String tmpD,String tmpL){
-DateTime dt = DateTime.parse(tmpD);
-final formattedDate = DateFormat('dd-MM-yyyy').format(dt);
+  String formateda(String tmpD, String tmpL) {
+    DateTime dt = DateTime.parse(tmpD);
+    final formattedDate = DateFormat('dd-MM-yyyy').format(dt);
 //final formattedTime = DateFormat('HH:mm').format(dt);
-String loc=tmpL;
-return 'Date :$formattedDate\nLocation :$loc';
-}
+    String loc = tmpL;
+    return 'Date :$formattedDate\nLocation :$loc';
+  }
+
   @override
   void initState() {
     super.initState();
 
     fecthPresentEventList();
-
 
     print("evetn page");
   }
@@ -89,54 +80,50 @@ return 'Date :$formattedDate\nLocation :$loc';
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child:presentEvents.isEmpty
-                  ? const Center(child: Text("no  events"))
-                  : ListView.builder(
-                      itemCount: presentEvents.length,
-                      itemBuilder: (context, index) {
-                        final item = presentEvents[index];
-                      
-                        print(item['image']);
-                        print("image url");
-                        return Card(
-                          child: ListTile(
-                            leading: Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              
-                              child: Image.network(
-                                "${ImageUrl}${item['thumbnail']['image']}",
-                                
-                                fit: BoxFit.cover, // Adjust the fit as needed
-                              ),
-                            ),
-                            title: Text(
-                              '${item['title']}',
-                            ),
-                            subtitle: Text(
-formateda(item['eventDate'],item['location'])
-                              //'Date: ${item['eventDate']}\nLocation: ${item['location']}',
-                            ),
-                            onTap: () {
-                              
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      SingleViewApproval(eventid: item['_id'])
-                                     
-                                ),
-                              );
-                               
-                            },
+        child: presentEvents.isEmpty
+            ? const Center(child: Text("no  events"))
+            : ListView.builder(
+                itemCount: presentEvents.length,
+                itemBuilder: (context, index) {
+                  final item = presentEvents[index];
+
+                  print(item['image']);
+                  print("image url");
+                  return Card(
+                    child: ListTile(
+                      leading: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Image.network(
+                          "${ImageUrl}${item['thumbnail']['image']}",
+
+                          fit: BoxFit.cover, // Adjust the fit as needed
+                        ),
+                      ),
+                      title: Text(
+                        '${item['title']}',
+                      ),
+                      subtitle: Text(
+                          formateda(item['eventDate'], item['location'])
+                          //'Date: ${item['eventDate']}\nLocation: ${item['location']}',
                           ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  SingleViewApproval(eventid: item['_id'])),
                         );
                       },
                     ),
-        ),);
-        }
+                  );
+                },
+              ),
+      ),
+    );
+  }
 }
