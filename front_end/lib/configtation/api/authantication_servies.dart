@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constant/routes.dart';
+import '../../presentation/event_list_page/widget/screen_event_list.dart';
 import '../../presentation/registration/login_page.dart';
 
 Future<void> signUp(String name, String email, String password,
@@ -30,21 +31,36 @@ Future<void> signUp(String name, String email, String password,
       print(responseData);
       print('Signed up successfully!');
 
-      // Extract any additional information you may need from the response
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => login_page()));
+          Navigator.pop(context, "reload");
+          UserSuccessfully.showDialogBox(
+            context,
+           'Successfully created',
+            'Login EventSnap',
+          );
     } else {
       print('Error signing up: ${response.statusCode}');
+       
+          CustomDialog.showDialogBox(
+            context,
+            'Failed to signing up',
+            'signup updating failed. Status: ${response.statusCode}',
+          );
       // Handle signup errors here
       // You might want to throw an exception or return an error message
     }
   } catch (e) {
     print('Error signing up: $e');
+      CustomDialog.showDialogBox(
+        context,
+        'Network Error!',
+        'Check your connection!',
+      );
     // Handle signup errors here
     throw e; // Rethrow the exception for the caller to handle
   }
 }
-
+ 
+    
 
 
 class AuthenticationService {
@@ -111,6 +127,7 @@ class AuthenticationService {
       }
     } catch (e) {
       print('Error signing out: $e');
+      
       // Handle sign-out errors here
       throw e; // Rethrow the exception for the caller to handle
     }
@@ -142,13 +159,47 @@ class AuthenticationService {
       print('Signed in successfully!');
     } else {
       print('Error signing in: ${response.statusCode}');
+        CustomDialog.showDialogBox(
+            context,
+            'Failed to signing in',
+            'signin updating failed. Status: ${response.statusCode}',
+          );
       // Handle sign-in errors here
     }
   } catch (e) {
     print('Error signing in: $e');
+    CustomDialog.showDialogBox(
+        context,
+        'Network Error!',
+        'Check your connection!',
+      );
     // Handle sign-in errors here
     throw e; // Rethrow the exception for the caller to handle
   }
 }
 
+}
+
+class UserSuccessfully {
+  static void showDialogBox(
+      BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => login_page()));
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
