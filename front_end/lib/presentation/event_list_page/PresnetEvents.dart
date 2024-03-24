@@ -1,5 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, unused_local_variable, avoid_print, non_constant_identifier_names, unnecessary_null_in_if_null_operators, prefer_final_fields, use_build_context_synchronously, must_be_immutable
 
+
 import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:front_end/core/constant/routes.dart';
@@ -223,6 +224,7 @@ formateda(item['eventDate'],item['location'])
                       },
                     ),
             ),
+            
             
           ],
         ),

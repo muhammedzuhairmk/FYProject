@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:front_end/main.dart';
 import 'package:front_end/presentation/event_list_page/PresnetEvents.dart';
 import 'package:front_end/presentation/home_page/widgets/Calender.dart';
-import 'package:front_end/presentation/home_page/widgets/album.dart';
 import 'package:front_end/presentation/registration/login_page.dart';
 
 import 'package:http/http.dart' as http;
@@ -281,7 +280,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (contex) => AlbumListPage(),
+                    builder: (contex) => PresentEventList(),
                   ),
                 );
               },

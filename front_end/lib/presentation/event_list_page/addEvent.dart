@@ -81,13 +81,6 @@ Future<void> fetchevent() async {
   }
 
 
-
-
-
-
-
-
-
   Future<void> submitData() async {
     print("event here");
     SharedPreferences prefs = await SharedPreferences.getInstance();
