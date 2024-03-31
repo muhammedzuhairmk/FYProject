@@ -7,11 +7,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:front_end/main.dart';
-import 'package:front_end/presentation/event_list_page/PresnetEvents.dart';
 import 'package:front_end/presentation/home_page/widgets/Calender.dart';
+import 'package:front_end/presentation/home_page/widgets/Upload.dart';
+import 'package:front_end/presentation/home_page/widgets/album.dart';
 import 'package:front_end/presentation/registration/login_page.dart';
 
 import 'package:http/http.dart' as http;
+
+import 'package:image_picker/image_picker.dart';
 import 'package:front_end/presentation/account_page/screen_Account.dart';
 import 'package:front_end/presentation/admin_page/admin_panel.dart';
 import 'package:front_end/presentation/home_page/widgets/main_container.dart';
@@ -40,12 +43,14 @@ class _AnimatedAppBarState extends State<ScreenMain> {
   String email = "";
   String avatar = "";
   var role;
-
+  var noted;
+  bool notedd = false;
   bool visi = false;
+
   Future<void> fetchProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    final userId = prefs.getInt('id');
+    // final userId = prefs.getInt('id');
 
     try {
       final response = await http.get(
@@ -120,6 +125,27 @@ class _AnimatedAppBarState extends State<ScreenMain> {
           backgroundColor: _isScrolled ? Colors.black : Colors.white,
           elevation: _isScrolled ? 4 : 0,
           actions: [
+            Stack(children: <Widget>[
+              Visibility(
+                visible: notedd,
+                child: Text(
+                  "New",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 2
+                      ..color = Colors.black,
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: notedd,
+                child: Text('New',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.yellow)),
+              ),
+            ]),
             IconButton(
               icon: Icon(
                 Icons.notifications,
@@ -266,7 +292,13 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                 'Upload image',
                 style: TextStyle(color: drawertext),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (contex) => AlbumListPage(),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(
@@ -280,7 +312,7 @@ class _AnimatedAppBarState extends State<ScreenMain> {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (contex) => PresentEventList(),
+                    builder: (contex) => AlbumListPage(),
                   ),
                 );
               },
@@ -355,27 +387,40 @@ class _AnimatedAppBarState extends State<ScreenMain> {
                   children: [
                     Column(
                       children: [
-                        const Text(
-                          'Choose The Event',
-                          style: TextStyle(
-                            color: drawertext,
-                          ),
-                        ),
                         IconButton(
-                          color: drawertext,
-                          iconSize: 60,
+                          color: const Color.fromARGB(255, 51, 99, 138),
                           hoverColor: const Color.fromARGB(255, 78, 131, 175),
-                          icon: const Icon(Icons.camera_alt_outlined,
-                          size: 40,),
+                          icon: const Icon(Icons.upload),
                           onPressed: () {
-                             Navigator.of(context).push(
-                           MaterialPageRoute(builder: (context) => PresentEventList(),
-                           )
-                          );
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> uploadImage() ));
                           },
+                        ),
+                        const Text(
+                          'Upload',
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 51, 99, 138),
+                          ),
                         ),
                       ],
                     ),
+                    // Column(
+                    //   children: [
+                    //     IconButton(
+                    //       color: mainColor,
+                    //       hoverColor: const Color.fromARGB(255, 78, 131, 175),
+                    //       icon: const Icon(Icons.upload),
+                    //       onPressed: () {
+                    //         _pickImageGallery();
+                    //       },
+                    //     ),
+                    //     const Text(
+                    //       'Upload',
+                    //       style: TextStyle(
+                    //         color: mainColor,
+                    //       ),
+                    //     ),
+                    //   ],
+                   // ),
                   ],
                 ),
               ],
@@ -384,5 +429,67 @@ class _AnimatedAppBarState extends State<ScreenMain> {
         );
       },
     );
+  }
+
+  Future<void> _pickImageGallery() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returnImage == null) return;
+    setState(() {
+      selectedIMage = File(returnImage.path);
+    });
+
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://192.168.14.131:3000/upload'),
+    );
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'image',
+        selectedIMage!.path, // Use selectedIMage instead of compressedFile
+      ),
+    );
+
+    try {
+      final response = await request.send();
+      if (response.statusCode == 200) {
+        print('Image uploaded successfully');
+      } else {
+        print('Failed to upload image');
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
+    }
+  }
+
+  Future<void> _pickImageCamera() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (returnImage == null) return;
+    setState(() {
+      selectedIMage = File(returnImage.path);
+    });
+
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://192.168.14.131:3000/upload'),
+    );
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'image',
+        selectedIMage!.path, // Use selectedIMage instead of compressedFile
+      ),
+    );
+
+    try {
+      final response = await request.send();
+      if (response.statusCode == 200) {
+        print('Image uploaded successfully');
+      } else {
+        print('Failed to upload image');
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
+    }
   }
 }

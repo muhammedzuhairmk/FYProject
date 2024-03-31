@@ -32,3 +32,5 @@ final seenNotf=url+"api/v1/notification/";
 final getNotification=url +'api/v1/notification';
 final createnotification =url +'api/v1/notification/create';
 final deleteNotification=url+'api/v1/notification/delete/';
+
+final addgallery=url+"api/v1/event/gallery/";

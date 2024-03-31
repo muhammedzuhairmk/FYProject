@@ -73,34 +73,7 @@ class AdminPanel extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Container(
-                      height: 70,
-                      width: 70,
-                      decoration: BoxDecoration(color: mainColor,borderRadius: BorderRadius.circular(20)),
-                      child: Column(
-                        children: [
-                          IconButton(
-                            color: Colors.white,
-                            hoverColor:const  Color.fromARGB(255, 78, 131, 175),
-                            icon:const  Icon(Icons.camera),
-                            onPressed: () {
-                              // Handle camera icon press
-                              Navigator.push(
-                               context,
-                               MaterialPageRoute(builder: (context) => AdminApprovalPage()),
-                               );
-                            },
-                          ),
-                        const  Text(
-                            'Camera',
-                            style:  TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
+                  
                      Container(
                       height: 70,
                       width: 70,
@@ -162,39 +135,6 @@ class AdminPanel extends StatelessWidget {
                         ],
                       ),
                     ),
-
-
-
-                     Container(
-                      height: 70,
-                      width: 70,
-                      decoration: BoxDecoration(color: mainColor,borderRadius: BorderRadius.circular(20)),
-                      child: Column(
-                        children: [
-                          IconButton(
-                            color: Colors.white,
-                            hoverColor:const  Color.fromARGB(255, 78, 131, 175),
-                            icon: const Icon(Icons.person_2),
-                            onPressed: () {
-                               Navigator.push(
-                               context,
-                               MaterialPageRoute(builder: (context) => Reg_page()),
-                               );
-                              // Handle camera icon press
-                              print('upload icon pressed');
-                            },
-                          ),
-
-
-                         const  Text(
-                            'Register',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ]
                 ),
 
@@ -234,65 +174,7 @@ class AdminPanel extends StatelessWidget {
                         ],
                       ),
                     ),
-
-
-                     Container(
-                      height: 70,
-                      width: 70,
-                      decoration: BoxDecoration(color: mainColor,borderRadius: BorderRadius.circular(20)),
-                      child: Column(
-                        children: [
-                          IconButton(
-                            color: Colors.white,
-                            hoverColor: const Color.fromARGB(255, 78, 131, 175),
-                            icon:const Icon(Icons.camera),
-                            onPressed: () {
-                              // Handle camera icon press
-                              print('Camera icon pressed');
-                            },
-                          ),
-
-
-                         const Text(
-                            'Camera',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-
-
-                    Container(
-                      height: 70,
-                      width: 70,
-                      decoration: BoxDecoration(color: mainColor,borderRadius: BorderRadius.circular(20)),
-                      child: Column(
-                        children: [
-                          IconButton(
-                            color: Colors.white,
-                            hoverColor: const Color.fromARGB(255, 78, 131, 175),
-                            icon:const Icon(Icons.camera),
-                            onPressed: () {
-                              // Handle camera icon press
-                              print('Camera icon pressed');
-                            },
-                          ),
-
-
-                         const Text(
-                            'Camera',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-
+                    
                      Container(
                       height: 70,
                       width: 70,
@@ -302,23 +184,26 @@ class AdminPanel extends StatelessWidget {
                           IconButton(
                             color: Colors.white,
                             hoverColor:const  Color.fromARGB(255, 78, 131, 175),
-                            icon: const Icon(Icons.cloud_upload),
+                            icon: const Icon(Icons.person_2),
                             onPressed: () {
+                               Navigator.push(
+                               context,
+                               MaterialPageRoute(builder: (context) => Reg_page()),
+                               );
                               // Handle camera icon press
                               print('upload icon pressed');
                             },
                           ),
-
-
                          const  Text(
-                            'Upload',
+                            'Register',
                             style: TextStyle(
                               color: Colors.white,
                             ),
                           ),
                         ],
                       ),
-                    ), 
+                    ),
+
                   ]
                 ),
               ],

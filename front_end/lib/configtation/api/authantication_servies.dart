@@ -33,8 +33,7 @@ Future<void> signUp(String name, String email, String password,
       print('Signed up successfully!');
 
       // Extract any additional information you may need from the response
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => login_page()));
+     ;
     } else {
       print('Error signing up: ${response.statusCode}');
        
